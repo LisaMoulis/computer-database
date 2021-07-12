@@ -1,25 +1,30 @@
 package ui;
 
-import java.util.ArrayList;
-
-import java.util.Scanner;
-
 import command.CommandHandler;
+import persistence.RequestHandler;
 
 /**
  * Class Main
- * Entry point, handle the command line inputs
+ * Entry point
  */
 public class Main {
 
 	private static CommandHandler commands = new CommandHandler();
 	
-	public static void main()
+	
+	public static void main(String[] str)
 	{
-		Scanner input = new Scanner(System.in);
-		
-		String sinput = input.nextLine();
-		String[] cinputs = sinput.split(" ");
-		commands.exec(cinputs);
+		System.out.println(RequestHandler.getComputer(5).toString());
+		//getFromCommandLine();
 	}
+	
+	private static void getFromCommandLine()
+	{
+		
+		while (CLIReader.canRead())
+		{
+			commands.exec(CLIReader.getLine());
+		}
+	}
+	
 }

@@ -1,18 +1,17 @@
-package mapper;
+package persistence;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 
+import mapper.CompanyMapper;
+import mapper.ComputerMapper;
 import model.Computer;
-import persistence.DBConnection;
 
-/**
- * Class Mapper
- * Handle the queries and map the information between the database and the models
- */
-public class Mapper {
+public class RequestHandler {
 
-	
 	public static Computer getComputer(int id)
 	{
 		Connection connection = DBConnection.getConnection();
@@ -21,9 +20,9 @@ public class Mapper {
 			
 			query.setInt(1, id);
 			ResultSet result = query.executeQuery();
-			result.first();
+			result.next();
 			
-			return mapToComputer(result);
+			return ComputerMapper.mapToComputer(result);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -39,9 +38,9 @@ public class Mapper {
 			
 			query.setString(1, name);
 			ResultSet result = query.executeQuery();
-			result.first();
+			result.next();
 			
-			return mapToComputer(result);
+			return ComputerMapper.mapToComputer(result);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -58,10 +57,28 @@ public class Mapper {
 			ResultSet result = query.executeQuery();
 			while (result.next())
 			{
-				computers.put(result.getInt("computer.id"),mapToComputer(result));
+				computers.put(result.getInt("computer.id"),ComputerMapper.mapToComputer(result));
 			}
 			return computers;
 
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static String getCompany(int id)
+	{
+		Connection connection = DBConnection.getConnection();
+		try {
+			PreparedStatement query = connection.prepareStatement("SELECT * FROM `company` WHERE id=?");
+			
+			query.setInt(1, id);
+			ResultSet result = query.executeQuery();
+			result.next();
+			
+			return CompanyMapper.mapToCompany(result);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -87,15 +104,5 @@ public class Mapper {
 			e.printStackTrace();
 			return null;
 		}
-	}
-	
-	private static Computer mapToComputer(ResultSet result) throws SQLException
-	{
-		String name = result.getString("name");
-		Date introduced = result.getDate("introduced");
-		Date discontinued = result.getDate("discontinued");
-		String company = result.getString("company.name");
-		
-		return new Computer(name,introduced.toLocalDate(),discontinued.toLocalDate(),company);
 	}
 }

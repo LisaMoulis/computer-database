@@ -8,42 +8,42 @@ import java.time.LocalDate;
  */
 public class Computer {
 	private String name;
-	private LocalDate date;
-	private LocalDate enddate;
-	private String manufacturer;
+	private LocalDate introduced;
+	private LocalDate discontinued;
+	private String company;
 	
 	public Computer(String name)
 	{
 		this.name = name;
 	}
 
-	public Computer(String name, LocalDate date, LocalDate enddate)
+	public Computer(String name, LocalDate introduced, LocalDate discontinued)
 	{
 		this.name = name;
-		this.date = date;
-		if (enddate.isAfter(date))
+		this.introduced = introduced;
+		if (discontinued != null && discontinued.isAfter(introduced))
 		{
-			this.enddate = enddate;
+			this.discontinued = discontinued;
 		}
 		
 	}
 	
-	public Computer(String name, LocalDate date, LocalDate enddate, String manufacturer)
+	public Computer(String name, LocalDate introduced, LocalDate discontinued, String company)
 	{
 		this.name = name;
-		this.date = date;
-		if (enddate.isAfter(date))
+		this.introduced = introduced;
+		if (discontinued != null && discontinued.isAfter(introduced))
 		{
-			this.enddate = enddate;
+			this.discontinued = discontinued;
 		}
-		this.manufacturer = manufacturer;
+		this.company = company;
 	}
 	
-	public Computer(String name, LocalDate date, String manufacturer)
+	public Computer(String name, LocalDate introduced, String company)
 	{
 		this.name = name;
-		this.date = date;
-		this.manufacturer = manufacturer;
+		this.introduced = introduced;
+		this.company = company;
 	}
 	
 	public String getName()
@@ -58,37 +58,43 @@ public class Computer {
 	
 	public LocalDate getDate()
 	{
-		return this.date;
+		return this.introduced;
 	}
 	
-	public void setDate(LocalDate date)
+	public void setDate(LocalDate introduced)
 	{
-		if (enddate.isAfter(date))
+		if (discontinued.isAfter(introduced))
 		{
-			this.date = date;
+			this.introduced = introduced;
 		}
 	}
 	
 	public LocalDate getEndDate()
 	{
-		return this.enddate;
+		return this.discontinued;
 	}
 	
-	public void setEndDate(LocalDate enddate)
+	public void setEndDate(LocalDate discontinued)
 	{
-		if (enddate.isAfter(date))
+		if (discontinued.isAfter(introduced))
 		{
-			this.enddate = enddate;
+			this.discontinued = discontinued;
 		}
 	}
 	
-	public String getManufacturer()
+	public String getcompany()
 	{
-		return this.manufacturer;
+		return this.company;
 	}
 	
-	public void setManufacturer(String manufacturer)
+	public void setcompany(String company)
 	{
-		this.manufacturer = manufacturer;
+		this.company = company;
+	}
+	
+	@Override
+	public String toString() {
+		return "Computer [name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued + ", company=" + company
+				+ "]";
 	}
 }

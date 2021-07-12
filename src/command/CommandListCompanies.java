@@ -8,6 +8,11 @@ package command;
 public class CommandListCompanies extends Command {
 	private final String name = "companies";
 
+	public String getName()
+	{
+		return this.name;
+	}
+	
 	@Override
 	public void exec(String... args) {
 		// TODO Auto-generated method stub

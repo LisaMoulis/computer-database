@@ -7,6 +7,11 @@ package command;
 public class CommandDetails extends Command {
 	private final String name = "details";
 
+	public String getName()
+	{
+		return this.name;
+	}
+	
 	@Override
 	public void exec(String... args) {
 		// TODO Auto-generated method stub

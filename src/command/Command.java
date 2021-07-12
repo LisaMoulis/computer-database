@@ -6,15 +6,11 @@ package command;
  */
 public abstract class Command {
 
-	private final String name = "";
-	
+	protected final String name = "";
 	
 	
 	public abstract void exec(String... args);
-	public String getName()
-	{
-		return this.name;
-	}
+	public abstract String getName();
 	
 	@Override
 	public boolean equals(Object object)

@@ -16,8 +16,9 @@ public class DBConnection {
 	private DBConnection()
 	{
 		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");  
 			connection = DriverManager.getConnection("jdbc:mysql://localhost/computer-database-db?" + "user=admincdb&password=qwerty1234");
-		} catch (SQLException e) {
+		} catch (SQLException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
