@@ -1,7 +1,7 @@
 package ui;
 
 import command.CommandHandler;
-import persistence.RequestHandler;
+import persistence.ComputerRequestHandler;
 
 /**
  * Class Main
@@ -14,7 +14,7 @@ public class Main {
 	
 	public static void main(String[] str)
 	{
-		System.out.println(RequestHandler.getComputer(5).toString());
+		System.out.println(ComputerRequestHandler.getComputer(5).toString());
 		//getFromCommandLine();
 	}
 	

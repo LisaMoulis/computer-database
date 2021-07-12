@@ -10,7 +10,7 @@ import mapper.CompanyMapper;
 import mapper.ComputerMapper;
 import model.Computer;
 
-public class RequestHandler {
+public class ComputerRequestHandler {
 
 	public static Computer getComputer(int id)
 	{
@@ -48,6 +48,11 @@ public class RequestHandler {
 		}
 	}
 	
+	public static void createComputer(Computer computer)
+	{
+		
+	}
+	
 	public static HashMap<Integer,Computer> getAllComputers()
 	{
 		HashMap<Integer,Computer> computers = new HashMap<Integer,Computer>();
@@ -68,41 +73,4 @@ public class RequestHandler {
 		}
 	}
 	
-	public static String getCompany(int id)
-	{
-		Connection connection = DBConnection.getConnection();
-		try {
-			PreparedStatement query = connection.prepareStatement("SELECT * FROM `company` WHERE id=?");
-			
-			query.setInt(1, id);
-			ResultSet result = query.executeQuery();
-			result.next();
-			
-			return CompanyMapper.mapToCompany(result);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	public static HashMap<Integer,String> getAllCompanies()
-	{
-		HashMap<Integer,String> companies = new HashMap<Integer,String>();
-		Connection connection = DBConnection.getConnection();
-		try {
-			PreparedStatement query = connection.prepareStatement("SELECT * FROM `company`");
-			ResultSet result = query.executeQuery();
-			while (result.next())
-			{
-				companies.put(result.getInt("id"),result.getString("name"));
-			}
-			return companies;
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
 }

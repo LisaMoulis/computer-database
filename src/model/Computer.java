@@ -16,7 +16,20 @@ public class Computer {
 	{
 		this.name = name;
 	}
-
+	
+	public Computer(String name, LocalDate introduced)
+	{
+		this.name = name;
+		this.introduced = introduced;		
+	}
+	
+	public Computer(String name, LocalDate introduced, String company)
+	{
+		this.name = name;
+		this.introduced = introduced;
+		this.company = company;
+	}
+	
 	public Computer(String name, LocalDate introduced, LocalDate discontinued)
 	{
 		this.name = name;
@@ -38,14 +51,7 @@ public class Computer {
 		}
 		this.company = company;
 	}
-	
-	public Computer(String name, LocalDate introduced, String company)
-	{
-		this.name = name;
-		this.introduced = introduced;
-		this.company = company;
-	}
-	
+
 	public String getName()
 	{
 		return this.name;
