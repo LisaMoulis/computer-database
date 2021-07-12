@@ -1,5 +1,9 @@
 package command;
 
+/**
+ * Class CommandUpdate
+ * Modify the information of a computer
+ */
 public class CommandUpdate extends Command{
 	private final String name = "update";
 
