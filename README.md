@@ -1,1 +1,1 @@
-# training-jave
+# training-java
