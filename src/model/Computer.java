@@ -2,6 +2,10 @@ package model;
 
 import java.time.LocalDate;
 
+/**
+ * Class Computer
+ * Represent a computer and its information
+ */
 public class Computer {
 	private String name;
 	private LocalDate date;

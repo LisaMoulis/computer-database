@@ -2,6 +2,10 @@ package command;
 
 import java.util.ArrayList;
 
+/**
+ * Class CommandHandler
+ * Manage the commands and execute them
+ */
 public class CommandHandler {
 
 	ArrayList<Command> commands;
@@ -14,8 +18,8 @@ public class CommandHandler {
 		this.commands.add(new CommandDetails());
 		this.commands.add(new CommandListCompanies());
 		this.commands.add(new CommandListComputers());
-		this.commands.add(new CommandQuit());
 		this.commands.add(new CommandUpdate());
+		this.commands.add(new CommandQuit());
 	}
 	
 	public void exec(String...args)
@@ -28,5 +32,16 @@ public class CommandHandler {
 			}
 		}
 	}
+	
+	public void add(Command command)
+	{
+		if (!commands.contains(command))
+		{
+			commands.add(command);
+		}
+		
+	}
+	
+	
 	
 }

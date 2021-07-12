@@ -2,6 +2,10 @@ package model;
 
 import java.util.*;
 
+/**
+ * Class ComputerLists
+ * Keeper of the computers and companies lists
+ */
 public class ComputerLists {
 
 	private HashMap<Integer,Computer> computers;

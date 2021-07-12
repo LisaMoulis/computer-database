@@ -1,16 +1,15 @@
 package command;
 
-public class CommandQuit implements Command {
+/**
+ * Class CommandQuit
+ * Close the program
+ */
+public class CommandQuit extends Command {
 
-	private static final String name = "quit";
+	private final String name = "quit";
 
 	@Override
 	public void exec(String... args) {
 		System.out.println("Bye!");
-	}
-
-	@Override
-	public String getName() {
-		return name;
 	}
 }

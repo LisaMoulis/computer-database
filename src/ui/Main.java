@@ -1,15 +1,18 @@
 package ui;
 
 import java.util.ArrayList;
+
 import java.util.Scanner;
 
 import command.CommandHandler;
 
+/**
+ * Class Main
+ * Entry point, handle the command line inputs
+ */
 public class Main {
 
 	private static CommandHandler commands = new CommandHandler();
-	
-	
 	
 	public static void main()
 	{
