@@ -2,12 +2,8 @@ package command;
 
 import model.ComputerList;
 
-/**
- * Class CommandListComputers
- * Display a list of the computers
- */
-public class CommandListComputers extends Command{
-	private final String name = "computers";
+public class CommandPreviousPage extends Command{
+	private final String name = "previous";
 
 	public String getName()
 	{
@@ -19,7 +15,7 @@ public class CommandListComputers extends Command{
 		if (args.length == 1)
 		{
 			System.out.println("List of the computers :\n");
-			System.out.println(ComputerList.getInstance().beginPage());
+			System.out.println(ComputerList.getInstance().previousPage());
 			this.logger.debug("List of computers displayed.");
 		}
 		else

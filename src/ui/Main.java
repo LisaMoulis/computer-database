@@ -1,5 +1,10 @@
 package ui;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import command.Command;
 import command.CommandHandler;
 import persistence.ComputerRequestHandler;
 
@@ -10,12 +15,13 @@ import persistence.ComputerRequestHandler;
 public class Main {
 
 	private static CommandHandler commands = new CommandHandler();
-	
+	protected static final Logger logger = LoggerFactory.getLogger(Main.class);
 	
 	public static void main(String[] str)
 	{
-		System.out.println(ComputerRequestHandler.getComputer(5).toString());
-		//getFromCommandLine();
+		logger.debug("Program started.");
+		//System.out.println(ComputerRequestHandler.getComputer(5).toString());
+		getFromCommandLine();
 	}
 	
 	private static void getFromCommandLine()
@@ -23,8 +29,10 @@ public class Main {
 		
 		while (CLIReader.canRead())
 		{
+			System.out.println("\nEnter your command :\n");
 			commands.exec(CLIReader.getLine());
 		}
+		logger.debug("Program closed.");
 	}
 	
 }

@@ -3,6 +3,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import command.Command;
+
 /**
  * Class DBConnection
  * Handle the connection
@@ -11,15 +16,17 @@ public class DBConnection {
 
 	private static DBConnection instance;
 	private static Connection connection;
-	
+	private static final Logger logger =  LoggerFactory.getLogger(DBConnection.class);
 	
 	private DBConnection()
 	{
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");  
 			connection = DriverManager.getConnection("jdbc:mysql://localhost/computer-database-db?" + "user=admincdb&password=qwerty1234");
+			logger.debug("Connection to the database etablished.");
 		} catch (SQLException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
+			logger.debug("Failed to establish a connection to the database.");
 			e.printStackTrace();
 		}
 
@@ -33,6 +40,11 @@ public class DBConnection {
 		}
 		return instance;
 	}
+	
+	public static Logger getLogger()
+	{
+		return logger;
+	}
 
 	public static void close()
 	{
@@ -40,6 +52,7 @@ public class DBConnection {
 		{
 			try {
 				connection.close();
+				logger.debug("Connection closed.");
 			} catch (SQLException e) {
 				System.out.println("Impossible to close the connection. ");
 				e.printStackTrace();

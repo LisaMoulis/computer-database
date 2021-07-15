@@ -6,9 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-import mapper.CompanyMapper;
 import mapper.ComputerMapper;
 import model.Computer;
+import model.ComputerList;
 
 public class ComputerRequestHandler {
 
@@ -50,7 +50,56 @@ public class ComputerRequestHandler {
 	
 	public static void createComputer(Computer computer)
 	{
-		
+		Connection connection = DBConnection.getConnection();
+		try {
+			PreparedStatement query = connection.prepareStatement("INSERT INTO `computer`"+ ComputerMapper.mapToCreate(computer));
+			DBConnection.getLogger().debug("INSERT INTO `computer`"+ ComputerMapper.mapToCreate(computer));
+			query.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void updateComputer(Computer computer)
+	{
+		Connection connection = DBConnection.getConnection();
+		try {
+			PreparedStatement query = connection.prepareStatement("UPDATE `computer` SET "+ ComputerMapper.mapToUpdate(computer) + "WHERE id=" + computer.getId());
+			DBConnection.getLogger().debug("UPDATE `computer` SET "+ ComputerMapper.mapToUpdate(computer) + "WHERE id=" + computer.getId());
+			
+			query.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void deleteComputer(int id)
+	{
+		Connection connection = DBConnection.getConnection();
+		try {
+			PreparedStatement query = connection.prepareStatement("DELETE FROM `computer` WHERE id="+id);
+			DBConnection.getLogger().debug("DELETE FROM `computer` WHERE id="+ id);
+			query.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void deleteComputer(String name)
+	{
+		Connection connection = DBConnection.getConnection();
+		try {
+			PreparedStatement query = connection.prepareStatement("DELETE FROM `computer` WHERE name='"+ name + "'");
+			DBConnection.getLogger().debug("DELETE FROM `computer` WHERE name='"+ name + "'");
+			
+			query.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public static HashMap<Integer,Computer> getAllComputers()

@@ -1,6 +1,9 @@
 package model;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
+
+import persistence.CompanyRequestHandler;
 
 /**
  * Class ComputerLists
@@ -9,12 +12,24 @@ import java.util.HashMap;
 public class CompanyList {
 
 	private final HashMap<Integer,String> companies;
+	private static CompanyList instance;
 	
-	public CompanyList(HashMap<Integer,String> companies)
+	private CompanyList()
 	{
-		this.companies = companies;
+		companies = CompanyRequestHandler.getAllCompanies();
 	}
 	
+	public static CompanyList getInstance()
+	{
+		if (instance == null)
+		{
+			instance = new CompanyList();
+		}
+		return instance;
+	}
+	
+	
+
 	public HashMap<Integer,String> getCompanies()
 	{
 		return this.companies;
@@ -23,5 +38,22 @@ public class CompanyList {
 	public String getCompany(int id)
 	{
 		return companies.get(id);
+	}
+	
+	public String getCompany(String name)
+	{
+		for (Entry<Integer, String> c : companies.entrySet())
+		{
+			if (c.getValue().equals(name))
+			{
+				return c.getValue();
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public String toString() {
+		return "CompanyList [companies=" + companies + "]";
 	}
 }

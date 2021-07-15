@@ -20,6 +20,8 @@ public class CommandHandler {
 		this.commands.add(new CommandListComputers());
 		this.commands.add(new CommandUpdate());
 		this.commands.add(new CommandQuit());
+		this.commands.add(new CommandNextPage());
+		this.commands.add(new CommandPreviousPage());
 	}
 	
 	public void exec(String...args)

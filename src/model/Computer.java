@@ -7,6 +7,7 @@ import java.time.LocalDate;
  * Represent a computer and its information
  */
 public class Computer {
+	private int id = -1;
 	private String name;
 	private LocalDate introduced;
 	private LocalDate discontinued;
@@ -45,7 +46,19 @@ public class Computer {
 	{
 		this.name = name;
 		this.introduced = introduced;
-		if (discontinued != null && discontinued.isAfter(introduced))
+		if (discontinued != null && introduced != null && discontinued.isAfter(introduced))
+		{
+			this.discontinued = discontinued;
+		}
+		this.company = company;
+	}
+	
+	public Computer(int id,String name, LocalDate introduced, LocalDate discontinued, String company)
+	{
+		this.id = id;
+		this.name = name;
+		this.introduced = introduced;
+		if (discontinued != null && introduced != null && discontinued.isAfter(introduced))
 		{
 			this.discontinued = discontinued;
 		}
@@ -62,45 +75,55 @@ public class Computer {
 		this.name = name;
 	}
 	
-	public LocalDate getDate()
+	public LocalDate getIntroduced()
 	{
 		return this.introduced;
 	}
 	
-	public void setDate(LocalDate introduced)
+	public void setIntroduced(LocalDate introduced)
 	{
-		if (discontinued.isAfter(introduced))
+		if (this.discontinued == null || discontinued.isAfter(introduced))
 		{
 			this.introduced = introduced;
 		}
 	}
 	
-	public LocalDate getEndDate()
+	public LocalDate getDiscontinued()
 	{
 		return this.discontinued;
 	}
 	
-	public void setEndDate(LocalDate discontinued)
+	public void setDiscontinued(LocalDate discontinued)
 	{
-		if (discontinued.isAfter(introduced))
+		if (introduced != null && discontinued.isAfter(introduced))
 		{
 			this.discontinued = discontinued;
 		}
 	}
 	
-	public String getcompany()
+	public String getCompany()
 	{
 		return this.company;
 	}
 	
-	public void setcompany(String company)
+	public void setCompany(String company)
 	{
 		this.company = company;
 	}
 	
+	public int getId()
+	{
+		return this.id;
+	}
+	
+	public void setId(int id)
+	{
+		this.id = id;
+	}
+	
 	@Override
 	public String toString() {
-		return "Computer [name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued + ", company=" + company
+		return "\nComputer [name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued + ", company=" + company
 				+ "]";
 	}
 }

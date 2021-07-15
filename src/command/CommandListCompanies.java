@@ -1,5 +1,6 @@
 package command;
 
+import model.CompanyList;
 
 /**
  * Class CommandListCompanies
@@ -15,7 +16,15 @@ public class CommandListCompanies extends Command {
 	
 	@Override
 	public void exec(String... args) {
-		// TODO Auto-generated method stub
-		
+		if (args.length == 1)
+		{
+			System.out.println("List of the companies :\n");
+			System.out.println(CompanyList.getInstance().toString());
+			this.logger.debug("List of the companies displayed");
+		}
+		else
+		{
+			System.out.println("Mismatch of number of arguments\n");
+		}
 	}
 }

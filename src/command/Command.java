@@ -1,5 +1,8 @@
 package command;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Class Command
  * Represent an executable command
@@ -7,7 +10,7 @@ package command;
 public abstract class Command {
 
 	protected final String name = "";
-	
+	protected final Logger logger = LoggerFactory.getLogger(Command.class);
 	
 	public abstract void exec(String... args);
 	public abstract String getName();
