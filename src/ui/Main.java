@@ -4,13 +4,12 @@ package ui;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import command.Command;
-import command.CommandHandler;
-import persistence.ComputerRequestHandler;
+import command.*;
 
 /**
- * Class Main
+ * Class Main :
  * Entry point
+ * @author Lisa
  */
 public class Main {
 

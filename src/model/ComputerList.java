@@ -6,8 +6,9 @@ import java.util.Map.Entry;
 import persistence.ComputerRequestHandler;
 
 /**
- * Class ComputerLists
+ * Class ComputerLists :
  * Keeper of the computers list
+ * @author Lisa
  */
 public class ComputerList {
 

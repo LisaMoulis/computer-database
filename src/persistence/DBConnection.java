@@ -6,11 +6,10 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import command.Command;
-
 /**
- * Class DBConnection
+ * Class DBConnection :
  * Handle the connection
+ * @author Lisa
  */
 public class DBConnection {
 

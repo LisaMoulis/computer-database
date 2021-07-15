@@ -5,6 +5,7 @@ import java.util.ArrayList;
 /**
  * Class CommandHandler
  * Manage the commands and execute them
+ * @author Lisa
  */
 public class CommandHandler {
 

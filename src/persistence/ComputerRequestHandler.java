@@ -8,8 +8,12 @@ import java.util.HashMap;
 
 import mapper.ComputerMapper;
 import model.Computer;
-import model.ComputerList;
 
+/**
+ * Class ComputersRequesthandler :
+ * Manage the SQL requests for the computers
+ * @author Lisa
+ */
 public class ComputerRequestHandler {
 
 	public static Computer getComputer(int id)

@@ -3,8 +3,9 @@ package ui;
 import java.util.Scanner;
 
 /**
- * Class CLIReader
+ * Class CLIReader :
  * Read the commands from the command line
+ * @author Lisa
  */
 public class CLIReader {
 

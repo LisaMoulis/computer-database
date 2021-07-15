@@ -8,6 +8,12 @@ import java.util.HashMap;
 
 import mapper.CompanyMapper;
 
+
+/**
+ * Class CompanyRequesthandler :
+ * Manage the SQL requests for the companies
+ * @author Lisa
+ */
 public class CompanyRequestHandler {
 
 	public static String getCompany(int id)
