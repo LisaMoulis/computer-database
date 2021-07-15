@@ -3,8 +3,9 @@ package model;
 import java.time.LocalDate;
 
 /**
- * Class Computer
+ * Class Computer :
  * Represent a computer and its information
+ * @author Lisa
  */
 public class Computer {
 	private int id = -1;
@@ -17,13 +18,21 @@ public class Computer {
 	{
 		this.name = name;
 	}
-	
+	/**
+	 * @param name
+	 * @param introduced
+	 */
 	public Computer(String name, LocalDate introduced)
 	{
 		this.name = name;
 		this.introduced = introduced;		
 	}
 	
+	/**
+	 * @param name
+	 * @param introduced
+	 * @param company
+	 */
 	public Computer(String name, LocalDate introduced, String company)
 	{
 		this.name = name;
@@ -31,6 +40,11 @@ public class Computer {
 		this.company = company;
 	}
 	
+	/**
+	 * @param name
+	 * @param introduced
+	 * @param discontinued
+	 */
 	public Computer(String name, LocalDate introduced, LocalDate discontinued)
 	{
 		this.name = name;
@@ -42,6 +56,12 @@ public class Computer {
 		
 	}
 	
+	/**
+	 * @param name
+	 * @param introduced
+	 * @param discontinued
+	 * @param company
+	 */
 	public Computer(String name, LocalDate introduced, LocalDate discontinued, String company)
 	{
 		this.name = name;
@@ -53,6 +73,13 @@ public class Computer {
 		this.company = company;
 	}
 	
+	/**
+	 * @param id
+	 * @param name
+	 * @param introduced
+	 * @param discontinued
+	 * @param company
+	 */
 	public Computer(int id,String name, LocalDate introduced, LocalDate discontinued, String company)
 	{
 		this.id = id;

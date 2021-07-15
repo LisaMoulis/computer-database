@@ -9,20 +9,28 @@ import model.CompanyList;
 import model.Computer;
 
 /**
- * Class ComputerMapper
+ * Class ComputerMapper :
  * Map the information between the database and computers
+ * @author Lisa
  */
 public class ComputerMapper {
 	
+	/**
+	 * @param result	Representation of a computer from the database
+	 * @return A computer object created from one of the database
+	 * @throws SQLException
+	 */
 	public static Computer mapToComputer(ResultSet result) throws SQLException
 	{
 		String name = result.getString("name");
 		LocalDate introduced = null;
+		LocalDate discontinued = null;
+		//Verify if some columns are empty before getting them
 		if (result.getBytes("introduced") != null && !result.getString("introduced").equals("0000-00-00 00:00:00"))
 		{
 			introduced = result.getTimestamp("introduced").toLocalDateTime().toLocalDate();
 		}
-		LocalDate discontinued = null;
+		
 		if (result.getBytes("discontinued") != null && !result.getString("discontinued").equals("0000-00-00 00:00:00"))
 		{
 			discontinued = result.getTimestamp("discontinued").toLocalDateTime().toLocalDate();
@@ -33,9 +41,13 @@ public class ComputerMapper {
 		return new Computer(id,name,introduced,discontinued,company);
 	}
 	
+	/**
+	 * @param computer	Computer to convert into a database representation
+	 * @return String representing the computer in an update request
+	 */
 	public static String mapToUpdate(Computer c)
 	{
-		
+		//Create the part of an update request with the computer values
 		StringBuilder values = new StringBuilder("`id`='").append(c.getId()).append("', `name`='").append(c.getName()).append("'");
 		if (c.getIntroduced() != null)
 		{
@@ -52,8 +64,13 @@ public class ComputerMapper {
 		return values.toString();	
 	}
 	
+	/**
+	 * @param computer	Computer to convert into a database representation
+	 * @return String representing the computer in a create request
+	 */
 	public static String mapToCreate(Computer c)
 	{
+		//Create the part of a create request with the computer values
 		StringBuilder columns = new StringBuilder("(`id`, `name`");
 		StringBuilder values = new StringBuilder(") VALUES (").append(c.getId()).append(", '").append(c.getName()).append("'");
 		if (c.getIntroduced() != null)

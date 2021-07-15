@@ -4,8 +4,9 @@ import model.ComputerList;
 import persistence.ComputerRequestHandler;
 
 /**
- * Class CommandDelete
+ * Class CommandDelete :
  * Delete a computer
+ * @author Lisa
  */
 public class CommandDelete extends Command {
 

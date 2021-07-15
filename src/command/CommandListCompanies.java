@@ -3,8 +3,9 @@ package command;
 import model.CompanyList;
 
 /**
- * Class CommandListCompanies
+ * Class CommandListCompanies :
  * Display a list of the companies
+ * @author Lisa
  */
 public class CommandListCompanies extends Command {
 	private final String name = "companies";

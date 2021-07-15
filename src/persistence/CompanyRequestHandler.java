@@ -16,6 +16,10 @@ import mapper.CompanyMapper;
  */
 public class CompanyRequestHandler {
 
+	/**
+	 * @param id	Identifier of a company
+	 * @return The company found
+	 */
 	public static String getCompany(int id)
 	{
 		Connection connection = DBConnection.getConnection();
@@ -34,13 +38,18 @@ public class CompanyRequestHandler {
 		}
 	}
 	
+	/**
+	 * @return All the companies in the database
+	 */
 	public static HashMap<Integer,String> getAllCompanies()
 	{
 		HashMap<Integer,String> companies = new HashMap<Integer,String>();
 		Connection connection = DBConnection.getConnection();
 		try {
+			//Send the request to get all the companies
 			PreparedStatement query = connection.prepareStatement("SELECT * FROM `company`");
 			ResultSet result = query.executeQuery();
+			//Put all the companies into a list
 			while (result.next())
 			{
 				companies.put(result.getInt("id"),result.getString("name"));

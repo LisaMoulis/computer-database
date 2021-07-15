@@ -19,6 +19,7 @@ public class DBConnection {
 	
 	private DBConnection()
 	{
+		//Connect to the database when the instance is created
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");  
 			connection = DriverManager.getConnection("jdbc:mysql://localhost/computer-database-db?" + "user=admincdb&password=qwerty1234");
@@ -31,8 +32,12 @@ public class DBConnection {
 
 	}
 	
+	/**
+	 * @return instance	The unique instance of the class
+	 */
 	public static DBConnection getInstance()
 	{
+		//Create the instance if it's not existing
 		if (instance == null)
 		{
 			instance = new DBConnection();
@@ -45,8 +50,12 @@ public class DBConnection {
 		return logger;
 	}
 
+	/**
+	 * Close the connection to the database
+	 */
 	public static void close()
 	{
+		//Close the connection if it's existing
 		if (connection != null)
 		{
 			try {
@@ -59,8 +68,12 @@ public class DBConnection {
 		}
 	}
 	
+	/**
+	 * @return The connection to the database
+	 */
 	public static Connection getConnection()
 	{
+		//Create the instance if it's not existing
 		if (connection == null || instance == null)
 		{
 			instance = new DBConnection();
@@ -71,6 +84,7 @@ public class DBConnection {
 	@Override
 	public void finalize()
 	{
+		//Close the connection as soon as the instance is available to the garbage collector taking
 		try {
 			if (!connection.isClosed())
 			{

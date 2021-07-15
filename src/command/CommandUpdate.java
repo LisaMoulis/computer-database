@@ -7,8 +7,9 @@ import model.*;
 import persistence.ComputerRequestHandler;
 
 /**
- * Class CommandUpdate
+ * Class CommandUpdate :
  * Modify the information of a computer
+ * @author Lisa
  */
 public class CommandUpdate extends Command{
 	private final String name = "update";
@@ -48,6 +49,7 @@ public class CommandUpdate extends Command{
 					toupdate.setCompany(args[i+1]);
 					break;
 				}
+				//Update the computer in the database
 				ComputerRequestHandler.updateComputer(toupdate);
 			}
 			this.logger.debug("Computer info updated.");

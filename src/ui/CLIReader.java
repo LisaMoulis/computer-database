@@ -17,11 +17,17 @@ public class CLIReader {
 		open = false;
 	}
 	
+	/**
+	 * @return If it's possible to read the use inputs
+	 */
 	public static boolean canRead()
 	{
 		return open;
 	}
 	
+	/**
+	 * @return The user input read
+	 */
 	public static String[] getLine()
 	{
 		String[] line = null;

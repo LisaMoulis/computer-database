@@ -3,7 +3,7 @@ package command;
 import java.util.ArrayList;
 
 /**
- * Class CommandHandler
+ * Class CommandHandler :
  * Manage the commands and execute them
  * @author Lisa
  */
@@ -13,6 +13,7 @@ public class CommandHandler {
 	
 	public CommandHandler()
 	{
+		//Create the list of commands with the basic ones
 		this.commands = new ArrayList<Command>();
 		this.commands.add(new CommandCreate());
 		this.commands.add(new CommandDelete());
@@ -25,8 +26,12 @@ public class CommandHandler {
 		this.commands.add(new CommandPreviousPage());
 	}
 	
+	/**
+	 * @param args	keyword of the entered command + arguments
+	 */
 	public void exec(String...args)
 	{
+		//Calls the exec of the specified command
 		for(Command c : commands)
 		{
 			if (c.getName().equals(args[0]))
@@ -36,13 +41,26 @@ public class CommandHandler {
 		}
 	}
 	
+	/**
+	 * @param command	command to add
+	 */
 	public void add(Command command)
 	{
 		if (!commands.contains(command))
 		{
 			commands.add(command);
 		}
-		
+	}
+	
+	/**
+	 * @param command	command to remove
+	 */
+	public void remove(Command command)
+	{
+		if (commands.contains(command))
+		{
+			commands.remove(command);
+		}
 	}
 	
 	

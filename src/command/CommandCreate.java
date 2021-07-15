@@ -8,8 +8,9 @@ import model.*;
 import persistence.ComputerRequestHandler;
 
 /**
- * Class CommandCreate
+ * Class CommandCreate :
  * Create a computer
+ * @author Lisa
  */
 public class CommandCreate extends Command {
 	private final String name = "create";
@@ -48,6 +49,7 @@ public class CommandCreate extends Command {
 		if (newone != null)
 		{
 			this.logger.info("Computer created.");
+			//Create the computer in the database and locally
 			ComputerList.getInstance().add(newone);
 			ComputerRequestHandler.createComputer(newone);
 			

@@ -25,7 +25,7 @@ public class Main {
 	
 	private static void getFromCommandLine()
 	{
-		
+		//Read the command line inputs while it's possible
 		while (CLIReader.canRead())
 		{
 			System.out.println("\nEnter your command :\n");

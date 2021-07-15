@@ -2,6 +2,11 @@ package command;
 
 import model.ComputerList;
 
+/**
+ * Class CommandNextPage :
+ * Display the previous page of computers
+ * @author Lisa
+ */
 public class CommandPreviousPage extends Command{
 	private final String name = "previous";
 

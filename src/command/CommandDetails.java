@@ -4,8 +4,9 @@ import model.*;
 import persistence.ComputerRequestHandler;
 
 /**
- * Class CommandDetails
+ * Class CommandDetails :
  * Display the details of a computer
+ * @author Lisa
  */
 public class CommandDetails extends Command {
 	private final String name = "details";

@@ -22,8 +22,12 @@ public class ComputerList {
 		computers = ComputerRequestHandler.getAllComputers();
 	}
 	
+	/**
+	 * @return instance	The unique instance of the class
+	 */
 	public static ComputerList getInstance()
 	{
+		//Create the instance if it's not existing
 		if (instance == null)
 		{
 			instance = new ComputerList();
@@ -31,11 +35,19 @@ public class ComputerList {
 		return instance;
 	}
 	
+	/**
+	 * @param id Identifier of a computer
+	 * @return The computer found
+	 */
 	public Computer getComputer(int id)
 	{
 		return computers.get(id);
 	}
 	
+	/**
+	 * @param name Name of a computer
+	 * @return The computer found
+	 */
 	public Computer getComputer(String name)
 	{
 		for (Entry<Integer, Computer> c : computers.entrySet())
@@ -50,13 +62,13 @@ public class ComputerList {
 	
 	public void add(Computer c)
 	{
-		int index = 1;
-		while (computers.containsKey(index))
+		int cindex = 1;
+		while (computers.containsKey(cindex))
 		{
-			index++;
+			cindex++;
 		}
-		c.setId(index);
-		computers.put(index, c);
+		c.setId(cindex);
+		computers.put(cindex, c);
 	}
 	
 	public void remove(Computer c)
@@ -74,8 +86,12 @@ public class ComputerList {
 		computers.remove(getComputer(name).getId());
 	}
 	
+	/**
+	 * @return The current page of the computers list
+	 */
 	private String getPage()
 	{
+		//Create the list of computers to display
 		StringBuilder str = new StringBuilder("	Page ").append(index+1).append("\nComputerList [computers=");
 		for (int i = index*sizePage+1; i < computers.size() && i < (index+1)*sizePage+1; i++)
 		{
@@ -89,15 +105,21 @@ public class ComputerList {
 		return str.toString();
 	}
 	
-	
+	/**
+	 * @return The first page of the computers list
+	 */
 	public String beginPage()
 	{
 		index = 0;
 		return getPage();
 	}
 	
+	/**
+	 * @return The next page of the computers list
+	 */
 	public String nextPage()
 	{
+		//Verify the page isn't the last one before returning the next one
 		if ((index+1)*sizePage < computers.size())
 		{
 			index++;
@@ -105,8 +127,12 @@ public class ComputerList {
 		return getPage();
 	}
 	
+	/**
+	 * @return The previous page of the computers list
+	 */
 	public String previousPage()
 	{
+		//Verify the page isn't the first one before returning the previous one
 		if (index > 0)
 		{
 			index--;

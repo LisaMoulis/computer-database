@@ -3,8 +3,9 @@ package command;
 import ui.CLIReader;
 
 /**
- * Class CommandQuit
+ * Class CommandQuit :
  * Close the program
+ * @author Lisa
  */
 public class CommandQuit extends Command {
 

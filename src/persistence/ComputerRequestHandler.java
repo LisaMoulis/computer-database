@@ -16,6 +16,10 @@ import model.Computer;
  */
 public class ComputerRequestHandler {
 
+	/**
+	 * @param id	Identified of a computer
+	 * @return The computer found
+	 */
 	public static Computer getComputer(int id)
 	{
 		Connection connection = DBConnection.getConnection();
@@ -34,6 +38,10 @@ public class ComputerRequestHandler {
 		}
 	}
 	
+	/**
+	 * @param name	Name of a computer
+	 * @return The computer found
+	 */
 	public static Computer getComputer(String name)
 	{
 		Connection connection = DBConnection.getConnection();
@@ -52,10 +60,14 @@ public class ComputerRequestHandler {
 		}
 	}
 	
+	/**
+	 * @param computer	Computer to create
+	 */
 	public static void createComputer(Computer computer)
 	{
 		Connection connection = DBConnection.getConnection();
 		try {
+			//Use the mapper to get the representation of the computer to insert
 			PreparedStatement query = connection.prepareStatement("INSERT INTO `computer`"+ ComputerMapper.mapToCreate(computer));
 			DBConnection.getLogger().debug("INSERT INTO `computer`"+ ComputerMapper.mapToCreate(computer));
 			query.executeUpdate();
@@ -65,10 +77,14 @@ public class ComputerRequestHandler {
 		}
 	}
 	
+	/**
+	 * @param computer	Computer to update
+	 */
 	public static void updateComputer(Computer computer)
 	{
 		Connection connection = DBConnection.getConnection();
 		try {
+			//Use the mapper to get the representation of the computer to update
 			PreparedStatement query = connection.prepareStatement("UPDATE `computer` SET "+ ComputerMapper.mapToUpdate(computer) + "WHERE id=" + computer.getId());
 			DBConnection.getLogger().debug("UPDATE `computer` SET "+ ComputerMapper.mapToUpdate(computer) + "WHERE id=" + computer.getId());
 			
@@ -79,6 +95,9 @@ public class ComputerRequestHandler {
 		}
 	}
 	
+	/**
+	 * @param id	Identifier of the computer to delete
+	 */
 	public static void deleteComputer(int id)
 	{
 		Connection connection = DBConnection.getConnection();
@@ -92,6 +111,9 @@ public class ComputerRequestHandler {
 		}
 	}
 	
+	/**
+	 * @param name Name of the computer to delete
+	 */
 	public static void deleteComputer(String name)
 	{
 		Connection connection = DBConnection.getConnection();
@@ -106,13 +128,18 @@ public class ComputerRequestHandler {
 		}
 	}
 	
+	/**
+	 * @return The list of all the computers
+	 */
 	public static HashMap<Integer,Computer> getAllComputers()
 	{
 		HashMap<Integer,Computer> computers = new HashMap<Integer,Computer>();
 		Connection connection = DBConnection.getConnection();
 		try {
+			//Send the request to get all the computers
 			PreparedStatement query = connection.prepareStatement("SELECT * FROM `computer` LEFT JOIN `company` ON company_id = company.id");
 			ResultSet result = query.executeQuery();
+			//Create the list of all the computers
 			while (result.next())
 			{
 				computers.put(result.getInt("computer.id"),ComputerMapper.mapToComputer(result));
