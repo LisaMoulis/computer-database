@@ -21,4 +21,14 @@ public class CommandQuit extends Command {
 		System.out.println("Bye!");
 		CLIReader.close();
 	}
+	
+	@Override
+	public boolean equals(Object object)
+	{
+		if (object == null || !this.name.equals(((Command)object).getName()))
+		{
+			return false;
+		}
+		return true;
+	}
 }

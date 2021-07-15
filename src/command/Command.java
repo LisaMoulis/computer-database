@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class Command {
 
-	protected final String name = "";
 	protected final Logger logger = LoggerFactory.getLogger(Command.class);
 	
 	/**
@@ -21,12 +20,5 @@ public abstract class Command {
 	public abstract String getName();
 	
 	@Override
-	public boolean equals(Object object)
-	{
-		if (object == null || !this.name.equals(((Command)object).getName()))
-		{
-			return false;
-		}
-		return true;
-	}
+	public abstract boolean equals(Object object);
 }

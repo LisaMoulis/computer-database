@@ -59,5 +59,15 @@ public class CommandUpdate extends Command{
 		{
 			this.logger.debug("An issue in the computer update happened.");
 		}
-	}	
+	}
+	
+	@Override
+	public boolean equals(Object object)
+	{
+		if (object == null || !this.name.equals(((Command)object).getName()))
+		{
+			return false;
+		}
+		return true;
+	}
 }

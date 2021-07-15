@@ -14,6 +14,9 @@ public class Computer {
 	private LocalDate discontinued;
 	private String company;
 	
+	/**
+	 * @param name
+	 */
 	public Computer(String name)
 	{
 		this.name = name;
@@ -35,8 +38,7 @@ public class Computer {
 	 */
 	public Computer(String name, LocalDate introduced, String company)
 	{
-		this.name = name;
-		this.introduced = introduced;
+		this(name,introduced);
 		this.company = company;
 	}
 	
@@ -47,8 +49,7 @@ public class Computer {
 	 */
 	public Computer(String name, LocalDate introduced, LocalDate discontinued)
 	{
-		this.name = name;
-		this.introduced = introduced;
+		this(name,introduced);
 		if (discontinued != null && discontinued.isAfter(introduced))
 		{
 			this.discontinued = discontinued;
@@ -64,12 +65,7 @@ public class Computer {
 	 */
 	public Computer(String name, LocalDate introduced, LocalDate discontinued, String company)
 	{
-		this.name = name;
-		this.introduced = introduced;
-		if (discontinued != null && introduced != null && discontinued.isAfter(introduced))
-		{
-			this.discontinued = discontinued;
-		}
+		this(name,introduced,discontinued);
 		this.company = company;
 	}
 	
@@ -81,15 +77,8 @@ public class Computer {
 	 * @param company
 	 */
 	public Computer(int id,String name, LocalDate introduced, LocalDate discontinued, String company)
-	{
+	{ 	this(name,introduced,discontinued,company);
 		this.id = id;
-		this.name = name;
-		this.introduced = introduced;
-		if (discontinued != null && introduced != null && discontinued.isAfter(introduced))
-		{
-			this.discontinued = discontinued;
-		}
-		this.company = company;
 	}
 
 	public String getName()

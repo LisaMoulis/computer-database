@@ -61,4 +61,14 @@ public class CommandCreate extends Command {
 		
 	}
 	
+	@Override
+	public boolean equals(Object object)
+	{
+		if (object == null || !this.name.equals(((Command)object).getName()))
+		{
+			return false;
+		}
+		return true;
+	}
+	
 }

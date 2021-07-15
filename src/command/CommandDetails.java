@@ -36,4 +36,14 @@ public class CommandDetails extends Command {
 			System.out.println("Mismatch of number of arguments\n");
 		}
 	}
+	
+	@Override
+	public boolean equals(Object object)
+	{
+		if (object == null || !this.name.equals(((Command)object).getName()))
+		{
+			return false;
+		}
+		return true;
+	}
 }
