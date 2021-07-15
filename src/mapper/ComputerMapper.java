@@ -51,11 +51,11 @@ public class ComputerMapper {
 		StringBuilder values = new StringBuilder("`id`='").append(c.getId()).append("', `name`='").append(c.getName()).append("'");
 		if (c.getIntroduced() != null)
 		{
-			values.append(", `introduced`=").append(Timestamp.valueOf(LocalDateTime.of(c.getIntroduced(),LocalTime.of(0, 0))));
+			values.append(", `introduced`='").append(Timestamp.valueOf(LocalDateTime.of(c.getIntroduced(),LocalTime.of(0, 0)))).append("'");
 		}
 		if (c.getDiscontinued() != null)
 		{
-			values.append(", `discontinued`=").append(Timestamp.valueOf(LocalDateTime.of(c.getDiscontinued(),LocalTime.of(0, 0))));
+			values.append(", `discontinued`='").append(Timestamp.valueOf(LocalDateTime.of(c.getDiscontinued(),LocalTime.of(0, 0)))).append("'");
 		}
 		if (c.getCompany() != null)
 		{
@@ -76,12 +76,12 @@ public class ComputerMapper {
 		if (c.getIntroduced() != null)
 		{
 			columns.append(", `introduced`");
-			values.append(", ").append(Timestamp.valueOf(LocalDateTime.of(c.getIntroduced(),LocalTime.of(0, 0))));
+			values.append(", '").append(Timestamp.valueOf(LocalDateTime.of(c.getIntroduced(),LocalTime.of(0, 0)))).append("'");
 		}
 		if (c.getDiscontinued() != null)
 		{
 			columns.append(", `discontinued`");
-			values.append(", ").append(Timestamp.valueOf(LocalDateTime.of(c.getDiscontinued(),LocalTime.of(0, 0))));
+			values.append(", '").append(Timestamp.valueOf(LocalDateTime.of(c.getDiscontinued(),LocalTime.of(0, 0)))).append("'");
 		}
 		if (c.getCompany() != null)
 		{
