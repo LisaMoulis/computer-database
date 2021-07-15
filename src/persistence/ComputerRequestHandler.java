@@ -25,7 +25,6 @@ public class ComputerRequestHandler {
 		Connection connection = DBConnection.getConnection();
 		try {
 			PreparedStatement query = connection.prepareStatement("SELECT * FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE computer.id=?");
-			
 			query.setInt(1, id);
 			ResultSet result = query.executeQuery();
 			result.next();
@@ -47,7 +46,6 @@ public class ComputerRequestHandler {
 		Connection connection = DBConnection.getConnection();
 		try {
 			PreparedStatement query = connection.prepareStatement("SELECT * FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE computer.name=?");
-			
 			query.setString(1, name);
 			ResultSet result = query.executeQuery();
 			result.next();
@@ -85,9 +83,9 @@ public class ComputerRequestHandler {
 		Connection connection = DBConnection.getConnection();
 		try {
 			//Use the mapper to get the representation of the computer to update
-			PreparedStatement query = connection.prepareStatement("UPDATE `computer` SET "+ ComputerMapper.mapToUpdate(computer) + "WHERE id=" + computer.getId());
-			DBConnection.getLogger().debug("UPDATE `computer` SET "+ ComputerMapper.mapToUpdate(computer) + "WHERE id=" + computer.getId());
-			
+			PreparedStatement query = connection.prepareStatement("UPDATE `computer` SET "+ ComputerMapper.mapToUpdate(computer) + "WHERE id=?");
+			DBConnection.getLogger().debug("UPDATE `computer` SET "+ ComputerMapper.mapToUpdate(computer) + "WHERE id=?");
+			query.setInt(1, computer.getId());
 			query.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -102,8 +100,10 @@ public class ComputerRequestHandler {
 	{
 		Connection connection = DBConnection.getConnection();
 		try {
-			PreparedStatement query = connection.prepareStatement("DELETE FROM `computer` WHERE id="+id);
+			PreparedStatement query = connection.prepareStatement("DELETE FROM `computer` WHERE id=?");
+			
 			DBConnection.getLogger().debug("DELETE FROM `computer` WHERE id="+ id);
+			query.setInt(1, id);
 			query.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -118,9 +118,9 @@ public class ComputerRequestHandler {
 	{
 		Connection connection = DBConnection.getConnection();
 		try {
-			PreparedStatement query = connection.prepareStatement("DELETE FROM `computer` WHERE name='"+ name + "'");
-			DBConnection.getLogger().debug("DELETE FROM `computer` WHERE name='"+ name + "'");
-			
+			PreparedStatement query = connection.prepareStatement("DELETE FROM `computer` WHERE name=?");
+			DBConnection.getLogger().debug("DELETE FROM `computer` WHERE name=?");
+			query.setString(1, name);
 			query.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

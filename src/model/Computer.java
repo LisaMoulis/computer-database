@@ -50,7 +50,7 @@ public class Computer {
 	public Computer(String name, LocalDate introduced, LocalDate discontinued)
 	{
 		this(name,introduced);
-		if (discontinued != null && discontinued.isAfter(introduced))
+		if (discontinued != null && introduced != null && discontinued.isAfter(introduced))
 		{
 			this.discontinued = discontinued;
 		}
