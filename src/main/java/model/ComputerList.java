@@ -15,7 +15,7 @@ public class ComputerList {
 	private HashMap<Integer,Computer> computers;
 	private static ComputerList instance;
 	private int index = 0;
-	private final int sizePage = 50;
+	private final int sizePage = 10;
 	
 	private ComputerList()
 	{
