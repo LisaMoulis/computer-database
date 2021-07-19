@@ -9,7 +9,7 @@ import javax.servlet.http.*;
 import service.displayer.Displayer;
 import service.displayer.WebDisplayer;
 
-public class Home extends HttpServlet{
+public class Computers extends HttpServlet{
 	private Displayer displayer = WebDisplayer.getInstance();
 	
 	

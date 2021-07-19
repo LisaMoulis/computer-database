@@ -19,17 +19,6 @@ public class DBConnection {
 	
 	private DBConnection()
 	{
-		//Connect to the database when the instance is created
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");  
-			connection = DriverManager.getConnection("jdbc:mysql://localhost/computer-database-db?" + "user=admincdb&password=qwerty1234");
-			logger.debug("Connection to the database etablished.");
-		} catch (SQLException | ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			logger.debug("Failed to establish a connection to the database.");
-			e.printStackTrace();
-		}
-
 	}
 	
 	/**
@@ -74,9 +63,21 @@ public class DBConnection {
 	public static Connection getConnection()
 	{
 		//Create the instance if it's not existing
-		if (connection == null || instance == null)
+		if (connection == null)
 		{
-			instance = new DBConnection();
+			if (instance == null)
+			{
+				instance = new DBConnection();
+			}
+			try {
+				Class.forName("com.mysql.cj.jdbc.Driver");  
+				connection = DriverManager.getConnection("jdbc:mysql://localhost/computer-database-db?" + "user=admincdb&password=qwerty1234");
+				logger.debug("Connection to the database etablished.");
+			} catch (SQLException | ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				logger.debug("Failed to establish a connection to the database.");
+				e.printStackTrace();
+			}
 		}
 		return connection;
 	}

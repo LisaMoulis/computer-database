@@ -6,10 +6,10 @@
  <servlet>
         <servlet-name>Home</servlet-name>
         <servlet-class>ui.servlets.Home</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>Home</servlet-name>
-        <url-pattern>/</url-pattern>
-    </servlet-mapping>
+ </servlet>
+ <servlet-mapping>
+     <servlet-name>Home</servlet-name>
+     <url-pattern>/*</url-pattern>
+</servlet-mapping>
 
 </web-app>

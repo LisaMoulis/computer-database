@@ -6,6 +6,8 @@ import java.time.format.DateTimeParseException;
 
 import model.*;
 import persistence.ComputerRequestHandler;
+import service.ComputerBuilder;
+import service.displayer.Displayer;
 
 /**
  * Class CommandCreate :
@@ -21,43 +23,32 @@ public class CommandCreate extends Command {
 	}
 	
 	@Override
-	public void exec(String... args) {
-		Computer newone = null;
-		switch (args.length)
+	public String exec(Displayer displayer,String...args) {
+		ComputerBuilder newone = new ComputerBuilder();
+		for (int i = 2; i+1 < args.length;i+=2)
 		{
-		case (2):
-			newone = new Computer(args[1]);
-			break;
-		case (3):
-			newone = new Computer(args[1],LocalDate.parse(args[2],DateTimeFormatter.ISO_LOCAL_DATE));
-			break;
-		case (4):
-			try {
-				newone = new Computer(args[1],LocalDate.parse(args[2],DateTimeFormatter.ISO_LOCAL_DATE),LocalDate.parse(args[3],DateTimeFormatter.ISO_LOCAL_DATE));
-			}
-			catch (DateTimeParseException e)
+			switch (args[i])
 			{
-				newone = new Computer(args[1],LocalDate.parse(args[2],DateTimeFormatter.ISO_LOCAL_DATE),args[3]);
+			case ("name"):
+				newone.setName(args[i+1]);
+				break;
+			case("introduced"):
+				newone.setIntroduced(LocalDate.parse(args[i+1],DateTimeFormatter.ISO_LOCAL_DATE));
+				break;
+			case("discontinued"):
+				newone.setDiscontinued(LocalDate.parse(args[i+1],DateTimeFormatter.ISO_LOCAL_DATE));
+				break;
+			case("company"):
+				newone.setCompany(args[i+1]);
+				break;
 			}
-			break;
-		case (5):
-			newone = new Computer(args[1],LocalDate.parse(args[2],DateTimeFormatter.ISO_LOCAL_DATE),LocalDate.parse(args[3],DateTimeFormatter.ISO_LOCAL_DATE),args[4]);
-			break;
-		default:
-			System.out.println("Mismatch of number of arguments\n");
 		}
-		if (newone != null)
-		{
-			this.logger.info("Computer created.");
-			//Create the computer in the database and locally
-			ComputerList.getInstance().add(newone);
-			ComputerRequestHandler.createComputer(newone);
-			
-		}
-		else
-		{
-			this.logger.info("An issue in the computer creation happened.");
-		}
+		this.logger.info("Computer created.");
+		Computer newc = newone.build();
+		//Create the computer in the database and locally
+		ComputerList.getInstance().add(newc);
+		ComputerRequestHandler.createComputer(newc);
+		return displayer.crud();
 		
 	}
 	

@@ -2,6 +2,7 @@ package command;
 
 import model.ComputerList;
 import persistence.ComputerRequestHandler;
+import service.displayer.Displayer;
 
 /**
  * Class CommandDelete :
@@ -18,7 +19,7 @@ public class CommandDelete extends Command {
 	}
 	
 	@Override
-	public void exec(String... args) {
+	public String exec(Displayer displayer,String...args) {
 		if (args.length == 2)
 		{
 			try {
@@ -32,10 +33,11 @@ public class CommandDelete extends Command {
 				ComputerList.getInstance().remove(args[1]);
 			}
 			this.logger.debug("Computer deleted.");
+			return displayer.crud();
 		}
 		else
 		{
-			System.out.println("Mismatch of number of arguments\n");
+			return "Mismatch of number of arguments\n";
 		}
 	}
 	

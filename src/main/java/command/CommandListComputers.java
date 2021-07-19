@@ -1,6 +1,7 @@
 package command;
 
 import model.ComputerList;
+import service.displayer.Displayer;
 
 /**
  * Class CommandListComputers :
@@ -16,17 +17,23 @@ public class CommandListComputers extends Command{
 	}
 	
 	@Override
-	public void exec(String... args) {
+	public String exec(Displayer displayer,String...args) {
 		if (args.length == 1)
 		{
-			System.out.println("List of the computers :\n");
-			System.out.println(ComputerList.getInstance().beginPage());
-			this.logger.debug("List of computers displayed.");
+			ComputerList.getInstance().beginPage();
+			this.logger.debug("Displaying the list of computers.");
+			return displayer.listComputers();
+		}
+		else if (args.length == 2)
+		{
+			this.logger.debug("Displaying the list of computers.");
+			return displayer.listComputers(Integer.valueOf(args[2]));
 		}
 		else
 		{
-			System.out.println("Mismatch of number of arguments\n");
+			return "Mismatch of number of arguments\n";
 		}
+		
 	}
 	
 	@Override

@@ -1,6 +1,7 @@
 package command;
 
 import model.CompanyList;
+import service.displayer.Displayer;
 
 /**
  * Class CommandListCompanies :
@@ -16,17 +17,17 @@ public class CommandListCompanies extends Command {
 	}
 	
 	@Override
-	public void exec(String... args) {
+	public String exec(Displayer displayer,String...args) {
 		if (args.length == 1)
 		{
-			System.out.println("List of the companies :\n");
-			System.out.println(CompanyList.getInstance().toString());
-			this.logger.debug("List of the companies displayed");
+			this.logger.debug("Displaying the list of the companies.");
+			return displayer.listCompanies();
 		}
 		else
 		{
-			System.out.println("Mismatch of number of arguments\n");
+			return "Mismatch of number of arguments\n";
 		}
+		
 	}
 	
 	@Override
