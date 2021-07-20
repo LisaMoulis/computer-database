@@ -11,9 +11,10 @@ import service.displayer.Displayer;
  */
 public class CommandHandler {
 
-	ArrayList<Command> commands;
+	private ArrayList<Command> commands;
+	private static CommandHandler instance;
 	
-	public CommandHandler()
+	private CommandHandler()
 	{
 		//Create the list of commands with the basic ones
 		this.commands = new ArrayList<Command>();
@@ -26,6 +27,15 @@ public class CommandHandler {
 		this.commands.add(new CommandQuit());
 		this.commands.add(new CommandNextPage());
 		this.commands.add(new CommandPreviousPage());
+	}
+	
+	public static CommandHandler getInstance()
+	{
+		if (instance == null)
+		{
+			instance = new CommandHandler();
+		}
+		return instance;
 	}
 	
 	/**

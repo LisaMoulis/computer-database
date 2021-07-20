@@ -1,7 +1,5 @@
 package service.displayer;
 
-import java.util.HashMap;
-import model.*;
 
 public interface Displayer {
 

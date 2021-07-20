@@ -1,7 +1,5 @@
 package command;
 
-import model.*;
-import persistence.ComputerRequestHandler;
 import service.displayer.Displayer;
 
 /**

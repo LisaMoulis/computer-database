@@ -93,7 +93,7 @@ public class ComputerList {
 	{
 		ArrayList<Computer> toDisplay = new ArrayList<Computer>();
 		//Create the list of computers to display
-		StringBuilder str = new StringBuilder("	Page ").append(index+1).append("\nComputerList [computers=");
+		//StringBuilder str = new StringBuilder("	Page ").append(index+1).append("\nComputerList [computers=");
 		for (int i = index*sizePage+1; i < computers.size() && i < (index+1)*sizePage+1; i++)
 		{
 			if (computers.get(i) != null)

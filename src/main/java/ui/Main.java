@@ -15,7 +15,7 @@ import service.displayer.Displayer;
  */
 public class Main {
 
-	private static CommandHandler commands = new CommandHandler();
+	private static CommandHandler commands = CommandHandler.getInstance();
 	protected static final Logger logger = LoggerFactory.getLogger(Main.class);
 	private static Displayer displayer = CLIDisplayer.getInstance();
 	
