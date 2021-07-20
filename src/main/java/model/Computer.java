@@ -138,6 +138,17 @@ public class Computer {
 	}
 	
 	@Override
+	public boolean equals(Object c)
+	{
+		Computer totest = (Computer) c;
+		if (totest == null || this.id != totest.getId() || !this.name.equals(totest.getName()) || !this.introduced.equals(totest.getIntroduced()) || !this.discontinued.equals(totest.getDiscontinued()) || !this.company.equals(totest.getCompany()))
+		{
+			return false;
+		}
+		return true;
+	}
+	
+	@Override
 	public String toString() {
 		return "\nComputer [name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued + ", company=" + company
 				+ "]";

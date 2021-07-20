@@ -13,29 +13,34 @@ public class ComputerBuilder {
 	private String company;
 
 	
-	public void setName(String name)
+	public ComputerBuilder setName(String name)
 	{
 		this.name = name;
+		return this;
 	}
 	
-	public void setIntroduced(LocalDate introduced)
+	public ComputerBuilder setIntroduced(LocalDate introduced)
 	{
 		this.introduced = introduced;
+		return this;
 	}
 	
-	public void setDiscontinued(LocalDate discontinued)
+	public ComputerBuilder setDiscontinued(LocalDate discontinued)
 	{
 		this.discontinued = discontinued;
+		return this;
 	}
 	
-	public void setCompany(String company)
+	public ComputerBuilder setCompany(String company)
 	{
 		this.company = company;
+		return this;
 	}
 	
-	public void setId(int id)
+	public ComputerBuilder setId(int id)
 	{
 		this.id = id;
+		return this;
 	}
 	
 	public Computer build()
