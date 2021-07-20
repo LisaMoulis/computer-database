@@ -25,7 +25,7 @@ public class CommandCreate extends Command {
 	@Override
 	public String exec(Displayer displayer,String...args) {
 		ComputerBuilder newone = new ComputerBuilder();
-		for (int i = 2; i+1 < args.length;i+=2)
+		for (int i = 1; i+1 < args.length;i+=2)
 		{
 			switch (args[i])
 			{
@@ -43,8 +43,10 @@ public class CommandCreate extends Command {
 				break;
 			}
 		}
+		System.out.println(args);
 		this.logger.info("Computer created.");
 		Computer newc = newone.build();
+		this.logger.info(newc.toString());
 		//Create the computer in the database and locally
 		ComputerList.getInstance().add(newc);
 		ComputerRequestHandler.createComputer(newc);

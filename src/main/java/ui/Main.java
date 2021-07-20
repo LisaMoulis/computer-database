@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import command.*;
+import service.ComputerBuilder;
 import service.displayer.CLIDisplayer;
 import service.displayer.Displayer;
 
@@ -23,6 +24,8 @@ public class Main {
 	{
 		logger.debug("Program started.");
 		//System.out.println(ComputerRequestHandler.getComputer(5).toString());
+		ComputerBuilder builder = new ComputerBuilder();
+		//System.out.println(builder.build());
 		getFromCommandLine();
 	}
 	

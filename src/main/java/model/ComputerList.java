@@ -20,6 +20,7 @@ public class ComputerList {
 	
 	private ComputerList()
 	{
+		computers = ComputerRequestHandler.getAllComputers();
 	}
 	
 	/**
@@ -63,9 +64,12 @@ public class ComputerList {
 	public void add(Computer c)
 	{
 		int cindex = 1;
-		while (computers.containsKey(cindex))
+		if (computers != null)
 		{
-			cindex++;
+			while (computers.containsKey(cindex))
+			{
+				cindex++;
+			}
 		}
 		c.setId(cindex);
 		computers.put(cindex, c);

@@ -29,28 +29,29 @@ public class AddComputer extends HttpServlet{
 	@Override
 	public void doPost(HttpServletRequest request,HttpServletResponse response) throws ServletException,IOException 
 	{
-		/*ArrayList<String> args = new ArrayList<String>();
+		ArrayList<String> args = new ArrayList<String>();
 		args.add("create");
 		args.add("name");
-		args.add((String) request.getAttribute("computerName"));
-		if (request.getAttribute("introduced") != null)
+		args.add((String) request.getParameter("computerName"));
+		if (request.getParameter("introduced") != null && !request.getParameter("introduced").equals(""))
 		{
 			args.add("introduced");
-			args.add((String) request.getAttribute("introduced"));
+			args.add((String) request.getParameter("introduced"));
 		}
-		if (request.getAttribute("discontinued") != null)
+		if (request.getParameter("discontinued") != null && !request.getParameter("discontinued").equals(""))
 		{
 			args.add("discontinued");
-			args.add((String) request.getAttribute("discontinued"));
+			args.add((String) request.getParameter("discontinued"));
 		}
-		if (request.getAttribute("companyId") != null && CompanyList.getInstance().getCompany(Integer.parseInt((String) request.getAttribute("companyId")))!= null)
+		if (request.getParameter("companyId") != null && !request.getParameter("companyId").equals("") && CompanyList.getInstance().getCompany(Integer.parseInt((String) request.getParameter("companyId")))!= null)
 		{
 			args.add("company");
-			args.add(CompanyList.getInstance().getCompany(Integer.parseInt((String) request.getAttribute("companyId"))));
+			args.add(CompanyList.getInstance().getCompany(Integer.parseInt((String) request.getParameter("companyId"))));
 		}
-		CommandHandler.getInstance().exec(displayer,(String[]) args.toArray());
-		request.getRequestDispatcher("/static/views/dashboard.jsp").forward(request, response);*/
-		this.doGet(request, response);
+		CommandHandler.getInstance().exec(displayer,args.toArray(new String[args.size()]));
+		//request.getRequestDispatcher("/static/views/dashboard.jsp").forward(request, response);
+		response.sendRedirect("computers");
+		//this.doGet(request, response);
 	}
 
 }
