@@ -3,7 +3,6 @@ package model;
 import java.util.*;
 import java.util.Map.Entry;
 
-import persistence.CompanyRequestHandler;
 import persistence.ComputerRequestHandler;
 
 /**

@@ -1,6 +1,5 @@
 package command;
 
-import model.CompanyList;
 import service.displayer.Displayer;
 
 /**

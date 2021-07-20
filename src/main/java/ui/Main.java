@@ -24,7 +24,7 @@ public class Main {
 	{
 		logger.debug("Program started.");
 		//System.out.println(ComputerRequestHandler.getComputer(5).toString());
-		ComputerBuilder builder = new ComputerBuilder();
+		//ComputerBuilder builder = new ComputerBuilder();
 		//System.out.println(builder.build());
 		getFromCommandLine();
 	}
