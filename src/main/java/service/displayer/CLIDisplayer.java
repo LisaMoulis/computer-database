@@ -37,7 +37,7 @@ public class CLIDisplayer implements Displayer {
 	
 	@Override
 	public String listComputers(int index) {
-		return "List of the computers :\n" + ComputerList.getInstance().getPage(index);
+		return "List of the computers :\n" + ComputerList.getInstance().getPage(index,10);
 	}
 
 	@Override

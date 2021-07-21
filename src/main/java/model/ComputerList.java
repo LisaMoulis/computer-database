@@ -111,17 +111,33 @@ public class ComputerList {
 		return toDisplay;
 	}
 	
+	public int getNbComputers()
+	{
+		computers = ComputerRequestHandler.getAllComputers();
+		return computers.size();
+	}
+	
 	public int getIndex()
 	{
 		return this.index;
 	}
 	
-	public ArrayList<Computer> getPage(int idx)
+	public int getNbPages(int size)
+	{
+		computers = ComputerRequestHandler.getAllComputers();
+		if (computers.size()%size == 0)
+		{
+			return computers.size()/size;
+		}
+		return computers.size()/size + 1;
+	}
+	
+	public ArrayList<Computer> getPage(int idx,int size)
 	{
 		ArrayList<Computer> toDisplay = new ArrayList<Computer>();
 		//Create the list of computers to display
 		//StringBuilder str = new StringBuilder("	Page ").append(idx+1).append("\nComputerList [computers=");
-		for (int i = idx*sizePage+1; i < computers.size() && i < (idx+1)*sizePage+1; i++)
+		for (int i = (idx-1)*size+1; i < computers.size() && i < idx*size+1; i++)
 		{
 			if (computers.get(i) != null)
 			{
@@ -142,16 +158,6 @@ public class ComputerList {
 	{
 		index = 0;
 		computers = ComputerRequestHandler.getAllComputers();
-	}
-	
-	public int getNbPages()
-	{
-		computers = ComputerRequestHandler.getAllComputers();
-		if (computers.size()%sizePage == 0)
-		{
-			return computers.size()%sizePage;
-		}
-		return computers.size()%sizePage + 1;
 	}
 	
 	/**

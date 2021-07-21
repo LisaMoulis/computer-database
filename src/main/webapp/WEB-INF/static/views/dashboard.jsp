@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
 <title>Computer Database</title>
@@ -11,8 +12,6 @@
 </head>
 <body>
 	<%@ page import="model.ComputerList" %>
-	<%int nbpages = ComputerList.getInstance().getNbPages(); %>
-	<%int current = Integer.valueOf((String)request.getAttribute("page")); %>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <a class="navbar-brand" href="dashboard.jsp"> Application - Computer Database </a>
@@ -21,7 +20,7 @@
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                121 Computers found
+                <c:out value="${nbComputers}"/> Computers found
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
@@ -42,7 +41,9 @@
         <form id="deleteForm" action="#" method="POST">
             <input type="hidden" name="selection" value="">
         </form>
-
+		<c:if test="${empty current}">
+              	<c:set var="page" value="1" scope="page" />
+        </c:if>  
         <div class="container" style="margin-top: 10px;">
             <table class="table table-striped table-bordered">
                 <thead>
@@ -77,54 +78,104 @@
                 </thead>
                 <!-- Browse attribute computers -->
                 <tbody id="results">
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">Nintendo 3DS</a>
-                        </td>
-                        <td>2010-03-23</td>
-                        <td></td>
-                        <td>Nintendo</td>
-
-                    </tr>
-                    
+                	<c:forEach items="${computers}" var="entry">
+					
+					 
+	                    <tr>
+	                        <td class="editMode">
+	                            <input type="checkbox" name="cb" class="cb" value="0">
+	                        </td>
+	                        <td>
+	                            <a href="editComputer.jsp" onclick=""><c:out value="${entry.name}"/></a>
+	                        </td>
+	                        <td><c:if test="${not empty entry.introduced}">${entry.introduced}</c:if></td>
+	                        <td><c:if test="${not empty entry.discontinued}">${entry.discontinued}</c:if></td>
+	                        <td><c:if test="${not empty entry.company}">${entry.company}</c:if></td>
+	
+	                    </tr>
+					</c:forEach>
                 </tbody>
             </table>
         </div>
     </section>
-
     <footer class="navbar-fixed-bottom">
         <div class="container text-center">
             <ul class="pagination">
                 <li>
-                    <a href="#" aria-label="Previous">
+                    <a href="computers?page=${current-1}&size=${size}" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="computers?page=3">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
+              	<c:set var="beginning" value="1" scope="page" />
+              	
+              	<c:if test="${current>5}">
+              		<c:set var="beginning" value="${current-5}" scope="page" />
+              	</c:if>
+              	<c:set var="end" value="${beginning+10}" scope="page" />
+              	<c:if test="${end>nbPages}">
+              		<c:set var="end" value="${nbPages}" scope="page" />
+              		<c:set var="beginning" value="${end-10}" scope="page" />
+              		<c:if test="${beginning<1}">
+              			<c:set var="beginning" value="1" scope="page" />
+              		</c:if>
+              	</c:if>
+              	
+				<c:forEach begin="${beginning}" end="${end}" var="i" step="1">
+					<li><a href="computers?page=${i}&size=${size}">${i}</a></li>
+				</c:forEach>
+				
               <li>
-                <a href="#" aria-label="Next">
+                <a href="computers?page=${current+1}&size=${size}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
-        </ul></div>
+        </ul>
+
 
         <div class="btn-group btn-group-sm pull-right" role="group" >
-            <button type="button" class="btn btn-default">10</button>
-            <button type="button" class="btn btn-default">50</button>
-            <button type="button" class="btn btn-default">100</button>
-        </div>
+            <button type="button" class="btn btn-default" onclick="size10()">10</button>
+            <button type="button" class="btn btn-default" onclick="size50()">50</button>
+            <button type="button" class="btn btn-default" onclick="size100()">100</button>
+        </div></div>
 
     </footer>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
 <script src="../js/dashboard.js"></script>
-
+<script> 
+	function size10() {
+		var searchParams = new URLSearchParams(window.location.search);
+		if (searchParams.get('page') == null)
+		{
+			window.location.replace("computers?page=1&size=10");
+		}
+		else
+		{
+			window.location.replace("computers?page="+ searchParams.get('page') +"&size=10");
+		}
+	}
+	function size50() {
+		var searchParams = new URLSearchParams(window.location.search);
+		if (searchParams.get('page') == null)
+		{
+			window.location.replace("computers?page=1&size=50");
+		}
+		else
+		{
+			window.location.replace("computers?page="+ searchParams.get('page') +"&size=50");
+		}
+	}
+	function size100() {
+		var searchParams = new URLSearchParams(window.location.search);
+		if (searchParams.get('page') == null)
+		{
+			window.location.replace("computers?page=1&size=100");
+		}
+		else
+		{
+			window.location.replace("computers?page="+ searchParams.get('page') +"&size=100");
+		}
+	}
+</script>
 </body>
 </html>
