@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import model.*;
 import persistence.ComputerRequestHandler;
 import service.ComputerBuilder;
+import service.Validator;
 import service.displayer.Displayer;
 
 /**
@@ -42,13 +43,14 @@ public class CommandCreate extends Command {
 				break;
 			}
 		}
-		System.out.println(args);
-		this.logger.info("Computer created.");
+		
 		Computer newc = newone.build();
-		this.logger.info(newc.toString());
 		//Create the computer in the database and locally
+		Validator.validate(newc);
 		ComputerList.getInstance().add(newc);
 		ComputerRequestHandler.createComputer(newc);
+		this.logger.info("Computer created.");
+		this.logger.info(newc.toString());
 		return displayer.crud();
 		
 	}

@@ -30,7 +30,7 @@ public class Computers extends HttpServlet{
 		out.println( "</body>" );
 		out.println( "</html>" );
 		out.close();*/
-		request.getRequestDispatcher("/static/views/dashboard.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/static/views/dashboard.jsp").forward(request, response);
 	}
 	
 	@Override

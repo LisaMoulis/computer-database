@@ -4,6 +4,9 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+
+import javax.servlet.http.HttpServletRequest;
 
 import model.CompanyList;
 import model.Computer;
@@ -90,5 +93,29 @@ public class ComputerMapper {
 		}
 		values.append(")");
 		return columns.append(values).toString();		
+	}
+	
+	public static ArrayList<String> mapToCreateArgs(HttpServletRequest request)
+	{
+		ArrayList<String> args = new ArrayList<String>();
+		args.add("create");
+		args.add("name");
+		args.add((String) request.getParameter("computerName"));
+		if (request.getParameter("introduced") != null && !request.getParameter("introduced").equals(""))
+		{
+			args.add("introduced");
+			args.add((String) request.getParameter("introduced"));
+		}
+		if (request.getParameter("discontinued") != null && !request.getParameter("discontinued").equals(""))
+		{
+			args.add("discontinued");
+			args.add((String) request.getParameter("discontinued"));
+		}
+		if (request.getParameter("companyId") != null && !request.getParameter("companyId").equals("") && CompanyList.getInstance().getCompany(Integer.parseInt((String) request.getParameter("companyId")))!= null)
+		{
+			args.add("company");
+			args.add(CompanyList.getInstance().getCompany(Integer.parseInt((String) request.getParameter("companyId"))));
+		}
+		return args;
 	}
 }

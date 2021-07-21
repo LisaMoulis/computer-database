@@ -10,12 +10,14 @@
 <link href="/training-java/static/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
+	<%@ page import="model.ComputerList" %>
+	<%int nbpages = ComputerList.getInstance().getNbPages(); %>
+	<%int current = Integer.valueOf((String)request.getAttribute("page")); %>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <a class="navbar-brand" href="dashboard.jsp"> Application - Computer Database </a>
         </div>
     </header>
-
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
@@ -103,7 +105,7 @@
               </li>
               <li><a href="#">1</a></li>
               <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
+              <li><a href="computers?page=3">3</a></li>
               <li><a href="#">4</a></li>
               <li><a href="#">5</a></li>
               <li>

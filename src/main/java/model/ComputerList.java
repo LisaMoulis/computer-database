@@ -144,6 +144,16 @@ public class ComputerList {
 		computers = ComputerRequestHandler.getAllComputers();
 	}
 	
+	public int getNbPages()
+	{
+		computers = ComputerRequestHandler.getAllComputers();
+		if (computers.size()%sizePage == 0)
+		{
+			return computers.size()%sizePage;
+		}
+		return computers.size()%sizePage + 1;
+	}
+	
 	/**
 	 * @return The next page of the computers list
 	 */
