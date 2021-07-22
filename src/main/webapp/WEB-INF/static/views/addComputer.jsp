@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
 <title>Computer Database</title>
@@ -34,10 +35,12 @@
                                 <label for="discontinued">Discontinued date</label>
                                 <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date">
                             </div>
-                            <div class="form-group">
                                 <label for="companyId">Company</label>
                                 <select class="form-control" id="companyId" name="companyId" >
                                     <option value="0">--</option>
+                                    <c:forEach items="${companies}" var="company">
+                                    	<option value="${company.key}"><c:out value="${company.value.name}"/></option>
+                                    </c:forEach>
                                 </select>
                             </div>                  
                         </fieldset>

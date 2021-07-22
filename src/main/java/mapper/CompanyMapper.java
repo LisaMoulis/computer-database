@@ -3,6 +3,8 @@ package mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import model.Company;
+
 /**
  * Class CompanyMapper :
  * Map the information between the database and companies
@@ -15,9 +17,8 @@ public class CompanyMapper {
 	 * @return Name of the company
 	 * @throws SQLException
 	 */
-	public static String mapToCompany(ResultSet result) throws SQLException
+	public static Company mapToCompany(ResultSet result) throws SQLException
 	{
-		String name = result.getString("name");
-		return name;
+		return new Company(result.getInt("id"),result.getString("name"));
 	}
 }

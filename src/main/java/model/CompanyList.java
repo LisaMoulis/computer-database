@@ -12,7 +12,7 @@ import persistence.CompanyRequestHandler;
  */
 public class CompanyList {
 
-	private final HashMap<Integer,String> companies;
+	private final HashMap<Integer,Company> companies;
 	private static CompanyList instance;
 	
 	private CompanyList()
@@ -37,12 +37,12 @@ public class CompanyList {
 	 * @param id Identifier of a company
 	 * @return The company found
 	 */
-	public HashMap<Integer,String> getCompanies()
+	public HashMap<Integer,Company> getCompanies()
 	{
 		return this.companies;
 	}
 	
-	public String getCompany(int id)
+	public Company getCompany(int id)
 	{
 		return companies.get(id);
 	}
@@ -51,11 +51,11 @@ public class CompanyList {
 	 * @param name Name of a company
 	 * @return The company found
 	 */
-	public String getCompany(String name)
+	public Company getCompany(String name)
 	{
-		for (Entry<Integer, String> c : companies.entrySet())
+		for (Entry<Integer, Company> c : companies.entrySet())
 		{
-			if (c.getValue().equals(name))
+			if (c.getValue().getName().equals(name))
 			{
 				return c.getValue();
 			}

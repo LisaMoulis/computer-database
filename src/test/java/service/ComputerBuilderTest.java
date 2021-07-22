@@ -7,13 +7,13 @@ import model.Computer;
 
 public class ComputerBuilderTest extends TestCase {
 
-	public void TestCreateEmpty() throws  Exception
+	public void testCreateEmpty() throws  Exception
 	{
 		ComputerBuilder builder = new ComputerBuilder();
 		assertEquals(null,builder.build());
 	}
 	
-	public void TestCreateMinimum() throws Exception
+	public void testCreateMinimum() throws Exception
 	{
 		ComputerBuilder builder = new ComputerBuilder();
 		builder.setName("test");
@@ -21,7 +21,7 @@ public class ComputerBuilderTest extends TestCase {
 		assertEquals(testc,builder.build());
 	}
 	
-	public void TestCreateFull() throws Exception
+	public void testCreateFull() throws Exception
 	{
 		ComputerBuilder builder = new ComputerBuilder();
 		builder.setId(1).setName("test").setIntroduced(LocalDate.of(2020, 1, 1)).setDiscontinued(LocalDate.of(2020,2,2)).setCompany("One company");

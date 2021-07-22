@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 import mapper.CompanyMapper;
+import model.Company;
 
 
 /**
@@ -20,7 +21,7 @@ public class CompanyRequestHandler {
 	 * @param id	Identifier of a company
 	 * @return The company found
 	 */
-	public static String getCompany(int id)
+	public static Company getCompany(int id)
 	{
 		Connection connection = DBConnection.getConnection();
 		try {
@@ -41,9 +42,9 @@ public class CompanyRequestHandler {
 	/**
 	 * @return All the companies in the database
 	 */
-	public static HashMap<Integer,String> getAllCompanies()
+	public static HashMap<Integer,Company> getAllCompanies()
 	{
-		HashMap<Integer,String> companies = new HashMap<Integer,String>();
+		HashMap<Integer,Company> companies = new HashMap<Integer,Company>();
 		Connection connection = DBConnection.getConnection();
 		try {
 			//Send the request to get all the companies
@@ -52,7 +53,7 @@ public class CompanyRequestHandler {
 			//Put all the companies into a list
 			while (result.next())
 			{
-				companies.put(result.getInt("id"),result.getString("name"));
+				companies.put(result.getInt("id"),CompanyMapper.mapToCompany(result));
 			}
 			return companies;
 

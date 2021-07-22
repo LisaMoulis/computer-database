@@ -62,7 +62,7 @@ public class ComputerMapper {
 		}
 		if (c.getCompany() != null)
 		{
-			values.append(", `company_id`='").append(CompanyList.getInstance().getCompany(c.getCompany())).append("'");
+			values.append(", `company_id`='").append(CompanyList.getInstance().getCompany(c.getCompany()).getId()).append("'");
 		}
 		return values.toString();	
 	}
@@ -89,7 +89,7 @@ public class ComputerMapper {
 		if (c.getCompany() != null)
 		{
 			columns.append(", `company_id`");
-			values.append(", ").append(CompanyList.getInstance().getCompany(c.getCompany()));
+			values.append(", ").append(CompanyList.getInstance().getCompany(c.getCompany()).getId());
 		}
 		values.append(")");
 		return columns.append(values).toString();		
@@ -114,7 +114,8 @@ public class ComputerMapper {
 		if (request.getParameter("companyId") != null && !request.getParameter("companyId").equals("") && CompanyList.getInstance().getCompany(Integer.parseInt((String) request.getParameter("companyId")))!= null)
 		{
 			args.add("company");
-			args.add(CompanyList.getInstance().getCompany(Integer.parseInt((String) request.getParameter("companyId"))));
+			System.out.println(request.getParameter("companyId"));
+			args.add(CompanyList.getInstance().getCompany(Integer.parseInt((String) request.getParameter("companyId"))).getName());
 		}
 		return args;
 	}
