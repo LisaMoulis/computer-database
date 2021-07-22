@@ -30,4 +30,10 @@ public class Company {
 	{
 		return this.name;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return this.name;
+	}
 }

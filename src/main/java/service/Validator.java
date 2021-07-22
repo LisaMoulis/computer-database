@@ -9,7 +9,6 @@ public class Validator {
 	{
 		if (computer.getName() == null || computer.getName().equals(""))
 		{
-			System.out.println("coucou");
 			throw new EmptyNameException();
 		}
 		

@@ -41,7 +41,7 @@ public class AddComputer extends HttpServlet{
 		logger.debug("Computer info retreived. Trying to create the computer.");
 		try
 		{
-			ArrayList<String> args = ComputerMapper.mapToCreateArgs(request);
+			ArrayList<String> args = new ComputerDTO(request).mapToCreateArgs();
 			CommandHandler.getInstance().exec(displayer,args.toArray(new String[args.size()]));
 			logger.debug("Computer created with command '"+ args +"'. Redirection to the computer list.");
 			response.sendRedirect("computers");

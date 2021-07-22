@@ -20,7 +20,7 @@
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                <c:out value="${nbComputers}"/> Computers found
+                <c:out value="${page.nbComputers}"/> Computers found
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
@@ -40,10 +40,7 @@
 
         <form id="deleteForm" action="#" method="POST">
             <input type="hidden" name="selection" value="">
-        </form>
-		<c:if test="${empty current}">
-              	<c:set var="page" value="1" scope="page" />
-        </c:if>  
+        </form> 
         <div class="container" style="margin-top: 10px;">
             <table class="table table-striped table-bordered">
                 <thead>
@@ -78,7 +75,7 @@
                 </thead>
                 <!-- Browse attribute computers -->
                 <tbody id="results">
-                	<c:forEach items="${computers}" var="entry">
+                	<c:forEach items="${page.computers}" var="entry">
 					
 					 
 	                    <tr>
@@ -102,18 +99,18 @@
         <div class="container text-center">
             <ul class="pagination">
                 <li>
-                    <a href="computers?page=${current-1}&size=${size}" aria-label="Previous">
+                    <a href="computers?page=${page.page-1}&size=${page.size}" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
               	<c:set var="beginning" value="1" scope="page" />
               	
-              	<c:if test="${current>5}">
-              		<c:set var="beginning" value="${current-5}" scope="page" />
+              	<c:if test="${page.page>5}">
+              		<c:set var="beginning" value="${page.page-5}" scope="page" />
               	</c:if>
               	<c:set var="end" value="${beginning+10}" scope="page" />
-              	<c:if test="${end>nbPages}">
-              		<c:set var="end" value="${nbPages}" scope="page" />
+              	<c:if test="${end>page.nbPages}">
+              		<c:set var="end" value="${page.nbPages}" scope="page" />
               		<c:set var="beginning" value="${end-10}" scope="page" />
               		<c:if test="${beginning<1}">
               			<c:set var="beginning" value="1" scope="page" />
@@ -121,11 +118,11 @@
               	</c:if>
               	
 				<c:forEach begin="${beginning}" end="${end}" var="i" step="1">
-					<li><a href="computers?page=${i}&size=${size}">${i}</a></li>
+					<li><a href="computers?page=${i}&size=${page.size}">${i}</a></li>
 				</c:forEach>
 				
               <li>
-                <a href="computers?page=${current+1}&size=${size}" aria-label="Next">
+                <a href="computers?page=${page.page+1}&size=${page.size}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
@@ -139,9 +136,9 @@
         </div></div>
 
     </footer>
-<script src="../js/jquery.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/dashboard.js"></script>
+<script src="/training-java/static/js/jquery.min.js"></script>
+<script src="/training-java/static/js/bootstrap.min.js"></script>
+<script src="/training-java/static/js/dashboard.js"></script>
 <script> 
 	function size10() {
 		var searchParams = new URLSearchParams(window.location.search);

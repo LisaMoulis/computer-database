@@ -150,7 +150,7 @@ public class Computer {
 	
 	@Override
 	public String toString() {
-		return "\nComputer [name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued + ", company=" + company
+		return "Computer [name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued + ", company=" + company
 				+ "]";
 	}
 }

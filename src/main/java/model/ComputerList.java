@@ -14,7 +14,7 @@ public class ComputerList {
 
 	private HashMap<Integer,Computer> computers;
 	private static ComputerList instance;
-	private int index = 0;
+	private int index = 1;
 	private final int sizePage = 10;
 	
 	private ComputerList()
@@ -60,6 +60,12 @@ public class ComputerList {
 		return null;
 	}
 	
+	public List<Computer> getComputers()
+	{
+		computers = ComputerRequestHandler.getAllComputers();
+		return new ArrayList<Computer>(computers.values());
+	}
+	
 	public void add(Computer c)
 	{
 		int cindex = 1;
@@ -92,23 +98,11 @@ public class ComputerList {
 	/**
 	 * @return The current page of the computers list
 	 */
-	public ArrayList<Computer> getPage()
+	public List<Computer> getPage()
 	{
-		ArrayList<Computer> toDisplay = new ArrayList<Computer>();
 		//Create the list of computers to display
 		//StringBuilder str = new StringBuilder("	Page ").append(index+1).append("\nComputerList [computers=");
-		for (int i = index*sizePage+1; i < computers.size() && i < (index+1)*sizePage+1; i++)
-		{
-			if (computers.get(i) != null)
-			{
-				toDisplay.add(computers.get(i));
-				//str.append(computers.get(i).toString());
-			}
-			
-		}
-		//str.append("]");
-		//return str.toString();
-		return toDisplay;
+		return new ArrayList<Computer>(computers.values()).subList((index-1)*sizePage, index*sizePage);
 	}
 	
 	public int getNbComputers()
@@ -122,33 +116,10 @@ public class ComputerList {
 		return this.index;
 	}
 	
-	public int getNbPages(int size)
+	public List<Computer> getPage(int idx,int size)
 	{
-		computers = ComputerRequestHandler.getAllComputers();
-		if (computers.size()%size == 0)
-		{
-			return computers.size()/size;
-		}
-		return computers.size()/size + 1;
-	}
-	
-	public ArrayList<Computer> getPage(int idx,int size)
-	{
-		ArrayList<Computer> toDisplay = new ArrayList<Computer>();
 		//Create the list of computers to display
-		//StringBuilder str = new StringBuilder("	Page ").append(idx+1).append("\nComputerList [computers=");
-		for (int i = (idx-1)*size+1; i < computers.size() && i < idx*size+1; i++)
-		{
-			if (computers.get(i) != null)
-			{
-				toDisplay.add(computers.get(i));
-				//str.append(computers.get(i).toString());
-			}
-			
-		}
-		//str.append("]");
-		//return str.toString();
-		return toDisplay;
+		return new ArrayList<Computer>(computers.values()).subList((idx-1)*size, idx*size);
 	}
 	
 	/**
@@ -156,7 +127,7 @@ public class ComputerList {
 	 */
 	public void beginPage()
 	{
-		index = 0;
+		index = 1;
 		computers = ComputerRequestHandler.getAllComputers();
 	}
 	
