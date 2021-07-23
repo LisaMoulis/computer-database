@@ -50,11 +50,7 @@ public class Computer {
 	public Computer(String name, LocalDate introduced, LocalDate discontinued)
 	{
 		this(name,introduced);
-		if (discontinued != null && introduced != null && discontinued.isAfter(introduced))
-		{
-			this.discontinued = discontinued;
-		}
-		
+		this.discontinued = discontinued;
 	}
 	
 	/**
@@ -98,10 +94,7 @@ public class Computer {
 	
 	public void setIntroduced(LocalDate introduced)
 	{
-		if (this.discontinued == null || discontinued.isAfter(introduced))
-		{
-			this.introduced = introduced;
-		}
+		this.introduced = introduced;
 	}
 	
 	public LocalDate getDiscontinued()
@@ -111,10 +104,7 @@ public class Computer {
 	
 	public void setDiscontinued(LocalDate discontinued)
 	{
-		if (introduced != null && discontinued.isAfter(introduced))
-		{
-			this.discontinued = discontinued;
-		}
+		this.discontinued = discontinued;
 	}
 	
 	public String getCompany()
@@ -141,7 +131,19 @@ public class Computer {
 	public boolean equals(Object c)
 	{
 		Computer totest = (Computer) c;
-		if (totest == null || this.id != totest.getId() || !this.name.equals(totest.getName()) || !this.introduced.equals(totest.getIntroduced()) || !this.discontinued.equals(totest.getDiscontinued()) || !this.company.equals(totest.getCompany()))
+		if (totest == null || this.id != totest.getId() || !this.name.equals(totest.getName()))
+		{
+			return false;
+		}
+		else if (this.introduced != totest.getIntroduced() && this.introduced != null && !this.introduced.equals(totest.getIntroduced()))
+		{
+			return false;
+		}
+		else if (this.discontinued != totest.getDiscontinued() && this.discontinued != null && !this.discontinued.equals(totest.getDiscontinued()))
+		{
+			return false;
+		}
+		else if (this.company != null && !this.company.equals(totest.getCompany()))
 		{
 			return false;
 		}

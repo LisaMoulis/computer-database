@@ -1,7 +1,5 @@
 package mapper;
 
-import java.util.ArrayList;
-
 import javax.servlet.http.HttpServletRequest;
 
 import model.Company;
@@ -44,29 +42,5 @@ public class ComputerDTO {
 	public Company getCompany()
 	{
 		return this.company;
-	}
-	
-	public ArrayList<String> mapToCreateArgs()
-	{
-		ArrayList<String> args = new ArrayList<String>();
-		args.add("create");
-		args.add("name");
-		args.add(name);
-		if (introduced != null && !introduced.equals(""))
-		{
-			args.add("introduced");
-			args.add(introduced);
-		}
-		if (discontinued != null && !discontinued.equals(""))
-		{
-			args.add("discontinued");
-			args.add(discontinued);
-		}
-		if (company != null)
-		{
-			args.add("company");
-			args.add(company.getName());
-		}
-		return args;
 	}
 }

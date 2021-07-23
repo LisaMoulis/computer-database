@@ -2,8 +2,6 @@ package command;
 
 import java.util.ArrayList;
 
-import service.displayer.Displayer;
-
 /**
  * Class CommandHandler :
  * Manage the commands and execute them
@@ -41,18 +39,16 @@ public class CommandHandler {
 	/**
 	 * @param args	keyword of the entered command + arguments
 	 */
-	public String exec(Displayer displayer,String...args)
+	public void exec(String...args)
 	{
-		String str = null;
 		//Calls the exec of the specified command
 		for(Command c : commands)
 		{
 			if (c.getName().equals(args[0]))
 			{
-				str = c.exec(displayer, args);
+				c.exec(args);
 			}
 		}
-		return str;
 	}
 	
 	/**

@@ -2,6 +2,7 @@ package ui.servlets;
 
 import java.io.IOException;
 
+
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
@@ -9,12 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mapper.PageListDTO;
-import model.ComputerList;
-import service.displayer.Displayer;
-import service.displayer.WebDisplayer;
 
 public class Computers extends HttpServlet{
-	private Displayer displayer = WebDisplayer.getInstance();
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final Logger logger = LoggerFactory.getLogger(AddComputer.class);
 	
 	@Override

@@ -1,22 +1,19 @@
 package mapper;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-
-import javax.servlet.http.HttpServletRequest;
 
 import model.CompanyList;
 import model.Computer;
+import service.ComputerBuilder;
 
 /**
  * Class ComputerMapper :
  * Map the information between the database and computers
  * @author Lisa
  */
-public class ComputerMapper {
+public class ComputerDAOMapper {
 	
 	/**
 	 * @param result	Representation of a computer from the database
@@ -25,23 +22,20 @@ public class ComputerMapper {
 	 */
 	public static Computer mapToComputer(ResultSet result) throws SQLException
 	{
-		String name = result.getString("name");
-		LocalDate introduced = null;
-		LocalDate discontinued = null;
+		ComputerBuilder builder = new ComputerBuilder().setName(result.getString("name"));
 		//Verify if some columns are empty before getting them
 		if (result.getBytes("introduced") != null && !result.getString("introduced").equals("0000-00-00 00:00:00"))
 		{
-			introduced = result.getTimestamp("introduced").toLocalDateTime().toLocalDate();
+			builder.setIntroduced(result.getTimestamp("introduced").toLocalDateTime().toLocalDate());
 		}
 		
 		if (result.getBytes("discontinued") != null && !result.getString("discontinued").equals("0000-00-00 00:00:00"))
 		{
-			discontinued = result.getTimestamp("discontinued").toLocalDateTime().toLocalDate();
+			builder.setDiscontinued(result.getTimestamp("discontinued").toLocalDateTime().toLocalDate());
 			
 		}
-		String company = result.getString("company.name");
-		int id = result.getInt("computer.id");
-		return new Computer(id,name,introduced,discontinued,company);
+		builder.setCompany(result.getString("company.name")).setId(result.getInt("computer.id"));
+		return builder.build();
 	}
 	
 	/**

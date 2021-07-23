@@ -5,9 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import command.*;
-import service.ComputerBuilder;
-import service.displayer.CLIDisplayer;
-import service.displayer.Displayer;
 
 /**
  * Class Main :
@@ -18,7 +15,6 @@ public class Main {
 
 	private static CommandHandler commands = CommandHandler.getInstance();
 	protected static final Logger logger = LoggerFactory.getLogger(Main.class);
-	private static Displayer displayer = CLIDisplayer.getInstance();
 	
 	public static void main(String[] str)
 	{
@@ -35,7 +31,7 @@ public class Main {
 		while (CLIReader.canRead())
 		{
 			System.out.println("\nEnter your command :\n");
-			System.out.println(commands.exec(displayer,CLIReader.getLine()));
+			commands.exec(CLIReader.getLine());
 		}
 		logger.debug("Program closed.");
 	}

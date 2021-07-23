@@ -2,7 +2,6 @@ package ui.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -10,16 +9,15 @@ import javax.servlet.http.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import command.Command;
-import command.CommandHandler;
-import model.CompanyList;
-import model.ComputerList;
-import service.displayer.Displayer;
-import service.displayer.WebDisplayer;
+import model.*;
+import service.Validator;
 import mapper.*;
 
 public class AddComputer extends HttpServlet{
-	private Displayer displayer = WebDisplayer.getInstance();
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final Logger logger = LoggerFactory.getLogger(AddComputer.class);
 	
 	@Override
@@ -39,14 +37,12 @@ public class AddComputer extends HttpServlet{
 	public void doPost(HttpServletRequest request,HttpServletResponse response) throws ServletException,IOException 
 	{
 		logger.debug("Computer info retreived. Trying to create the computer.");
+		Computer computer = ComputerDTOMapper.mapToComputer(new ComputerDTO(request));
 		try
-		{
-			ArrayList<String> args = new ComputerDTO(request).mapToCreateArgs();
-			CommandHandler.getInstance().exec(displayer,args.toArray(new String[args.size()]));
-			logger.debug("Computer created with command '"+ args +"'. Redirection to the computer list.");
+		{	
+			Validator.validate(computer);
+			logger.debug("Computer created. Redirection to the computer list.");
 			response.sendRedirect("computers");
-			
-			//request.getRequestDispatcher("/static/views/dashboard.jsp").forward(request, response);
 		}
 		catch (RuntimeException e)
 		{

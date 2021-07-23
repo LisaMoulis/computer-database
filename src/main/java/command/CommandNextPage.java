@@ -1,7 +1,6 @@
 package command;
 
 import model.ComputerList;
-import service.displayer.Displayer;
 
 /**
  * Class CommandNextPage :
@@ -17,16 +16,17 @@ public class CommandNextPage extends Command{
 	}
 	
 	@Override
-	public String exec(Displayer displayer,String...args) {
+	public void exec(String...args) {
 		if (args.length == 1)
 		{
 			ComputerList.getInstance().nextPage();
 			this.logger.debug("Next page of computers displayed.");
-			return displayer.listComputers();
+			System.out.println("List of the computers :\n" + ComputerList.getInstance().getPage());
 		}
 		else
 		{
-			return "Mismatch of number of arguments\n";
+			logger.error("Mismatch of number of arguments.");
+			System.out.println("Mismatch of number of arguments.\n");
 		}
 		
 	}

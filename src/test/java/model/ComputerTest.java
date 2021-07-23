@@ -31,18 +31,17 @@ public class ComputerTest extends TestCase{
 		assertEquals(LocalDate.of(2020, 1, 2),computer.getIntroduced());
 	}
 	
-	public void testInvalidDiscontinued()
+	public void testDiscontinued()
 	{
 		computer = new Computer("test");
-		computer.setDiscontinued(LocalDate.of(2020, 1, 2));
-		assertEquals(null,computer.getDiscontinued());
-	}
-	
-	public void testValidDiscontinued()
-	{
-		computer = new Computer("test");
-		computer.setIntroduced(LocalDate.of(2020, 1, 2));
 		computer.setDiscontinued(LocalDate.of(2020, 2, 2));
 		assertEquals(LocalDate.of(2020, 2, 2),computer.getDiscontinued());
+	}
+	
+	public void testCompany()
+	{
+		computer = new Computer("test");
+		computer.setCompany("test");
+		assertEquals("test",computer.getCompany());
 	}
 }

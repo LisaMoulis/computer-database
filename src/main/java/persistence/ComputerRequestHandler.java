@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-import mapper.ComputerMapper;
+import mapper.ComputerDAOMapper;
 import model.Computer;
 
 /**
@@ -29,7 +29,7 @@ public class ComputerRequestHandler {
 			ResultSet result = query.executeQuery();
 			result.next();
 			
-			return ComputerMapper.mapToComputer(result);
+			return ComputerDAOMapper.mapToComputer(result);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -50,7 +50,7 @@ public class ComputerRequestHandler {
 			ResultSet result = query.executeQuery();
 			result.next();
 			
-			return ComputerMapper.mapToComputer(result);
+			return ComputerDAOMapper.mapToComputer(result);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -66,8 +66,8 @@ public class ComputerRequestHandler {
 		Connection connection = DBConnection.getConnection();
 		try {
 			//Use the mapper to get the representation of the computer to insert
-			PreparedStatement query = connection.prepareStatement("INSERT INTO `computer`"+ ComputerMapper.mapToCreate(computer));
-			DBConnection.getLogger().debug("INSERT INTO `computer`"+ ComputerMapper.mapToCreate(computer));
+			PreparedStatement query = connection.prepareStatement("INSERT INTO `computer`"+ ComputerDAOMapper.mapToCreate(computer));
+			DBConnection.getLogger().debug("INSERT INTO `computer`"+ ComputerDAOMapper.mapToCreate(computer));
 			query.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -83,8 +83,8 @@ public class ComputerRequestHandler {
 		Connection connection = DBConnection.getConnection();
 		try {
 			//Use the mapper to get the representation of the computer to update
-			PreparedStatement query = connection.prepareStatement("UPDATE `computer` SET "+ ComputerMapper.mapToUpdate(computer) + "WHERE id=?");
-			DBConnection.getLogger().debug("UPDATE `computer` SET "+ ComputerMapper.mapToUpdate(computer) + "WHERE id=?");
+			PreparedStatement query = connection.prepareStatement("UPDATE `computer` SET "+ ComputerDAOMapper.mapToUpdate(computer) + "WHERE id=?");
+			DBConnection.getLogger().debug("UPDATE `computer` SET "+ ComputerDAOMapper.mapToUpdate(computer) + "WHERE id=?");
 			query.setInt(1, computer.getId());
 			query.executeUpdate();
 		} catch (SQLException e) {
@@ -142,7 +142,7 @@ public class ComputerRequestHandler {
 			//Create the list of all the computers
 			while (result.next())
 			{
-				computers.put(result.getInt("computer.id"),ComputerMapper.mapToComputer(result));
+				computers.put(result.getInt("computer.id"),ComputerDAOMapper.mapToComputer(result));
 			}
 			return computers;
 

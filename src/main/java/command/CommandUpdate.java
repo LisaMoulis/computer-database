@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter;
 
 import model.*;
 import persistence.ComputerRequestHandler;
-import service.displayer.Displayer;
 
 /**
  * Class CommandUpdate :
@@ -21,7 +20,7 @@ public class CommandUpdate extends Command{
 	}
 	
 	@Override
-	public String exec(Displayer displayer,String...args) {
+	public void exec(String...args) {
 		Computer toupdate = null;
 		try {
 			int id = Integer.valueOf(args[1]);
@@ -58,9 +57,8 @@ public class CommandUpdate extends Command{
 		}
 		else
 		{
-			this.logger.debug("An issue in the computer update happened.");
+			this.logger.error("An issue in the computer update happened.");
 		}
-		return displayer.crud();
 	}
 	
 	@Override

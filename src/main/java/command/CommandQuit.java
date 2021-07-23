@@ -1,6 +1,5 @@
 package command;
 
-import service.displayer.Displayer;
 import ui.CLIReader;
 
 /**
@@ -18,9 +17,9 @@ public class CommandQuit extends Command {
 	}
 	
 	@Override
-	public String exec(Displayer displayer,String...args) {
+	public void exec(String...args) {
 		CLIReader.close();
-		return displayer.quit();
+		System.out.println("Bye!");
 	}
 	
 	@Override

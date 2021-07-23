@@ -3,8 +3,6 @@ package command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import service.displayer.Displayer;
-
 /**
  * Class Command :
  * Represent an executable command
@@ -17,7 +15,7 @@ public abstract class Command {
 	/**
 	 * @param args	keyword of the command + arguments
 	 */
-	public abstract String exec(Displayer displayer,String...args);
+	public abstract void exec(String...args);
 	
 	public abstract String getName();
 	

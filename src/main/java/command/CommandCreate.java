@@ -7,7 +7,6 @@ import model.*;
 import persistence.ComputerRequestHandler;
 import service.ComputerBuilder;
 import service.Validator;
-import service.displayer.Displayer;
 
 /**
  * Class CommandCreate :
@@ -23,7 +22,7 @@ public class CommandCreate extends Command {
 	}
 	
 	@Override
-	public String exec(Displayer displayer,String...args) {
+	public void exec(String...args) {
 		ComputerBuilder newone = new ComputerBuilder();
 		for (int i = 1; i+1 < args.length;i+=2)
 		{
@@ -47,11 +46,10 @@ public class CommandCreate extends Command {
 		Computer newc = newone.build();
 		//Create the computer in the database and locally
 		Validator.validate(newc);
-		ComputerList.getInstance().add(newc);
 		ComputerRequestHandler.createComputer(newc);
 		this.logger.info("Computer created.");
 		this.logger.info(newc.toString());
-		return displayer.crud();
+		System.out.println("Done.\n");
 		
 	}
 	

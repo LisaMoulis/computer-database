@@ -1,6 +1,7 @@
 package command;
 
-import service.displayer.Displayer;
+import model.ComputerList;
+import persistence.ComputerRequestHandler;
 
 /**
  * Class CommandDetails :
@@ -16,15 +17,26 @@ public class CommandDetails extends Command {
 	}
 	
 	@Override
-	public String exec(Displayer displayer,String...args) {
+	public void exec(String...args) {
 		if (args.length == 2)
 		{
 			this.logger.debug("Details of the computer displayed.");
-			return displayer.detailsComputer(args[1]);
+			String str = "Details of the computer :\n";
+			try {
+				int id = Integer.valueOf(args[1]);
+				str += ComputerRequestHandler.getComputer(id);
+			}
+			catch (NumberFormatException e)
+			{
+				str += ComputerList.getInstance().getComputer(args[1]);
+			}
+			System.out.println(str);
+			logger.debug("Details of the computer displayed.");
 		}
 		else
 		{
-			return "Mismatch of number of arguments\n";
+			logger.debug("Mismatch of number of arguments.");
+			System.out.println("Mismatch of number of arguments.\n");
 		}
 	}
 	

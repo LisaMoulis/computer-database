@@ -6,13 +6,13 @@ import java.io.PrintWriter;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import service.displayer.Displayer;
-import service.displayer.WebDisplayer;
-
 public class Home extends HttpServlet{
-	private Displayer displayer = WebDisplayer.getInstance();
-	
-	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public String getServletInfo() {
 		return "My home page";
