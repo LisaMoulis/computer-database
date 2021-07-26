@@ -34,7 +34,8 @@ public class ComputerDAOMapper {
 			builder.setDiscontinued(result.getTimestamp("discontinued").toLocalDateTime().toLocalDate());
 			
 		}
-		builder.setCompany(result.getString("company.name")).setId(result.getInt("computer.id"));
+		builder.setCompany(result.getString("company.name"));
+		builder.setId(result.getInt("computer.id"));
 		return builder.build();
 	}
 	

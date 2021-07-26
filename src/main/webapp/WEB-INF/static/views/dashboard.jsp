@@ -38,7 +38,7 @@
             </div>
         </div>
 
-        <form id="deleteForm" action="#" method="POST">
+        <form id="deleteForm" action="delete" method="POST">
             <input type="hidden" name="selection" value="">
         </form> 
         <div class="container" style="margin-top: 10px;">
@@ -80,10 +80,10 @@
 					 
 	                    <tr>
 	                        <td class="editMode">
-	                            <input type="checkbox" name="cb" class="cb" value="0">
-	                        </td>
+                            	<input type="checkbox" name="cb" class="cb" value="${entry.id}">
+                        	</td>
 	                        <td>
-	                            <a href="editComputer.jsp" onclick=""><c:out value="${entry.id}"/> <c:out value="${entry.name}"/></a>
+	                            <a href="edit?id=${entry.id}" onclick=""><c:out value="${entry.name}"/></a>
 	                        </td>
 	                        <td><c:if test="${not empty entry.introduced}">${entry.introduced}</c:if></td>
 	                        <td><c:if test="${not empty entry.discontinued}">${entry.discontinued}</c:if></td>

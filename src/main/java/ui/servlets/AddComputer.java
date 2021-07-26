@@ -37,7 +37,7 @@ public class AddComputer extends HttpServlet{
 	@Override
 	public void doPost(HttpServletRequest request,HttpServletResponse response) throws ServletException,IOException 
 	{
-		logger.debug("Computer info retreived. Trying to create the computer.");
+		logger.debug("Computer info retrieved. Trying to create the computer.");
 		Computer computer = ComputerDTOMapper.mapToComputer(new ComputerDTO(request));
 		try
 		{	

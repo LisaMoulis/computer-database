@@ -6,38 +6,70 @@ import java.io.PrintWriter;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import mapper.ComputerDTO;
+import mapper.ComputerDTOMapper;
+import model.CompanyList;
+import model.Computer;
+import model.ComputerList;
+import persistence.ComputerRequestHandler;
+import service.Validator;
+
 public class Edit extends HttpServlet{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	private final Logger logger = LoggerFactory.getLogger(Edit.class);
+	
 	@Override
 	public String getServletInfo() {
-		return "My home page";
+		return "Edit computer";
 	}
 	
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		response.setContentType( "text/html" );
-		PrintWriter out = response.getWriter();
-		out.println( "<html>" );
-		out.println( "<head>");
-		out.println( "<title>Home</title>" );
-		out.println( "</head>" );
-		out.println( "<body>" );
-		out.println( "<h1>Home</h1><p>Home, sweet home</p>" );
-		out.println( "</body>" );
-		out.println( "</html>" );
-		out.close();
-		//request.getRequestDispatcher("/static/views/dashboard.html").forward(request, response);
+		logger.debug("Edit page displayed.");
+		int id = Integer.parseInt(request.getParameter("id"));
+		Computer c = ComputerList.getInstance().getComputer(id);
+		request.setAttribute("computer", c);
+		if (c.getCompany() != null)
+		{
+			request.setAttribute("companyId",CompanyList.getInstance().getCompany(c.getCompany()).getId());
+		}
+		else
+		{
+			request.setAttribute("companyId",0);
+		}
+		request.setAttribute("companies", CompanyList.getInstance().getCompanies());
+		logger.debug("The companies are "+ CompanyList.getInstance().getCompanies());
+		request.getRequestDispatcher("/WEB-INF/static/views/editComputer.jsp").forward(request, response);
 	}
 	
 	@Override
-	public void doPost(HttpServletRequest request,HttpServletResponse response) 
-			throws ServletException,IOException {
-			  this.doGet(request, response);
-			}
-
+	public void doPost(HttpServletRequest request,HttpServletResponse response) throws ServletException,IOException 
+	{
+		logger.debug("Computer info retrieved. Trying to update the computer.");
+		Computer computer = ComputerDTOMapper.mapToComputer(new ComputerDTO(request));
+		computer.setId(Integer.valueOf(request.getParameter("id")));
+		try
+		{	
+			Validator.validate(computer);
+			ComputerRequestHandler.updateComputer(computer);
+			logger.debug("Computer updated. Redirection to the computer list.");
+			response.sendRedirect("computers");
+		}
+		catch (RuntimeException e)
+		{
+			response.setContentType( "text/html" );
+			PrintWriter out = response.getWriter();
+			logger.debug("Computer update failed. Error message : "+e.getMessage());
+			out.println("<script>alert(\""+ e.getMessage()+"\")</script>");
+			request.setAttribute("companies", CompanyList.getInstance().getCompanies());
+			request.getRequestDispatcher("/WEB-INF/static/views/editComputer.jsp").include(request, response);
+		}
+	}
 }
