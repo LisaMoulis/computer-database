@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import model.*;
+import persistence.ComputerRequestHandler;
 
 public class PageListDTO implements Serializable {
 
@@ -19,13 +20,15 @@ public class PageListDTO implements Serializable {
 	{
 		this.page = 1;
 		this.size = 10;
-		this.computers = ComputerList.getInstance().getComputers();
+		this.computers = ComputerRequestHandler.getPage(size,(page-1)*size);
 	}
 	
 	public PageListDTO(int page, int size)
 	{
 		this.page = page;
 		this.size = size;
+		this.size = 10;
+		this.computers = ComputerRequestHandler.getPage(size,(page-1)*size);
 	}
 	
 	public int getPage()
@@ -40,25 +43,22 @@ public class PageListDTO implements Serializable {
 	
 	public int getNbPages()
 	{
-		if (computers.size()%size == 0)
+		int nbComputers = getNbComputers();
+		if (nbComputers%size == 0)
 		{
-			return computers.size()/size;
+			return nbComputers/size;
 		}
-		return computers.size()/size + 1;
+		return nbComputers/size + 1;
 	}
 	
 	public List<Computer> getComputers()
 	{
-		if (page*size > computers.size())
-		{
-			return computers.subList((page-1)*size, computers.size());
-		}
-		return computers.subList((page-1)*size, page*size);
+		return computers;
 	}
 	
 	public int getNbComputers()
 	{
-		return computers.size();
+		return ComputerRequestHandler.getNbComputers();
 	}
 	
 	public void setPage(int page)
@@ -71,7 +71,7 @@ public class PageListDTO implements Serializable {
 		{
 			page = getNbPages();
 		}
-		this.page = page;
+		this.computers = ComputerRequestHandler.getPage(size,(page-1)*size);;
 	}
 	
 	public void setSize(int size)

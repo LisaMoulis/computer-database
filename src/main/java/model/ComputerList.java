@@ -1,7 +1,6 @@
 package model;
 
 import java.util.*;
-import java.util.Map.Entry;
 
 import persistence.ComputerRequestHandler;
 
@@ -19,7 +18,6 @@ public class ComputerList {
 	
 	private ComputerList()
 	{
-		computers = ComputerRequestHandler.getAllComputers();
 	}
 	
 	/**
@@ -41,7 +39,7 @@ public class ComputerList {
 	 */
 	public Computer getComputer(int id)
 	{
-		return computers.get(id);
+		return ComputerRequestHandler.getComputer(id);
 	}
 	
 	/**
@@ -50,14 +48,7 @@ public class ComputerList {
 	 */
 	public Computer getComputer(String name)
 	{
-		for (Entry<Integer, Computer> c : computers.entrySet())
-		{
-			if (c.getValue().getName().equals(name))
-			{
-				return c.getValue();
-			}
-		}
-		return null;
+		return ComputerRequestHandler.getComputer(name);
 	}
 	
 	public List<Computer> getComputers()
@@ -102,13 +93,12 @@ public class ComputerList {
 	{
 		//Create the list of computers to display
 		//StringBuilder str = new StringBuilder("	Page ").append(index+1).append("\nComputerList [computers=");
-		return new ArrayList<Computer>(computers.values()).subList((index-1)*sizePage, index*sizePage);
+		return ComputerRequestHandler.getPage(sizePage,(index-1)*sizePage);
 	}
 	
 	public int getNbComputers()
 	{
-		computers = ComputerRequestHandler.getAllComputers();
-		return computers.size();
+		return ComputerRequestHandler.getNbComputers();
 	}
 	
 	public int getIndex()
@@ -119,7 +109,7 @@ public class ComputerList {
 	public List<Computer> getPage(int idx,int size)
 	{
 		//Create the list of computers to display
-		return new ArrayList<Computer>(computers.values()).subList((idx-1)*size, idx*size);
+		return ComputerRequestHandler.getPage(size,(idx-1)*size);
 	}
 	
 	/**
@@ -128,7 +118,6 @@ public class ComputerList {
 	public void beginPage()
 	{
 		index = 1;
-		computers = ComputerRequestHandler.getAllComputers();
 	}
 	
 	/**
@@ -137,7 +126,7 @@ public class ComputerList {
 	public void nextPage()
 	{
 		//Verify the page isn't the last one before returning the next one
-		if ((index+1)*sizePage < computers.size())
+		if ((index)*sizePage < computers.size())
 		{
 			index++;
 		}
@@ -149,7 +138,7 @@ public class ComputerList {
 	public void previousPage()
 	{
 		//Verify the page isn't the first one before returning the previous one
-		if (index > 0)
+		if (index > 1)
 		{
 			index--;
 		}

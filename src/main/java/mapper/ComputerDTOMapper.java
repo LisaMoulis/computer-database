@@ -23,9 +23,19 @@ public class ComputerDTOMapper {
 	{
 		ComputerBuilder builder = new ComputerBuilder().setName(dto.getName());
 		//Verify if some columns are empty before getting them
-		builder.setIntroduced(LocalDate.parse(dto.getIntroduced(), DateTimeFormatter.ISO_LOCAL_DATE));
-		builder.setDiscontinued(LocalDate.parse(dto.getIntroduced(), DateTimeFormatter.ISO_LOCAL_DATE));
-		builder.setCompany(dto.getCompany().getName());
+		if (dto.getIntroduced() != null && dto.getIntroduced() != "")
+		{
+			builder.setIntroduced(LocalDate.parse(dto.getIntroduced(), DateTimeFormatter.ISO_LOCAL_DATE));
+		}
+		
+		if (dto.getIntroduced() != null && dto.getIntroduced() != "")
+		{
+			builder.setDiscontinued(LocalDate.parse(dto.getIntroduced(), DateTimeFormatter.ISO_LOCAL_DATE));
+		}
+		if (dto.getCompany() != null)
+		{
+			builder.setCompany(dto.getCompany().getName());
+		}
 		return builder.build();
 	}
 }

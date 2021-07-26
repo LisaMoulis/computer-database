@@ -68,8 +68,8 @@ public class ComputerDAOMapper {
 	public static String mapToCreate(Computer c)
 	{
 		//Create the part of a create request with the computer values
-		StringBuilder columns = new StringBuilder("(`id`, `name`");
-		StringBuilder values = new StringBuilder(") VALUES (").append(c.getId()).append(", '").append(c.getName()).append("'");
+		StringBuilder columns = new StringBuilder("(`name`");
+		StringBuilder values = new StringBuilder(") VALUES ('").append(c.getName()).append("'");
 		if (c.getIntroduced() != null)
 		{
 			columns.append(", `introduced`");

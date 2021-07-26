@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import mapper.ComputerDAOMapper;
 import model.Computer;
@@ -16,6 +18,12 @@ import model.Computer;
  */
 public class ComputerRequestHandler {
 
+	private static final String GET_WITH_NAME = "SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer`, `company.name` LEFT JOIN `company` ON company_id = company.id WHERE computer.name=?";
+	private static final String GET_WITH_ID = "SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE computer.id=?";
+	private static final String GET_PAGE = "SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer` LEFT JOIN `company` ON company_id = company.id LIMIT ? OFFSET ?";
+	private static final String GET_NB_COMPUTERS = "SELECT COUNT(id) FROM `computer`";
+	
+	
 	/**
 	 * @param id	Identified of a computer
 	 * @return The computer found
@@ -24,7 +32,7 @@ public class ComputerRequestHandler {
 	{
 		Connection connection = DBConnection.getConnection();
 		try {
-			PreparedStatement query = connection.prepareStatement("SELECT * FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE computer.id=?");
+			PreparedStatement query = connection.prepareStatement(GET_WITH_ID);
 			query.setInt(1, id);
 			ResultSet result = query.executeQuery();
 			result.next();
@@ -45,7 +53,7 @@ public class ComputerRequestHandler {
 	{
 		Connection connection = DBConnection.getConnection();
 		try {
-			PreparedStatement query = connection.prepareStatement("SELECT * FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE computer.name=?");
+			PreparedStatement query = connection.prepareStatement(GET_WITH_NAME);
 			query.setString(1, name);
 			ResultSet result = query.executeQuery();
 			result.next();
@@ -153,4 +161,46 @@ public class ComputerRequestHandler {
 		}
 	}
 	
+	
+	public static List<Computer> getPage(int size, int offset)
+	{
+		Connection connection = DBConnection.getConnection();
+		try {
+			PreparedStatement query = connection.prepareStatement(GET_PAGE);
+			DBConnection.getLogger().info("Getting page from database with size "+ size + " and offset "+ offset);
+			query.setInt(1, size);
+			query.setInt(2, offset);
+			ResultSet result = query.executeQuery();
+			List<Computer> page = new ArrayList<Computer>();
+			while (result.next())
+			{
+				page.add(ComputerDAOMapper.mapToComputer(result));
+			}
+			DBConnection.getLogger().info("Page gathered : " + page);
+			return page;
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static int getNbComputers()
+	{
+		Connection connection = DBConnection.getConnection();
+		try {
+			PreparedStatement query = connection.prepareStatement(GET_NB_COMPUTERS);
+			DBConnection.getLogger().debug(GET_NB_COMPUTERS);
+			ResultSet result = query.executeQuery();
+			result.next();
+			DBConnection.getLogger().info("Nb computers : " + result.getInt(1));
+			return result.getInt(1);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return 0;
+		}
+	}
 }

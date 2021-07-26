@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import model.*;
+import persistence.ComputerRequestHandler;
 import service.Validator;
 import mapper.*;
 
@@ -41,6 +42,7 @@ public class AddComputer extends HttpServlet{
 		try
 		{	
 			Validator.validate(computer);
+			ComputerRequestHandler.createComputer(computer);
 			logger.debug("Computer created. Redirection to the computer list.");
 			response.sendRedirect("computers");
 		}

@@ -83,7 +83,7 @@
 	                            <input type="checkbox" name="cb" class="cb" value="0">
 	                        </td>
 	                        <td>
-	                            <a href="editComputer.jsp" onclick=""><c:out value="${entry.name}"/></a>
+	                            <a href="editComputer.jsp" onclick=""><c:out value="${entry.id}"/> <c:out value="${entry.name}"/></a>
 	                        </td>
 	                        <td><c:if test="${not empty entry.introduced}">${entry.introduced}</c:if></td>
 	                        <td><c:if test="${not empty entry.discontinued}">${entry.discontinued}</c:if></td>
