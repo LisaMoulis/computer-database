@@ -6,6 +6,9 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
 /**
  * Class DBConnection :
  * Handle the connection
@@ -16,6 +19,8 @@ public class DBConnection {
 	private static DBConnection instance;
 	private static Connection connection;
 	private static final Logger logger =  LoggerFactory.getLogger(DBConnection.class);
+	private static HikariConfig config = new HikariConfig("/datasource.properties");
+    private static HikariDataSource dataSource;
 	
 	private DBConnection()
 	{
@@ -70,10 +75,12 @@ public class DBConnection {
 				instance = new DBConnection();
 			}
 			try {
-				Class.forName("com.mysql.cj.jdbc.Driver");  
-				connection = DriverManager.getConnection("jdbc:mysql://localhost/computer-database-db?" + "user=admincdb&password=qwerty1234");
+				config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+				dataSource  = new HikariDataSource(config);
+				connection = dataSource.getConnection();
+				
 				logger.debug("Connection to the database etablished.");
-			} catch (SQLException | ClassNotFoundException e) {
+			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				logger.debug("Failed to establish a connection to the database.");
 				e.printStackTrace();
