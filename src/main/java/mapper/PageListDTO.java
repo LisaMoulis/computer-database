@@ -65,13 +65,17 @@ public class PageListDTO implements Serializable {
 	{
 		if (page < 1)
 		{
-			page = 1;
+			this.page = 1;
 		}
 		else if (page > getNbPages())
 		{
-			page = getNbPages();
+			this.page = getNbPages();
 		}
-		this.computers = ComputerRequestHandler.getPage(size,(page-1)*size);;
+		else
+		{
+			this.page = page;
+		}
+		this.computers = ComputerRequestHandler.getPage(size,(this.page-1)*size);;
 	}
 	
 	public void setSize(int size)

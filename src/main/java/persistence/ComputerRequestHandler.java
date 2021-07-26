@@ -10,6 +10,7 @@ import java.util.List;
 
 import mapper.ComputerDAOMapper;
 import model.Computer;
+import model.exceptions.RollbackHappened;
 
 /**
  * Class ComputersRequesthandler :
@@ -77,9 +78,18 @@ public class ComputerRequestHandler {
 			PreparedStatement query = connection.prepareStatement("INSERT INTO `computer`"+ ComputerDAOMapper.mapToCreate(computer));
 			DBConnection.getLogger().debug("INSERT INTO `computer`"+ ComputerDAOMapper.mapToCreate(computer));
 			query.executeUpdate();
+			connection.commit();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			try {
+				DBConnection.getLogger().error("Transaction is being rolled back");
+		        connection.rollback();
+		        throw new RollbackHappened();
+		    } 
+			catch (SQLException excep) 
+			{
+		    	excep.printStackTrace();
+		    }
 		}
 	}
 	
@@ -95,9 +105,18 @@ public class ComputerRequestHandler {
 			DBConnection.getLogger().debug("UPDATE `computer` SET "+ ComputerDAOMapper.mapToUpdate(computer) + "WHERE id=?");
 			query.setInt(1, computer.getId());
 			query.executeUpdate();
+			connection.commit();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			try {
+				DBConnection.getLogger().error("Transaction is being rolled back");
+				connection.rollback();
+				throw new RollbackHappened();
+		    } 
+			catch (SQLException excep) 
+			{
+		    	excep.printStackTrace();
+		    }
 		}
 	}
 	
@@ -113,9 +132,18 @@ public class ComputerRequestHandler {
 			DBConnection.getLogger().debug("DELETE FROM `computer` WHERE id="+ id);
 			query.setInt(1, id);
 			query.executeUpdate();
+			connection.commit();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			try {
+				DBConnection.getLogger().error("Transaction is being rolled back");
+				connection.rollback();
+				throw new RollbackHappened();
+		    } 
+			catch (SQLException excep) 
+			{
+		    	excep.printStackTrace();
+		    }
 		}
 	}
 	
@@ -130,9 +158,18 @@ public class ComputerRequestHandler {
 			DBConnection.getLogger().debug("DELETE FROM `computer` WHERE name=?");
 			query.setString(1, name);
 			query.executeUpdate();
+			connection.commit();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			try {
+				DBConnection.getLogger().error("Transaction is being rolled back");
+				connection.rollback();
+				throw new RollbackHappened();
+		    } 
+			catch (SQLException excep) 
+			{
+		    	excep.printStackTrace();
+		    }
 		}
 	}
 	

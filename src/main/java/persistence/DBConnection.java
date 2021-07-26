@@ -78,11 +78,13 @@ public class DBConnection {
 				config.setDriverClassName("com.mysql.cj.jdbc.Driver");
 				dataSource  = new HikariDataSource(config);
 				connection = dataSource.getConnection();
+				connection.setAutoCommit(false);
+				connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 				
 				logger.debug("Connection to the database etablished.");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				logger.debug("Failed to establish a connection to the database.");
+				logger.error("Failed to establish a connection to the database.");
 				e.printStackTrace();
 			}
 		}
