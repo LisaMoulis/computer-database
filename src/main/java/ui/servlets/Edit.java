@@ -9,7 +9,7 @@ import javax.servlet.http.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mapper.ComputerDTO;
+import dto.ComputerDTO;
 import mapper.ComputerDTOMapper;
 import model.CompanyList;
 import model.Computer;

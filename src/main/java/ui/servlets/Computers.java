@@ -9,7 +9,7 @@ import javax.servlet.http.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mapper.PageListDTO;
+import dto.PageListDTO;
 
 public class Computers extends HttpServlet{
 	/**
@@ -27,7 +27,7 @@ public class Computers extends HttpServlet{
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		
 		PageListDTO page;
-		if (request.getSession().getAttribute("page") == null || (request.getParameter("size") == null && request.getParameter("page") == null))
+		if (request.getSession().getAttribute("page") == null)
 		{
 			page = new PageListDTO();
 			logger.debug("Default settings applying.");
@@ -37,6 +37,31 @@ public class Computers extends HttpServlet{
 		{
 			page = (PageListDTO) request.getSession().getAttribute("page");
 		}
+		
+		if (request.getParameter("searchsubmit") != null && request.getParameter("searchsubmit") != "")
+		{
+			System.out.println(page.getSearch());
+			if (request.getParameter("search") != null)
+			{
+				page.setSearch(request.getParameter("search"));
+				request.setAttribute("search", page.getSearch());
+			}
+			
+			if (request.getParameter("searchsubmit").equals("Filter by company"))
+			{
+				page.setOrder("company.name");
+			}
+			else if (request.getParameter("searchsubmit").equals("Filter by name"))
+			{
+				page.setOrder("computer.name");
+			}
+			else if (request.getParameter("searchsubmit").equals("Cancel"))
+			{
+				page.setSearch("");
+				request.setAttribute("search", null);
+			}
+		}
+		
 		
 		if (request.getParameter("size") != null)
 		{
@@ -49,12 +74,13 @@ public class Computers extends HttpServlet{
 			page.setPage(Integer.valueOf((String)request.getParameter("page")));
 			logger.debug("Number of the page changed to the asked one.");
 		}
+		
 		request.getRequestDispatcher("/WEB-INF/static/views/dashboard.jsp").include(request, response);
 	}
 	
 	@Override
 	public void doPost(HttpServletRequest request,HttpServletResponse response) throws ServletException,IOException 
-	{
+	{		
 		logger.debug("Settings changed.");
 		this.doGet(request, response);
 	}

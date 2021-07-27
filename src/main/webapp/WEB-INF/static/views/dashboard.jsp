@@ -14,7 +14,7 @@
 	<%@ page import="model.ComputerList" %>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard.jsp"> Application - Computer Database </a>
+            <a class="navbar-brand" href="computers"> Application - Computer Database </a>
         </div>
     </header>
     <section id="main">
@@ -26,9 +26,10 @@
                 <div class="pull-left">
                     <form id="searchForm" action="#" method="GET" class="form-inline">
 
-                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
-                        <input type="submit" id="searchsubmit" value="Filter by name"
-                        class="btn btn-primary" />
+                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" <c:if test="${not empty search}">value="${search}"</c:if> />
+                        <input type="submit" id="searchsubmit" name="searchsubmit" value="Filter by name" class="btn btn-primary" />
+                        <input type="submit" id="searchsubmit" name="searchsubmit" value="Filter by company" class="btn btn-primary" />
+                        <input type="submit" id="searchsubmit" name="searchsubmit" value="Cancel" class="btn btn-primary" />
                     </form>
                 </div>
                 <div class="pull-right">
@@ -144,33 +145,33 @@
 		var searchParams = new URLSearchParams(window.location.search);
 		if (searchParams.get('page') == null)
 		{
-			window.location.replace("computers?page=1&size=10");
+			window.location.replace("computers?page=1&size=10&search=" + document.getElementById("searchbox").value;
 		}
 		else
 		{
-			window.location.replace("computers?page="+ searchParams.get('page') +"&size=10");
+			window.location.replace("computers?page="+ searchParams.get('page') +"&size=10&search=" + document.getElementById("searchbox"));
 		}
 	}
 	function size50() {
 		var searchParams = new URLSearchParams(window.location.search);
 		if (searchParams.get('page') == null)
 		{
-			window.location.replace("computers?page=1&size=50");
+			window.location.replace("computers?page=1&size=50&search=" + document.getElementById("searchbox"));
 		}
 		else
 		{
-			window.location.replace("computers?page="+ searchParams.get('page') +"&size=50");
+			window.location.replace("computers?page="+ searchParams.get('page') +"&size=50&search=" + document.getElementById("searchbox"));
 		}
 	}
 	function size100() {
 		var searchParams = new URLSearchParams(window.location.search);
 		if (searchParams.get('page') == null)
 		{
-			window.location.replace("computers?page=1&size=100");
+			window.location.replace("computers?page=1&size=100&search=" + document.getElementById("searchbox"));
 		}
 		else
 		{
-			window.location.replace("computers?page="+ searchParams.get('page') +"&size=100");
+			window.location.replace("computers?page="+ searchParams.get('page') +"&size=100&search=" + document.getElementById("searchbox"));
 		}
 	}
 </script>

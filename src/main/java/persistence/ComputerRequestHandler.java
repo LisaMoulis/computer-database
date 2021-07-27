@@ -21,9 +21,8 @@ public class ComputerRequestHandler {
 
 	private static final String GET_WITH_NAME = "SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer`, `company.name` LEFT JOIN `company` ON company_id = company.id WHERE computer.name=?";
 	private static final String GET_WITH_ID = "SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE computer.id=?";
-	private static final String GET_PAGE = "SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer` LEFT JOIN `company` ON company_id = company.id LIMIT ? OFFSET ?";
-	private static final String GET_NB_COMPUTERS = "SELECT COUNT(id) FROM `computer`";
-	
+	private static final String GET_PAGE = "SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ? ORDER BY "; 
+	private static final String GET_NB_COMPUTERS = "SELECT COUNT(computer.id) FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ?"; 
 	
 	/**
 	 * @param id	Identified of a computer
@@ -198,16 +197,20 @@ public class ComputerRequestHandler {
 		}
 	}
 	
-	
-	public static List<Computer> getPage(int size, int offset)
+	public static List<Computer> getPage(int size, int offset, String search, String column)
 	{
 		Connection connection = DBConnection.getConnection();
 		try {
-			PreparedStatement query = connection.prepareStatement(GET_PAGE);
-			DBConnection.getLogger().info("Getting page from database with size "+ size + " and offset "+ offset);
-			query.setInt(1, size);
-			query.setInt(2, offset);
+			PreparedStatement query = connection.prepareStatement(GET_PAGE + column + " LIMIT ? OFFSET ?");
+			DBConnection.getLogger().info("Getting page from database with size "+ size + ", offset "+ offset + ", searched "+search + " and order " + column);
+			query.setString(1, "%"+search+"%");
+			query.setString(2, "%"+search+"%");
+			//query.setString(3, column);
+			query.setInt(3, size);
+			query.setInt(4, offset);
+			DBConnection.getLogger().debug(query.toString());
 			ResultSet result = query.executeQuery();
+			
 			List<Computer> page = new ArrayList<Computer>();
 			while (result.next())
 			{
@@ -223,12 +226,16 @@ public class ComputerRequestHandler {
 		}
 	}
 	
-	public static int getNbComputers()
+
+	
+	public static int getNbComputers(String search)
 	{
 		Connection connection = DBConnection.getConnection();
 		try {
 			PreparedStatement query = connection.prepareStatement(GET_NB_COMPUTERS);
 			DBConnection.getLogger().debug(GET_NB_COMPUTERS);
+			query.setString(1, "%"+search+"%");
+			query.setString(2, "%"+search+"%");
 			ResultSet result = query.executeQuery();
 			result.next();
 			DBConnection.getLogger().info("Nb computers : " + result.getInt(1));

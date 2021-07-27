@@ -93,12 +93,12 @@ public class ComputerList {
 	{
 		//Create the list of computers to display
 		//StringBuilder str = new StringBuilder("	Page ").append(index+1).append("\nComputerList [computers=");
-		return ComputerRequestHandler.getPage(sizePage,(index-1)*sizePage);
+		return ComputerRequestHandler.getPage(sizePage,(index-1)*sizePage,"","");
 	}
 	
 	public int getNbComputers()
 	{
-		return ComputerRequestHandler.getNbComputers();
+		return ComputerRequestHandler.getNbComputers("");
 	}
 	
 	public int getIndex()
@@ -109,7 +109,7 @@ public class ComputerList {
 	public List<Computer> getPage(int idx,int size)
 	{
 		//Create the list of computers to display
-		return ComputerRequestHandler.getPage(size,(idx-1)*size);
+		return ComputerRequestHandler.getPage(size,(idx-1)*size,"","");
 	}
 	
 	/**

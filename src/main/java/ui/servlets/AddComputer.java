@@ -9,6 +9,7 @@ import javax.servlet.http.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import dto.ComputerDTO;
 import model.*;
 import persistence.ComputerRequestHandler;
 import service.Validator;

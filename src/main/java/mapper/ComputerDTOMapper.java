@@ -4,6 +4,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import dto.ComputerDTO;
 import model.Computer;
 import service.ComputerBuilder;
 
