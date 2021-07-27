@@ -11,6 +11,7 @@ import java.util.List;
 import mapper.ComputerDAOMapper;
 import model.Computer;
 import model.exceptions.RollbackHappened;
+import service.Validator;
 
 /**
  * Class ComputersRequesthandler :
@@ -216,6 +217,18 @@ public class ComputerRequestHandler {
 			{
 				page.add(ComputerDAOMapper.mapToComputer(result));
 			}
+			try {
+				int id = Integer.valueOf(search);
+				Computer toAdd = getComputer(id);
+				try {
+					Validator.validate(toAdd);
+					page.add(toAdd);
+				}
+				catch(RuntimeException re)
+				{}
+			}
+			catch (Exception e)
+			{}
 			DBConnection.getLogger().info("Page gathered : " + page);
 			return page;
 			
@@ -239,7 +252,21 @@ public class ComputerRequestHandler {
 			ResultSet result = query.executeQuery();
 			result.next();
 			DBConnection.getLogger().info("Nb computers : " + result.getInt(1));
-			return result.getInt(1);
+			int plusOne = 0;
+			
+			try {
+				int id = Integer.valueOf(search);
+				Computer toAdd = getComputer(id);
+				try {
+					Validator.validate(toAdd);
+					plusOne = 1;
+				}
+				catch(RuntimeException re)
+				{}
+			}
+			catch (Exception e)
+			{}
+			return result.getInt(1) + plusOne;
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
