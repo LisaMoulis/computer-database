@@ -1,6 +1,7 @@
 package command;
 
 import model.ComputerList;
+import service.*;
 
 /**
  * Class CommandListComputers :
@@ -17,16 +18,18 @@ public class CommandListComputers extends Command{
 	
 	@Override
 	public void exec(String...args) {
+		ComputerList page = CommandHandler.getInstance().getPage();
 		if (args.length == 1)
 		{
-			ComputerList.getInstance().beginPage();
+			page.setPage(1);
 			this.logger.debug("Displaying the list of computers.");
-			System.out.println("List of the computers :\n" + ComputerList.getInstance().getPage());
+			System.out.println("List of the computers :\n" + PageService.getInstance().getPage(page,"",""));
 		}
 		else if (args.length == 2)
 		{
 			this.logger.debug("Displaying the list of computers.");
-			System.out.println("List of the computers :\n" + ComputerList.getInstance().getPage(Integer.valueOf(args[2]),10));
+			page.setPage(Integer.valueOf(args[2]));
+			System.out.println("List of the computers :\n" + PageService.getInstance().getPage(page,"",""));
 		}
 		else
 		{

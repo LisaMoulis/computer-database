@@ -9,13 +9,7 @@ import javax.servlet.http.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import dto.ComputerDTO;
-import mapper.ComputerDTOMapper;
-import model.CompanyList;
-import model.Computer;
-import model.ComputerList;
-import persistence.ComputerRequestHandler;
-import service.Validator;
+import service.ComputerService;
 
 public class Delete extends HttpServlet{
 
@@ -40,19 +34,14 @@ public class Delete extends HttpServlet{
 	public void doPost(HttpServletRequest request,HttpServletResponse response) throws ServletException,IOException 
 	{
 		logger.debug("Computer info retrieved. Trying to update the computer.");
-		System.out.println("coucou");
-		System.out.println(request.getParameter("selection"));
 		if (request.getParameter("selection") != null)
 		{
 			String[] selection = request.getParameter("selection").split(",");
 			
 			try
 			{
-				for (String nb : selection)
-				{
-					ComputerRequestHandler.deleteComputer(Integer.valueOf(nb));
-					logger.info("Computers deleted.");
-				}
+				ComputerService.getInstance().removeSelectedComputer(selection);
+				logger.info("Computers deleted.");
 			}
 			catch (RuntimeException e)
 			{

@@ -26,7 +26,7 @@
                 <div class="pull-left">
                     <form id="searchForm" action="#" method="GET" class="form-inline">
 
-                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" <c:if test="${not empty search}">value="${search}"</c:if> />
+                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${search}" />
                         <input type="submit" id="searchsubmit" name="searchsubmit" value="Filter by name" class="btn btn-primary" />
                         <input type="submit" id="searchsubmit" name="searchsubmit" value="Filter by company" class="btn btn-primary" />
                         <input type="submit" id="searchsubmit" name="searchsubmit" value="Cancel" class="btn btn-primary" />
@@ -119,11 +119,11 @@
               	</c:if>
               	
 				<c:forEach begin="${beginning}" end="${end}" var="i" step="1">
-					<li><a href="computers?page=${i}&size=${page.size}">${i}</a></li>
+					<li><a href="computers?page=${i}&size=${page.size}&search=${search}">${i}</a></li>
 				</c:forEach>
 				
               <li>
-                <a href="computers?page=${page.page+1}&size=${page.size}" aria-label="Next">
+                <a href="computers?page=${page.page+1}&size=${page.size}&search=${search}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
@@ -145,33 +145,33 @@
 		var searchParams = new URLSearchParams(window.location.search);
 		if (searchParams.get('page') == null)
 		{
-			window.location.replace("computers?page=1&size=10&search=" + document.getElementById("searchbox").value;
+			window.location.replace("computers?page=1&size=10&search=" + document.getElementById("searchbox").value);
 		}
 		else
 		{
-			window.location.replace("computers?page="+ searchParams.get('page') +"&size=10&search=" + document.getElementById("searchbox"));
+			window.location.replace("computers?page="+ searchParams.get('page') +"&size=10&search=" + document.getElementById("searchbox").value);
 		}
 	}
 	function size50() {
 		var searchParams = new URLSearchParams(window.location.search);
 		if (searchParams.get('page') == null)
 		{
-			window.location.replace("computers?page=1&size=50&search=" + document.getElementById("searchbox"));
+			window.location.replace("computers?page=1&size=50&search=" + document.getElementById("searchbox").value);
 		}
 		else
 		{
-			window.location.replace("computers?page="+ searchParams.get('page') +"&size=50&search=" + document.getElementById("searchbox"));
+			window.location.replace("computers?page="+ searchParams.get('page') +"&size=50&search=" + document.getElementById("searchbox").value);
 		}
 	}
 	function size100() {
 		var searchParams = new URLSearchParams(window.location.search);
 		if (searchParams.get('page') == null)
 		{
-			window.location.replace("computers?page=1&size=100&search=" + document.getElementById("searchbox"));
+			window.location.replace("computers?page=1&size=100&search=" + document.getElementById("searchbox").value);
 		}
 		else
 		{
-			window.location.replace("computers?page="+ searchParams.get('page') +"&size=100&search=" + document.getElementById("searchbox"));
+			window.location.replace("computers?page="+ searchParams.get('page') +"&size=100&search=" + document.getElementById("searchbox").value);
 		}
 	}
 </script>

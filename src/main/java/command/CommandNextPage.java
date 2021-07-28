@@ -1,5 +1,6 @@
 package command;
 
+import service.*;
 import model.ComputerList;
 
 /**
@@ -19,9 +20,10 @@ public class CommandNextPage extends Command{
 	public void exec(String...args) {
 		if (args.length == 1)
 		{
-			ComputerList.getInstance().nextPage();
+			ComputerList page = CommandHandler.getInstance().getPage();
+			page.setPage(page.getPage()+1);
 			this.logger.debug("Next page of computers displayed.");
-			System.out.println("List of the computers :\n" + ComputerList.getInstance().getPage());
+			System.out.println("List of the computers :\n" + PageService.getInstance().getPage(page,"",""));
 		}
 		else
 		{

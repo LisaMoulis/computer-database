@@ -2,6 +2,8 @@ package command;
 
 import java.util.ArrayList;
 
+import model.ComputerList;
+
 /**
  * Class CommandHandler :
  * Manage the commands and execute them
@@ -11,6 +13,7 @@ public class CommandHandler {
 
 	private ArrayList<Command> commands;
 	private static CommandHandler instance;
+	private ComputerList computerList = new ComputerList();
 	
 	private CommandHandler()
 	{
@@ -73,6 +76,9 @@ public class CommandHandler {
 		}
 	}
 	
-	
+	public ComputerList getPage()
+	{
+		return this.computerList;
+	}
 	
 }

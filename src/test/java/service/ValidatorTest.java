@@ -2,6 +2,7 @@ package service;
 
 import java.time.LocalDate;
 
+import builder.ComputerBuilder;
 import junit.framework.TestCase;
 import model.Computer;
 

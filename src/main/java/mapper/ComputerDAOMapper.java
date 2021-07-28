@@ -4,9 +4,9 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import builder.ComputerBuilder;
 import model.CompanyList;
 import model.Computer;
-import service.ComputerBuilder;
 
 /**
  * Class ComputerMapper :

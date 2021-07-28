@@ -13,8 +13,8 @@ import dto.ComputerDTO;
 import mapper.ComputerDTOMapper;
 import model.CompanyList;
 import model.Computer;
-import model.ComputerList;
 import persistence.ComputerRequestHandler;
+import service.ComputerService;
 import service.Validator;
 
 public class Edit extends HttpServlet{
@@ -34,7 +34,7 @@ public class Edit extends HttpServlet{
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		logger.debug("Edit page displayed.");
 		int id = Integer.parseInt(request.getParameter("id"));
-		Computer c = ComputerList.getInstance().getComputer(id);
+		Computer c = ComputerService.getInstance().getComputer(id);
 		request.setAttribute("computer", c);
 		if (c.getCompany() != null)
 		{
@@ -57,8 +57,7 @@ public class Edit extends HttpServlet{
 		computer.setId(Integer.valueOf(request.getParameter("id")));
 		try
 		{	
-			Validator.validate(computer);
-			ComputerRequestHandler.updateComputer(computer);
+			ComputerService.getInstance().updateComputer(computer);
 			logger.debug("Computer updated. Redirection to the computer list.");
 			response.sendRedirect("computers");
 		}

@@ -2,26 +2,42 @@ package dto;
 
 import javax.servlet.http.HttpServletRequest;
 
-import model.Company;
 import model.CompanyList;
 
 public class ComputerDTO {
 
+	private int id = -1;
 	private String name;
 	private String introduced;
 	private String discontinued;
-	private Company company;
+	private String company;
+	private int companyId;
 	
 	public ComputerDTO(HttpServletRequest request)
 	{
 		this.name = (String) request.getParameter("computerName");
 		this.introduced = (String) request.getParameter("introduced");
 		this.discontinued = (String) request.getParameter("discontinued");
-		this.company = null;
 		if (!request.getParameter("companyId").equals("") && CompanyList.getInstance().getCompany(Integer.parseInt((String) request.getParameter("companyId")))!= null)
 		{
-			this.company = CompanyList.getInstance().getCompany(Integer.parseInt((String) request.getParameter("companyId")));
+			this.companyId = Integer.parseInt((String) request.getParameter("companyId"));
+			this.company = CompanyList.getInstance().getCompany(this.companyId).getName();
 		}
+	}
+	
+	public ComputerDTO(int id, String name, String introduced, String discontinued, String company, int companyId)
+	{
+		this.id = id;
+		this.name = name;
+		this.introduced = introduced;
+		this.discontinued = discontinued;
+		this.company = company;
+		this.companyId = companyId;
+	}
+	
+	public int getId()
+	{
+		return this.id;
 	}
 	
 	public String getName()
@@ -39,8 +55,14 @@ public class ComputerDTO {
 		return this.discontinued;
 	}
 	
-	public Company getCompany()
+	public String getCompany()
 	{
 		return this.company;
 	}
+	
+	public int getCompanyId()
+	{
+		return this.companyId;
+	}
+
 }

@@ -3,10 +3,13 @@ package mapper;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import dto.ComputerDTO;
+import model.Company;
+import model.CompanyList;
 import model.Computer;
-import service.ComputerBuilder;
+import builder.*;
 
 /**
  * Class ComputerMapper :
@@ -35,8 +38,36 @@ public class ComputerDTOMapper {
 		}
 		if (dto.getCompany() != null)
 		{
-			builder.setCompany(dto.getCompany().getName());
+			builder.setCompany(dto.getCompany());
 		}
 		return builder.build();
+	}
+	
+	public static ComputerDTO mapToDTO(Computer computer)
+	{
+		ComputerDTOBuilder builder = new ComputerDTOBuilder().setId(computer.getId()).setName(computer.getName());
+		if (computer.getIntroduced() != null )
+		{
+			builder.setIntroduced(computer.getIntroduced().format(DateTimeFormatter.ISO_LOCAL_DATE));
+		}
+		if (computer.getDiscontinued() != null)
+		{
+			builder.setDiscontinued(computer.getDiscontinued().format(DateTimeFormatter.ISO_LOCAL_DATE));
+		}
+		if (computer.getCompany() != null)
+		{
+			Company comp = CompanyList.getInstance().getCompany(computer.getCompany());
+			if (comp != null)
+			{
+				builder.setCompany(comp.getName()).setCompanyId(comp.getId());
+			}
+		}
+		return builder.build();
+	}
+	
+	public static List<ComputerDTO> mapToDTOList(List<Computer> computers)
+	{
+		List<ComputerDTO> dto = (List<ComputerDTO>) computers.stream().map(e -> mapToDTO(e)).toList();
+		return dto;
 	}
 }

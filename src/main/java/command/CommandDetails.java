@@ -1,6 +1,6 @@
 package command;
 
-import model.ComputerList;
+import service.ComputerService;
 import persistence.ComputerRequestHandler;
 
 /**
@@ -28,7 +28,7 @@ public class CommandDetails extends Command {
 			}
 			catch (NumberFormatException e)
 			{
-				str += ComputerList.getInstance().getComputer(args[1]);
+				str += ComputerService.getInstance().getComputer(args[1]);
 			}
 			System.out.println(str);
 			logger.debug("Details of the computer displayed.");

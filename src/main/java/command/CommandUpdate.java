@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import model.*;
+import service.*;
 import persistence.ComputerRequestHandler;
 
 /**
@@ -24,11 +25,11 @@ public class CommandUpdate extends Command{
 		Computer toupdate = null;
 		try {
 			int id = Integer.valueOf(args[1]);
-			toupdate = ComputerList.getInstance().getComputer(id);
+			toupdate = ComputerService.getInstance().getComputer(id);
 		}
 		catch (NumberFormatException e)
 		{
-			toupdate = ComputerList.getInstance().getComputer(args[1]);
+			toupdate = ComputerService.getInstance().getComputer(args[1]);
 		}
 		if (toupdate != null)
 		{

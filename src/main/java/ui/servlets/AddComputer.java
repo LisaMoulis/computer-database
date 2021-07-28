@@ -11,8 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import dto.ComputerDTO;
 import model.*;
-import persistence.ComputerRequestHandler;
-import service.Validator;
+import service.ComputerService;
 import mapper.*;
 
 public class AddComputer extends HttpServlet{
@@ -41,9 +40,8 @@ public class AddComputer extends HttpServlet{
 		logger.debug("Computer info retrieved. Trying to create the computer.");
 		Computer computer = ComputerDTOMapper.mapToComputer(new ComputerDTO(request));
 		try
-		{	
-			Validator.validate(computer);
-			ComputerRequestHandler.createComputer(computer);
+		{
+			ComputerService.getInstance().createComputer(computer);
 			logger.debug("Computer created. Redirection to the computer list.");
 			response.sendRedirect("computers");
 		}

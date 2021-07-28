@@ -2,8 +2,7 @@ package dto;
 
 import java.util.List;
 
-import model.Computer;
-import persistence.ComputerRequestHandler;
+import service.PageService;
 
 public class PageListDTO {
 	
@@ -12,37 +11,11 @@ public class PageListDTO {
 	private String search = "";
 	private String order = "computer.name";
 	
-	protected List<Computer> computers;
+	private List<ComputerDTO> computers;
 	
 	public int getPage()
 	{
 		return this.page;
-	}
-	
-	public int getSize()
-	{
-		return this.size;
-	}
-	
-	public int getNbPages()
-	{
-		int nbComputers = getNbComputers();
-		if (nbComputers%size == 0)
-		{
-			return nbComputers/size;
-		}
-		return nbComputers/size + 1;
-	}
-	
-	public List<Computer> getComputers()
-	{
-		this.computers = ComputerRequestHandler.getPage(size,(this.page-1)*size,this.search,order);
-		return computers;
-	}
-	
-	public int getNbComputers()
-	{
-		return ComputerRequestHandler.getNbComputers(this.search);
 	}
 	
 	public void setPage(int page)
@@ -61,23 +34,58 @@ public class PageListDTO {
 		}
 	}
 	
-	public void setOrder(String o)
+	public int getSize()
 	{
-		this.order = o;
-	}
-	
-	public void setSearch(String s)
-	{
-		this.search = s;
+		return this.size;
 	}
 	
 	public void setSize(int size)
 	{
 		this.size = size;
 	}
-
+	
+	public int getNbPages()
+	{
+		int nbComputers = getNbComputers();
+		if (nbComputers%size == 0)
+		{
+			return nbComputers/size;
+		}
+		return nbComputers/size + 1;
+	}
+	
+	public List<ComputerDTO> getComputers()
+	{
+		return this.computers;
+	}
+	
+	public void setComputers(List<ComputerDTO> computers)
+	{
+		this.computers = computers;
+	}
+	
+	public int getNbComputers()
+	{
+		return PageService.getInstance().getNbComputers(this.search);
+	}
+	
+	public String getOrder()
+	{
+		return this.order;
+	}
+	
+	public void setOrder(String o)
+	{
+		this.order = o;
+	}
+	
 	public String getSearch() {
-		// TODO Auto-generated method stub
 		return search;
 	}
+	
+	public void setSearch(String s)
+	{
+		this.search = s;
+	}
+
 }

@@ -1,7 +1,7 @@
 package command;
 
-import model.ComputerList;
 import persistence.ComputerRequestHandler;
+import service.ComputerService;
 
 /**
  * Class CommandDelete :
@@ -24,12 +24,12 @@ public class CommandDelete extends Command {
 			try {
 				int id = Integer.valueOf(args[1]);
 				ComputerRequestHandler.deleteComputer(id);
-				ComputerList.getInstance().remove(id);
+				ComputerService.getInstance().removeComputer(id);
 			}
 			catch (NumberFormatException e)
 			{
 				ComputerRequestHandler.deleteComputer(args[1]);
-				ComputerList.getInstance().remove(args[1]);
+				ComputerService.getInstance().removeComputer(args[1]);
 			}
 			this.logger.debug("Computer deleted.");
 		}
