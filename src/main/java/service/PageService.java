@@ -27,6 +27,7 @@ public class PageService {
 	
 	public List<Computer> getPage(ComputerList page, String search, String column)
 	{
+		System.out.println("\nService " + column);
 		page.setComputers(ComputerRequestHandler.getPage(page.getSize(),page.getOffset(),search,column));
 		return page.getComputers();
 	}

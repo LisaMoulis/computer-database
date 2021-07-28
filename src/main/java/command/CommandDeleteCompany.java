@@ -1,16 +1,15 @@
 package command;
 
-import persistence.ComputerRequestHandler;
-import service.ComputerService;
+import service.CompanyService;
 
 /**
  * Class CommandDelete :
  * Delete a computer
  * @author Lisa
  */
-public class CommandDelete extends Command {
+public class CommandDeleteCompany extends Command {
 
-	private final String name = "delete";
+	private final String name = "delete-company";
 
 	public String getName()
 	{
@@ -19,17 +18,18 @@ public class CommandDelete extends Command {
 	
 	@Override
 	public void exec(String...args) {
+		System.out.println("coucou");
 		if (args.length == 2)
 		{
 			try {
 				int id = Integer.valueOf(args[1]);
-				ComputerService.getInstance().removeComputer(id);
+				CompanyService.getInstance().removeCompany(id);
 			}
 			catch (NumberFormatException e)
 			{
-				ComputerService.getInstance().removeComputer(args[1]);
+				CompanyService.getInstance().removeCompany(args[1]);
 			}
-			this.logger.debug("Computer deleted.");
+			this.logger.debug("Company deleted.");
 		}
 		else
 		{

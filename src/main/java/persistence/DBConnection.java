@@ -67,26 +67,25 @@ public class DBConnection {
 	public static Connection getConnection()
 	{
 		//Create the instance if it's not existing
-		if (connection == null)
+		if (instance == null)
 		{
-			if (instance == null)
-			{
-				instance = new DBConnection();
-			}
-			try {
-				config.setDriverClassName("com.mysql.cj.jdbc.Driver");
-				dataSource  = new HikariDataSource(config);
-				connection = dataSource.getConnection();
-				connection.setAutoCommit(false);
-				connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
-				
-				logger.debug("Connection to the database etablished.");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				logger.error("Failed to establish a connection to the database.");
-				e.printStackTrace();
-			}
+			instance = new DBConnection();
 		}
+		
+		try {
+			config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+			dataSource  = new HikariDataSource(config);
+			connection = dataSource.getConnection();
+			connection.setAutoCommit(false);
+			connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+			
+			logger.debug("Connection to the database etablished.");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			logger.error("Failed to establish a connection to the database.");
+			e.printStackTrace();
+		}
+		
 		return connection;
 	}
 	

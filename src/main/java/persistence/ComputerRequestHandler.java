@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import mapper.ComputerDAOMapper;
 import model.Computer;
@@ -31,8 +30,7 @@ public class ComputerRequestHandler {
 	 */
 	public static Computer getComputer(int id)
 	{
-		Connection connection = DBConnection.getConnection();
-		try {
+		try (Connection connection = DBConnection.getConnection();){
 			PreparedStatement query = connection.prepareStatement(GET_WITH_ID);
 			query.setInt(1, id);
 			ResultSet result = query.executeQuery();
@@ -52,16 +50,13 @@ public class ComputerRequestHandler {
 	 */
 	public static Computer getComputer(String name)
 	{
-		Connection connection = DBConnection.getConnection();
-		try {
+		try (Connection connection = DBConnection.getConnection();) {
 			PreparedStatement query = connection.prepareStatement(GET_WITH_NAME);
 			query.setString(1, name);
 			ResultSet result = query.executeQuery();
 			result.next();
-			
 			return ComputerDAOMapper.mapToComputer(result);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
@@ -73,8 +68,8 @@ public class ComputerRequestHandler {
 	public static HashMap<Integer,Computer> getAllComputers()
 	{
 		HashMap<Integer,Computer> computers = new HashMap<Integer,Computer>();
-		Connection connection = DBConnection.getConnection();
-		try {
+		
+		try (Connection connection = DBConnection.getConnection();){
 			//Send the request to get all the computers
 			PreparedStatement query = connection.prepareStatement("SELECT * FROM `computer` LEFT JOIN `company` ON company_id = company.id");
 			ResultSet result = query.executeQuery();
@@ -94,8 +89,7 @@ public class ComputerRequestHandler {
 	
 	public static ArrayList<Computer> getPage(int size, int offset, String search, String column)
 	{
-		Connection connection = DBConnection.getConnection();
-		try {
+		try (Connection connection = DBConnection.getConnection();) {
 			PreparedStatement query = connection.prepareStatement(GET_PAGE + column + " LIMIT ? OFFSET ?");
 			DBConnection.getLogger().info("Getting page from database with size "+ size + ", offset "+ offset + ", searched "+search + " and order " + column);
 			query.setString(1, "%"+search+"%");
@@ -103,6 +97,7 @@ public class ComputerRequestHandler {
 			//query.setString(3, column);
 			query.setInt(3, size);
 			query.setInt(4, offset);
+			System.out.println("\nRequest " + column);
 			DBConnection.getLogger().debug(query.toString());
 			ResultSet result = query.executeQuery();
 			
@@ -135,8 +130,7 @@ public class ComputerRequestHandler {
 
 	public static int getNbComputers(String search)
 	{
-		Connection connection = DBConnection.getConnection();
-		try {
+		try (Connection connection = DBConnection.getConnection();) {
 			PreparedStatement query = connection.prepareStatement(GET_NB_COMPUTERS);
 			DBConnection.getLogger().debug(GET_NB_COMPUTERS);
 			query.setString(1, "%"+search+"%");
@@ -179,11 +173,13 @@ public class ComputerRequestHandler {
 			DBConnection.getLogger().debug("INSERT INTO `computer`"+ ComputerDAOMapper.mapToCreate(computer));
 			query.executeUpdate();
 			connection.commit();
+			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			try {
 				DBConnection.getLogger().error("Transaction is being rolled back");
 		        connection.rollback();
+		        connection.close();
 		        throw new RollbackHappened();
 		    } 
 			catch (SQLException excep) 
@@ -206,11 +202,13 @@ public class ComputerRequestHandler {
 			query.setInt(1, computer.getId());
 			query.executeUpdate();
 			connection.commit();
+			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			try {
 				DBConnection.getLogger().error("Transaction is being rolled back");
 				connection.rollback();
+				connection.close();
 				throw new RollbackHappened();
 		    } 
 			catch (SQLException excep) 
@@ -233,11 +231,13 @@ public class ComputerRequestHandler {
 			query.setInt(1, id);
 			query.executeUpdate();
 			connection.commit();
+			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			try {
 				DBConnection.getLogger().error("Transaction is being rolled back");
 				connection.rollback();
+				connection.close();
 				throw new RollbackHappened();
 		    } 
 			catch (SQLException excep) 
@@ -259,11 +259,13 @@ public class ComputerRequestHandler {
 			query.setString(1, name);
 			query.executeUpdate();
 			connection.commit();
+			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			try {
 				DBConnection.getLogger().error("Transaction is being rolled back");
 				connection.rollback();
+				connection.close();
 				throw new RollbackHappened();
 		    } 
 			catch (SQLException excep) 

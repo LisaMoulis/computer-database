@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import mapper.CompanyMapper;
 import model.Company;
+import model.exceptions.RollbackHappened;
 
 
 /**
@@ -23,11 +24,27 @@ public class CompanyRequestHandler {
 	 */
 	public static Company getCompany(int id)
 	{
-		Connection connection = DBConnection.getConnection();
-		try {
+		try (Connection connection = DBConnection.getConnection();){
 			PreparedStatement query = connection.prepareStatement("SELECT * FROM `company` WHERE id=?");
 			
 			query.setInt(1, id);
+			ResultSet result = query.executeQuery();
+			result.next();
+			
+			return CompanyMapper.mapToCompany(result);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static Company getCompany(String name)
+	{
+		try (Connection connection = DBConnection.getConnection();){
+			PreparedStatement query = connection.prepareStatement("SELECT * FROM `company` WHERE name=?");
+			
+			query.setString(1, name);
 			ResultSet result = query.executeQuery();
 			result.next();
 			
@@ -45,8 +62,8 @@ public class CompanyRequestHandler {
 	public static HashMap<Integer,Company> getAllCompanies()
 	{
 		HashMap<Integer,Company> companies = new HashMap<Integer,Company>();
-		Connection connection = DBConnection.getConnection();
-		try {
+	
+		try (Connection connection = DBConnection.getConnection();) {
 			//Send the request to get all the companies
 			PreparedStatement query = connection.prepareStatement("SELECT * FROM `company`");
 			ResultSet result = query.executeQuery();
@@ -61,6 +78,34 @@ public class CompanyRequestHandler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
+		}
+	}
+	
+	public static void deleteCompany(int id)
+	{
+		Connection connection = DBConnection.getConnection();
+		try {
+			PreparedStatement query = connection.prepareStatement("DELETE FROM `computer` WHERE company_id=?");
+			
+			DBConnection.getLogger().debug("DELETE FROM `computer` WHERE company_id="+ id);
+			query.setInt(1, id);
+			query.executeUpdate();
+			
+			query.execute("DELETE FROM `company` WHERE id="+id);
+			connection.commit();
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				DBConnection.getLogger().error("Transaction is being rolled back");
+				connection.rollback();
+				connection.close();
+				throw new RollbackHappened();
+		    } 
+			catch (SQLException excep) 
+			{
+		    	excep.printStackTrace();
+		    }
 		}
 	}
 }

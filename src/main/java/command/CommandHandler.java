@@ -21,6 +21,7 @@ public class CommandHandler {
 		this.commands = new ArrayList<Command>();
 		this.commands.add(new CommandCreate());
 		this.commands.add(new CommandDelete());
+		this.commands.add(new CommandDeleteCompany());
 		this.commands.add(new CommandDetails());
 		this.commands.add(new CommandListCompanies());
 		this.commands.add(new CommandListComputers());
