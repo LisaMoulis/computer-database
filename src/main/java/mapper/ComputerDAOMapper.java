@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import builder.ComputerBuilder;
-import model.CompanyList;
-import model.Computer;
+import model.*;
+import service.*;
 
 /**
  * Class ComputerMapper :
@@ -57,7 +57,7 @@ public class ComputerDAOMapper {
 		}
 		if (c.getCompany() != null)
 		{
-			values.append(", `company_id`='").append(CompanyList.getInstance().getCompany(c.getCompany()).getId()).append("'");
+			values.append(", `company_id`='").append(CompanyService.getInstance().getCompany(c.getCompany()).getId()).append("'");
 		}
 		return values.toString();	
 	}
@@ -84,7 +84,7 @@ public class ComputerDAOMapper {
 		if (c.getCompany() != null)
 		{
 			columns.append(", `company_id`");
-			values.append(", ").append(CompanyList.getInstance().getCompany(c.getCompany()).getId());
+			values.append(", ").append(CompanyService.getInstance().getCompany(c.getCompany()).getId());
 		}
 		values.append(")");
 		return columns.append(values).toString();		

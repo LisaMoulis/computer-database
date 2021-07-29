@@ -7,8 +7,8 @@ import java.util.List;
 
 import dto.ComputerDTO;
 import model.Company;
-import model.CompanyList;
 import model.Computer;
+import service.CompanyService;
 import builder.*;
 
 /**
@@ -56,7 +56,7 @@ public class ComputerDTOMapper {
 		}
 		if (computer.getCompany() != null)
 		{
-			Company comp = CompanyList.getInstance().getCompany(computer.getCompany());
+			Company comp = CompanyService.getInstance().getCompany(computer.getCompany());
 			if (comp != null)
 			{
 				builder.setCompany(comp.getName()).setCompanyId(comp.getId());

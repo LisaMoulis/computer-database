@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import mapper.CompanyMapper;
 import model.Company;
@@ -29,8 +29,8 @@ public class CompanyRequestHandler {
 			
 			query.setInt(1, id);
 			ResultSet result = query.executeQuery();
+			connection.commit();
 			result.next();
-			
 			return CompanyMapper.mapToCompany(result);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -46,8 +46,8 @@ public class CompanyRequestHandler {
 			
 			query.setString(1, name);
 			ResultSet result = query.executeQuery();
+			connection.commit();
 			result.next();
-			
 			return CompanyMapper.mapToCompany(result);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -59,18 +59,21 @@ public class CompanyRequestHandler {
 	/**
 	 * @return All the companies in the database
 	 */
-	public static HashMap<Integer,Company> getAllCompanies()
+	public static ArrayList<Company> getAllCompanies()
 	{
-		HashMap<Integer,Company> companies = new HashMap<Integer,Company>();
+		ArrayList<Company> companies = new ArrayList<Company>();
 	
 		try (Connection connection = DBConnection.getConnection();) {
 			//Send the request to get all the companies
 			PreparedStatement query = connection.prepareStatement("SELECT * FROM `company`");
 			ResultSet result = query.executeQuery();
+			connection.commit();
 			//Put all the companies into a list
 			while (result.next())
 			{
-				companies.put(result.getInt("id"),CompanyMapper.mapToCompany(result));
+				Company c = CompanyMapper.mapToCompany(result);
+				c.setId(result.getInt("id"));
+				companies.add(c);
 			}
 			return companies;
 

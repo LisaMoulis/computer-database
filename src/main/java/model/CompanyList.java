@@ -1,9 +1,6 @@
 package model;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
-
-import persistence.CompanyRequestHandler;
+import java.util.ArrayList;
 
 /**
  * Class CompanyList :
@@ -12,56 +9,26 @@ import persistence.CompanyRequestHandler;
  */
 public class CompanyList {
 
-	private final HashMap<Integer,Company> companies;
-	private static CompanyList instance;
+	private ArrayList<Company> companies;
 	
-	private CompanyList()
+	public CompanyList()
 	{
-		companies = CompanyRequestHandler.getAllCompanies();
-	}
-	
-	/**
-	 * @return instance	The unique instance of the class
-	 */
-	public static CompanyList getInstance()
-	{
-		//Create the instance if it's not existing
-		if (instance == null)
-		{
-			instance = new CompanyList();
-		}
-		return instance;
 	}
 	
 	/**
 	 * @param id Identifier of a company
 	 * @return The company found
 	 */
-	public HashMap<Integer,Company> getCompanies()
+	public ArrayList<Company> getCompanies()
 	{
 		return this.companies;
 	}
 	
-	public Company getCompany(int id)
+	public void setCompanies(ArrayList<Company> c)
 	{
-		return companies.get(id);
+		this.companies = c;
 	}
 	
-	/**
-	 * @param name Name of a company
-	 * @return The company found
-	 */
-	public Company getCompany(String name)
-	{
-		for (Entry<Integer, Company> c : companies.entrySet())
-		{
-			if (c.getValue().getName().equals(name))
-			{
-				return c.getValue();
-			}
-		}
-		return null;
-	}
 	
 	@Override
 	public String toString() {

@@ -40,7 +40,7 @@
                                 <select class="form-control" id="companyId" name="companyId" >
                                     <option value="0">--</option>
                                     <c:forEach items="${companies}" var="company">
-                                    	<option value="${company.key}"><c:out value="${company.value.name}"/></option>
+                                    	<option value="${company.id}"><c:out value="${company.name}"/></option>
                                     </c:forEach>
                                 </select>
                             </div>                  

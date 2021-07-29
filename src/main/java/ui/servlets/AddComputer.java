@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import dto.ComputerDTO;
 import model.*;
+import service.CompanyService;
 import service.ComputerService;
 import mapper.*;
 
@@ -29,8 +30,10 @@ public class AddComputer extends HttpServlet{
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		logger.debug("Add page displayed.");
-		request.setAttribute("companies", CompanyList.getInstance().getCompanies());
-		logger.debug("The companies are "+ CompanyList.getInstance().getCompanies());
+		CompanyList companies = new CompanyList();
+		companies.setCompanies(CompanyService.getInstance().getAllCompanies());
+		request.setAttribute("companies", companies.getCompanies());
+		logger.debug("The companies are "+ companies.getCompanies());
 		request.getRequestDispatcher("/WEB-INF/static/views/addComputer.jsp").forward(request, response);
 	}
 	
@@ -51,7 +54,9 @@ public class AddComputer extends HttpServlet{
 			PrintWriter out = response.getWriter();
 			logger.debug("Computer creation failed. Error message : "+e.getMessage());
 			out.println("<script>alert(\""+ e.getMessage()+"\")</script>");
-			request.setAttribute("companies", CompanyList.getInstance().getCompanies());
+			CompanyList companies = new CompanyList();
+			companies.setCompanies(CompanyService.getInstance().getAllCompanies());
+			request.setAttribute("companies", companies.getCompanies());
 			request.getRequestDispatcher("/WEB-INF/static/views/addComputer.jsp").include(request, response);
 		}
 	}

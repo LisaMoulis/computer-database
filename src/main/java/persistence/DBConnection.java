@@ -23,6 +23,8 @@ public class DBConnection {
 	
 	private DBConnection()
 	{
+		config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+		dataSource  = new HikariDataSource(config);
 	}
 	
 	/**
@@ -73,8 +75,6 @@ public class DBConnection {
 		}
 		
 		try {
-			config.setDriverClassName("com.mysql.cj.jdbc.Driver");
-			dataSource  = new HikariDataSource(config);
 			connection = dataSource.getConnection();
 			connection.setAutoCommit(false);
 			connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);

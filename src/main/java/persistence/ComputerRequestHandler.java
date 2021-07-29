@@ -34,8 +34,9 @@ public class ComputerRequestHandler {
 			PreparedStatement query = connection.prepareStatement(GET_WITH_ID);
 			query.setInt(1, id);
 			ResultSet result = query.executeQuery();
+			connection.commit();
 			result.next();
-			
+			connection.commit();
 			return ComputerDAOMapper.mapToComputer(result);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -49,12 +50,14 @@ public class ComputerRequestHandler {
 	 * @return The computer found
 	 */
 	public static Computer getComputer(String name)
-	{
+	{			
 		try (Connection connection = DBConnection.getConnection();) {
 			PreparedStatement query = connection.prepareStatement(GET_WITH_NAME);
 			query.setString(1, name);
 			ResultSet result = query.executeQuery();
+			connection.commit();
 			result.next();
+			
 			return ComputerDAOMapper.mapToComputer(result);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -73,6 +76,7 @@ public class ComputerRequestHandler {
 			//Send the request to get all the computers
 			PreparedStatement query = connection.prepareStatement("SELECT * FROM `computer` LEFT JOIN `company` ON company_id = company.id");
 			ResultSet result = query.executeQuery();
+			connection.commit();
 			//Create the list of all the computers
 			while (result.next())
 			{
@@ -97,10 +101,9 @@ public class ComputerRequestHandler {
 			//query.setString(3, column);
 			query.setInt(3, size);
 			query.setInt(4, offset);
-			System.out.println("\nRequest " + column);
 			DBConnection.getLogger().debug(query.toString());
 			ResultSet result = query.executeQuery();
-			
+			connection.commit();
 			ArrayList<Computer> page = new ArrayList<Computer>();
 			while (result.next())
 			{
@@ -136,6 +139,7 @@ public class ComputerRequestHandler {
 			query.setString(1, "%"+search+"%");
 			query.setString(2, "%"+search+"%");
 			ResultSet result = query.executeQuery();
+			connection.commit();
 			result.next();
 			DBConnection.getLogger().info("Nb computers : " + result.getInt(1));
 			int plusOne = 0;

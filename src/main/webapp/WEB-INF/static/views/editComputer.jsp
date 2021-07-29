@@ -45,11 +45,11 @@
                                     <option value="0">--</option>
                                     <c:forEach items="${companies}" var="company">
                                     	<c:choose>
-                                    		<c:when test="${companyId == company.key }">
-                                    			<option value="${company.key}" selected><c:out value="${company.value.name}"/></option>
+                                    		<c:when test="${companyId == company.id }">
+                                    			<option value="${company.id}" selected><c:out value="${company.name}"/></option>
                                     		</c:when>
                                     		<c:otherwise>
-                                    			<option value="${company.key}"><c:out value="${company.value.name}"/></option>
+                                    			<option value="${company.id}"><c:out value="${company.name}"/></option>
                                     		</c:otherwise>
                                     	</c:choose>
                                     </c:forEach>

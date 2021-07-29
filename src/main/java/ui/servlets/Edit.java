@@ -11,9 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import dto.ComputerDTO;
 import mapper.ComputerDTOMapper;
-import model.CompanyList;
-import model.Computer;
-import service.ComputerService;
+import model.*;
+import service.*;
 
 public class Edit extends HttpServlet{
 
@@ -36,14 +35,14 @@ public class Edit extends HttpServlet{
 		request.setAttribute("computer", c);
 		if (c.getCompany() != null)
 		{
-			request.setAttribute("companyId",CompanyList.getInstance().getCompany(c.getCompany()).getId());
+			request.setAttribute("companyId",CompanyService.getInstance().getCompany(c.getCompany()).getId());
 		}
 		else
 		{
 			request.setAttribute("companyId",0);
 		}
-		request.setAttribute("companies", CompanyList.getInstance().getCompanies());
-		logger.debug("The companies are "+ CompanyList.getInstance().getCompanies());
+		request.setAttribute("companies", CompanyService.getInstance().getAllCompanies());
+		logger.debug("The companies are "+ CompanyService.getInstance().getAllCompanies());
 		request.getRequestDispatcher("/WEB-INF/static/views/editComputer.jsp").forward(request, response);
 	}
 	
@@ -65,7 +64,7 @@ public class Edit extends HttpServlet{
 			PrintWriter out = response.getWriter();
 			logger.debug("Computer update failed. Error message : "+e.getMessage());
 			out.println("<script>alert(\""+ e.getMessage()+"\")</script>");
-			request.setAttribute("companies", CompanyList.getInstance().getCompanies());
+			request.setAttribute("companies", CompanyService.getInstance().getAllCompanies());
 			request.getRequestDispatcher("/WEB-INF/static/views/editComputer.jsp").include(request, response);
 		}
 	}

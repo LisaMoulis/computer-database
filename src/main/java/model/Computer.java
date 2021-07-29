@@ -34,17 +34,6 @@ public class Computer {
 	/**
 	 * @param name
 	 * @param introduced
-	 * @param company
-	 */
-	public Computer(String name, LocalDate introduced, String company)
-	{
-		this(name,introduced);
-		this.company = company;
-	}
-	
-	/**
-	 * @param name
-	 * @param introduced
 	 * @param discontinued
 	 */
 	public Computer(String name, LocalDate introduced, LocalDate discontinued)

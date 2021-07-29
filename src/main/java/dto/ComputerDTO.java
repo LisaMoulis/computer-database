@@ -2,7 +2,7 @@ package dto;
 
 import javax.servlet.http.HttpServletRequest;
 
-import model.CompanyList;
+import service.CompanyService;
 
 public class ComputerDTO {
 
@@ -18,10 +18,10 @@ public class ComputerDTO {
 		this.name = (String) request.getParameter("computerName");
 		this.introduced = (String) request.getParameter("introduced");
 		this.discontinued = (String) request.getParameter("discontinued");
-		if (!request.getParameter("companyId").equals("") && CompanyList.getInstance().getCompany(Integer.parseInt((String) request.getParameter("companyId")))!= null)
+		if (request.getParameter("companyId") != null && !request.getParameter("companyId").equals("") && CompanyService.getInstance().getCompany(Integer.parseInt((String) request.getParameter("companyId")))!= null)
 		{
 			this.companyId = Integer.parseInt((String) request.getParameter("companyId"));
-			this.company = CompanyList.getInstance().getCompany(this.companyId).getName();
+			this.company = CompanyService.getInstance().getCompany(this.companyId).getName();
 		}
 	}
 	
@@ -60,11 +60,6 @@ public class ComputerDTO {
 		return this.company;
 	}
 	
-	@Override
-	public String toString() {
-		return "ComputerDTO [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued="
-				+ discontinued + ", company=" + company + ", companyId=" + companyId + "]";
-	}
 
 	public int getCompanyId()
 	{
