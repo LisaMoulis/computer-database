@@ -1,8 +1,7 @@
-package service;
+package builder;
 
 import java.time.LocalDate;
 
-import builder.ComputerBuilder;
 import junit.framework.*;
 import model.Computer;
 
@@ -11,7 +10,7 @@ public class ComputerBuilderTest extends TestCase {
 	public void testCreateEmpty() throws  Exception
 	{
 		ComputerBuilder builder = new ComputerBuilder();
-		assertEquals(null,builder.build());
+		assertEquals(new Computer(-1,null,null,null,null),builder.build());
 	}
 	
 	public void testCreateMinimum() throws Exception

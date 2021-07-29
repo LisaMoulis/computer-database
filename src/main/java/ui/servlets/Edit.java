@@ -13,9 +13,7 @@ import dto.ComputerDTO;
 import mapper.ComputerDTOMapper;
 import model.CompanyList;
 import model.Computer;
-import persistence.ComputerRequestHandler;
 import service.ComputerService;
-import service.Validator;
 
 public class Edit extends HttpServlet{
 

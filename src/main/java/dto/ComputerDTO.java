@@ -11,7 +11,7 @@ public class ComputerDTO {
 	private String introduced;
 	private String discontinued;
 	private String company;
-	private int companyId;
+	private int companyId = -1;
 	
 	public ComputerDTO(HttpServletRequest request)
 	{
@@ -60,9 +60,30 @@ public class ComputerDTO {
 		return this.company;
 	}
 	
+	@Override
+	public String toString() {
+		return "ComputerDTO [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued="
+				+ discontinued + ", company=" + company + ", companyId=" + companyId + "]";
+	}
+
 	public int getCompanyId()
 	{
 		return this.companyId;
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if (o == null)
+		{
+			return false;
+		}
+		ComputerDTO dto = (ComputerDTO) o;
+		if (dto.getId() == id && name.equals(dto.getName()) && introduced.equals(dto.getIntroduced()) && discontinued.equals(dto.getDiscontinued()) && company.equals(dto.getCompany()) && companyId == dto.getCompanyId())
+		{
+			return true;
+		}
+		return false;
 	}
 
 }

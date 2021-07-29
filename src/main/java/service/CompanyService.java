@@ -1,6 +1,5 @@
 package service;
 
-import model.Computer;
 import persistence.CompanyRequestHandler;
 import persistence.ComputerRequestHandler;
 

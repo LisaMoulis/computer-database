@@ -131,7 +131,11 @@ public class Computer {
 	public boolean equals(Object c)
 	{
 		Computer totest = (Computer) c;
-		if (totest == null || this.id != totest.getId() || !this.name.equals(totest.getName()))
+		if (totest == null || this.id != totest.getId())
+		{
+			return false;
+		}
+		else if (this.name != totest.getName() && this.name != null && !this.name.equals(totest.getName()))
 		{
 			return false;
 		}

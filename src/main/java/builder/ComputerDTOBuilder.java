@@ -9,7 +9,7 @@ public class ComputerDTOBuilder {
 	private String introduced = "";
 	private String discontinued = "";
 	private String company = "";
-	private int companyId = 0;
+	private int companyId = -1;
 	
 	public ComputerDTOBuilder setId(int id)
 	{
@@ -52,5 +52,5 @@ public class ComputerDTOBuilder {
 	{
 		return new ComputerDTO(id, name, introduced, discontinued, company, companyId);
 	}
-	
+		
 }
