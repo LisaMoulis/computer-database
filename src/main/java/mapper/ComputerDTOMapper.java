@@ -32,9 +32,9 @@ public class ComputerDTOMapper {
 			builder.setIntroduced(LocalDate.parse(dto.getIntroduced(), DateTimeFormatter.ISO_LOCAL_DATE));
 		}
 		
-		if (dto.getIntroduced() != null && dto.getIntroduced() != "")
+		if (dto.getDiscontinued() != null && dto.getDiscontinued() != "")
 		{
-			builder.setDiscontinued(LocalDate.parse(dto.getIntroduced(), DateTimeFormatter.ISO_LOCAL_DATE));
+			builder.setDiscontinued(LocalDate.parse(dto.getDiscontinued(), DateTimeFormatter.ISO_LOCAL_DATE));
 		}
 		if (dto.getCompany() != null)
 		{
