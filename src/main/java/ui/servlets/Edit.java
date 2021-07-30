@@ -31,7 +31,7 @@ public class Edit extends HttpServlet{
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		logger.debug("Edit page displayed.");
 		int id = Integer.parseInt(request.getParameter("id"));
-		Computer c = ComputerService.getInstance().getComputer(id);
+		ComputerDTO c = ComputerDTOMapper.mapToDTO(ComputerService.getInstance().getComputer(id));
 		request.setAttribute("computer", c);
 		if (c.getCompany() != null)
 		{

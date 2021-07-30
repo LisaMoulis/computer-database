@@ -1,9 +1,13 @@
 package dto;
 
+import org.mockito.Mockito;
+import org.mockito.Spy;
+
 import junit.framework.TestCase;
 
 public class PageListDTOTest extends TestCase {
 
+	@Spy
 	private PageListDTO page = new PageListDTO();
 	
 	public void testDefault()

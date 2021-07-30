@@ -35,7 +35,7 @@ public class CompanyRequestHandler {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
+			return new Company(-1,null);
 		}
 	}
 	
@@ -52,7 +52,7 @@ public class CompanyRequestHandler {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
+			return new Company(-1,null);
 		}
 	}
 	
@@ -75,13 +75,12 @@ public class CompanyRequestHandler {
 				c.setId(result.getInt("id"));
 				companies.add(c);
 			}
-			return companies;
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
 		}
+		return companies;
 	}
 	
 	public static void deleteCompany(int id)

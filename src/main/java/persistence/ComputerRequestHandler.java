@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import builder.ComputerBuilder;
 import mapper.ComputerDAOMapper;
 import model.Computer;
 import model.exceptions.RollbackHappened;
@@ -41,7 +42,7 @@ public class ComputerRequestHandler {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
+			return new ComputerBuilder().build();
 		}
 	}
 	
@@ -61,7 +62,7 @@ public class ComputerRequestHandler {
 			return ComputerDAOMapper.mapToComputer(result);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
+			return new ComputerBuilder().build();
 		}
 	}
 	
@@ -82,17 +83,17 @@ public class ComputerRequestHandler {
 			{
 				computers.put(result.getInt("computer.id"),ComputerDAOMapper.mapToComputer(result));
 			}
-			return computers;
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
 		}
+		return computers;
 	}
 	
 	public static ArrayList<Computer> getPage(int size, int offset, String search, String column)
 	{
+		ArrayList<Computer> page = new ArrayList<Computer>();
 		try (Connection connection = DBConnection.getConnection();) {
 			PreparedStatement query = connection.prepareStatement(GET_PAGE + column + " LIMIT ? OFFSET ?");
 			DBConnection.getLogger().info("Getting page from database with size "+ size + ", offset "+ offset + ", searched "+search + " and order " + column);
@@ -104,7 +105,6 @@ public class ComputerRequestHandler {
 			DBConnection.getLogger().debug(query.toString());
 			ResultSet result = query.executeQuery();
 			connection.commit();
-			ArrayList<Computer> page = new ArrayList<Computer>();
 			while (result.next())
 			{
 				page.add(ComputerDAOMapper.mapToComputer(result));
@@ -122,13 +122,11 @@ public class ComputerRequestHandler {
 			catch (Exception e)
 			{}
 			DBConnection.getLogger().info("Page gathered : " + page);
-			return page;
-			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
 		}
+		return page;
 	}
 
 	public static int getNbComputers(String search)

@@ -89,7 +89,7 @@ public class DBConnection {
 		return connection;
 	}
 	
-	@Override
+	/*@Override
 	public void finalize()
 	{
 		//Close the connection as soon as the instance is available to the garbage collector taking
@@ -102,6 +102,6 @@ public class DBConnection {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 }

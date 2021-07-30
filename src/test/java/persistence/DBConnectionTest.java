@@ -1,4 +1,4 @@
-package service;
+package persistence;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
@@ -20,7 +20,7 @@ public class DBConnectionTest extends TestCase {
 	
 	public void testOpen() throws SQLException
 	{
-        Connection connection = DBConnection.getConnection();
+		Connection connection = DBConnection.getConnection();
         assertNotNull(connection);
         assertFalse(connection.isClosed());
         connection.close();
@@ -31,15 +31,6 @@ public class DBConnectionTest extends TestCase {
         Connection connection = DBConnection.getConnection();
         assertNotNull(connection);
         DBConnection.close();
-        assertTrue(connection.isClosed());
-	}
-	
-	public void testFinalize() throws SQLException
-	{
-        Connection connection = DBConnection.getConnection();
-        DBConnection instance = DBConnection.getInstance();
-        assertNotNull(connection);
-        instance.finalize();
         assertTrue(connection.isClosed());
 	}
 }
