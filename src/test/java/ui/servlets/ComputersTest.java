@@ -136,7 +136,7 @@ public class ComputersTest extends TestCase {
 	}	
 	
 	@Test
-	public void testEmpty()
+	public void testEmpty() throws IOException, ServletException
 	{
 		HttpServletRequest request = mock(HttpServletRequest.class);       
 	    HttpServletResponse response = mock(HttpServletResponse.class);
@@ -144,18 +144,13 @@ public class ComputersTest extends TestCase {
 	    Mockito.when(request.getSession()).thenReturn(session);
 	    Mockito.when(request.getRequestDispatcher("/WEB-INF/static/views/dashboard.jsp")).thenReturn(dispatcher);
 
-	    try {
-			servlet.doGet(request, response);
-			PageListDTO page = (PageListDTO) session.getAttribute("page");
-			assertNotNull(page);
-			assertEquals("computer.name",page.getOrder());
-			assertEquals(1,page.getPage());
-			assertEquals(10,page.getSize());
-			
-		} catch (IOException | ServletException e) {
-			fail();
-			e.printStackTrace();
-		}
+		servlet.doGet(request, response);
+		PageListDTO page = (PageListDTO) session.getAttribute("page");
+		assertNotNull(page);
+		assertEquals("computer.name",page.getOrder());
+		assertEquals(1,page.getPage());
+		assertEquals(10,page.getSize());
+
 	    
 	}
 }

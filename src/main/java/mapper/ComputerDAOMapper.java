@@ -55,9 +55,11 @@ public class ComputerDAOMapper {
 		{
 			values.append(", `discontinued`='").append(Timestamp.valueOf(LocalDateTime.of(c.getDiscontinued(),LocalTime.of(0, 0)))).append("'");
 		}
+		
 		if (c.getCompany() != null)
 		{
-			values.append(", `company_id`='").append(CompanyService.getInstance().getCompany(c.getCompany()).getId()).append("'");
+			Company comp = CompanyService.getInstance().getCompany(c.getCompany());
+			values.append(", `company_id`='").append(comp.getId()).append("'");
 		}
 		return values.toString();	
 	}
@@ -81,7 +83,7 @@ public class ComputerDAOMapper {
 			columns.append(", `discontinued`");
 			values.append(", '").append(Timestamp.valueOf(LocalDateTime.of(c.getDiscontinued(),LocalTime.of(0, 0)))).append("'");
 		}
-		if (c.getCompany() != null)
+		if (c.getCompany() != null && CompanyService.getInstance().getCompany(c.getCompany()) != null)
 		{
 			columns.append(", `company_id`");
 			values.append(", ").append(CompanyService.getInstance().getCompany(c.getCompany()).getId());
