@@ -1,6 +1,6 @@
-package persistence;
+package service;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
@@ -10,14 +10,19 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import com.zaxxer.hikari.HikariDataSource;
 
+import mapper.ComputerDAOMapper;
 import model.Computer;
+import persistence.DBConnection;
 
-public class ComputerRequestHandlerTest {
+public class ComputerServiceTest {
 
 	private Connection connection =  Mockito.mock(Connection.class);
 	private ResultSet result = Mockito.mock(ResultSet.class);
@@ -39,9 +44,8 @@ public class ComputerRequestHandlerTest {
 		Mockito.when(result.getInt("computer.id")).thenReturn(3);
 		Mockito.when(result.next()).thenReturn(true).thenReturn(false);
 		
-		Mockito.when(connection.prepareStatement(Mockito.anyString())).thenReturn(query);
-		
 		Mockito.when(query.executeQuery()).thenReturn(result);
+		Mockito.when(connection.prepareStatement(Mockito.anyString())).thenReturn(query);
 		
 		Mockito.when(dataSource.getConnection()).thenReturn(connection);
 		
@@ -62,7 +66,7 @@ public class ComputerRequestHandlerTest {
 	@Test
 	public void testGetComputerByName()
 	{		
-		Computer c = ComputerRequestHandler.getComputer("test");
+		Computer c = ComputerService.getInstance().getComputer("test");
 		assertEquals("test",c.getName());
 		assertEquals(LocalDate.of(2021, 1, 1),c.getIntroduced());
 		assertEquals(LocalDate.of(2021, 2, 2),c.getDiscontinued());
@@ -72,7 +76,7 @@ public class ComputerRequestHandlerTest {
 	@Test
 	public void testGetComputerById()
 	{		
-		Computer c = ComputerRequestHandler.getComputer(3);
+		Computer c = ComputerService.getInstance().getComputer(3);
 		assertEquals("test",c.getName());
 		assertEquals(LocalDate.of(2021, 1, 1),c.getIntroduced());
 		assertEquals(LocalDate.of(2021, 2, 2),c.getDiscontinued());
@@ -80,13 +84,52 @@ public class ComputerRequestHandlerTest {
 	}
 	
 	@Test
-	public void testAllComputers()
-	{		
-		Computer c = ComputerRequestHandler.getComputer(3);
-		assertEquals("test",c.getName());
-		assertEquals(LocalDate.of(2021, 1, 1),c.getIntroduced());
-		assertEquals(LocalDate.of(2021, 2, 2),c.getDiscontinued());
-		assertEquals("testcompany",c.getCompany());
+	public void testDeleteComputerWithId() throws SQLException
+	{
+		ComputerService.getInstance().removeComputer(3);
+		ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
+		Mockito.verify(query).setInt(Mockito.eq(1),argument.capture());
+		assertEquals(3,argument.getValue().intValue());	
 	}
 	
+	@Test
+	public void testDeleteComputerWithName() throws SQLException
+	{
+		ComputerService.getInstance().removeComputer("test");
+		ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
+		Mockito.verify(query).setString(Mockito.anyInt(),argument.capture());
+		assertEquals("test",argument.getValue());	
+	}
+	
+	@Test
+	public void testDeleteAllComputers() throws SQLException
+	{
+		String [] args = {"3"};
+		ComputerService.getInstance().removeSelectedComputer(args);
+		ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
+		Mockito.verify(query).setInt(Mockito.eq(1),argument.capture());
+		assertEquals(3,argument.getValue().intValue());	
+	}
+	
+	@Test
+	public void testCreate() throws SQLException
+	{
+		Computer computer = new Computer(1,"test",LocalDate.of(2021,1,1),LocalDate.of(2021,2,2),"testcompany");
+		ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
+		ComputerService.getInstance().createComputer(computer);
+		Mockito.verify(connection).prepareStatement(argument.capture());
+		
+		assertEquals("INSERT INTO `computer`" + ComputerDAOMapper.mapToCreate(computer), argument.getValue());
+	}
+	
+	@Test
+	public void testUpdate() throws SQLException
+	{
+		Computer computer = new Computer(1,"test",LocalDate.of(2021,1,1),LocalDate.of(2021,2,2),"testcompany");
+		ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
+		ComputerService.getInstance().updateComputer(computer);
+		Mockito.verify(connection).prepareStatement(argument.capture());
+		
+		assertEquals("UPDATE `computer` SET " + ComputerDAOMapper.mapToUpdate(computer) + "WHERE id=?", argument.getValue());
+	}
 }

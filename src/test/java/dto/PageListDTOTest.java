@@ -1,6 +1,5 @@
 package dto;
 
-import org.mockito.Mockito;
 import org.mockito.Spy;
 
 import junit.framework.TestCase;

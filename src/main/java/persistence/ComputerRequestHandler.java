@@ -97,8 +97,8 @@ public class ComputerRequestHandler {
 		try (Connection connection = DBConnection.getConnection();) {
 			PreparedStatement query = connection.prepareStatement(GET_PAGE + column + " LIMIT ? OFFSET ?");
 			DBConnection.getLogger().info("Getting page from database with size "+ size + ", offset "+ offset + ", searched "+search + " and order " + column);
-			query.setString(1, "%"+search+"%");
-			query.setString(2, "%"+search+"%");
+			query.setString(1, "%"+search.toLowerCase()+"%");
+			query.setString(2, "%"+search.toLowerCase()+"%");
 			//query.setString(3, column);
 			query.setInt(3, size);
 			query.setInt(4, offset);
@@ -134,8 +134,8 @@ public class ComputerRequestHandler {
 		try (Connection connection = DBConnection.getConnection();) {
 			PreparedStatement query = connection.prepareStatement(GET_NB_COMPUTERS);
 			DBConnection.getLogger().debug(GET_NB_COMPUTERS);
-			query.setString(1, "%"+search+"%");
-			query.setString(2, "%"+search+"%");
+			query.setString(1, "%"+search.toLowerCase()+"%");
+			query.setString(2, "%"+search.toLowerCase()+"%");
 			ResultSet result = query.executeQuery();
 			connection.commit();
 			result.next();

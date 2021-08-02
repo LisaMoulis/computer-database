@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import junit.framework.TestCase;
-import persistence.DBConnection;
 
 public class DBConnectionTest extends TestCase {
 
