@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.*;
 
@@ -24,19 +25,22 @@ public class DBConnection {
 	private static DBConnection instance;
 	private static Connection connection;
 	private static final Logger logger =  LoggerFactory.getLogger(DBConnection.class);
-	private static HikariConfig config = new HikariConfig("/datasource.properties");
-    private static HikariDataSource dataSource;
-	
+	//private static HikariConfig config = new HikariConfig("/datasource.properties");
+    
+	@Autowired
+	private HikariDataSource dataSource;  
+    
+    
 	private DBConnection()
 	{
-		config.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		dataSource  = new HikariDataSource(config);
+		/*config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+		dataSource  = new HikariDataSource(config);*/
 	}
 	
 	/**
 	 * @return instance	The unique instance of the class
 	 */
-	public static DBConnection getInstance()
+	/*public static DBConnection getInstance()
 	{
 		//Create the instance if it's not existing
 		if (instance == null)
@@ -44,9 +48,9 @@ public class DBConnection {
 			instance = new DBConnection();
 		}
 		return instance;
-	}
+	}*/
 	
-	public static Logger getLogger()
+	public Logger getLogger()
 	{
 		return logger;
 	}
@@ -54,7 +58,7 @@ public class DBConnection {
 	/**
 	 * Close the connection to the database
 	 */
-	public static void close()
+	public void close()
 	{
 		//Close the connection if it's existing
 		if (connection != null)
@@ -72,7 +76,7 @@ public class DBConnection {
 	/**
 	 * @return The connection to the database
 	 */
-	public static Connection getConnection()
+	public Connection getConnection()
 	{
 		//Create the instance if it's not existing
 		if (instance == null)

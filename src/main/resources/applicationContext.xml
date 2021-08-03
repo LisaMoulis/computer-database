@@ -12,4 +12,17 @@
      <context:component-scan base-package="persistence"/>
      <context:component-scan base-package="mapper"/>
      <context:component-scan base-package="ui.servlets/"/>
+     
+
+	 <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+     	<property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+     	<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/computer-database-db?"/>
+     	<property name="dataSourceProperties">
+     		<props>
+     			<prop key="url">jdbc:mysql://localhost:3306/computer-database-db?</prop>
+	            <prop key="user">admincdb</prop>
+	            <prop key="password">qwerty1234</prop>
+	        </props>
+	    </property>
+	</bean>
 </beans>

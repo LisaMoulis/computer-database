@@ -10,6 +10,7 @@ import mapper.CompanyMapper;
 import model.Company;
 import model.exceptions.RollbackHappened;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
 
 /**
@@ -25,9 +26,12 @@ public class CompanyRequestHandler {
 	 * @param id	Identifier of a company
 	 * @return The company found
 	 */
-	public static Company getCompany(int id)
+	@Autowired
+	private DBConnection dbConnection;
+	
+	public Company getCompany(int id)
 	{
-		try (Connection connection = DBConnection.getConnection();){
+		try (Connection connection = dbConnection.getConnection();){
 			PreparedStatement query = connection.prepareStatement("SELECT * FROM `company` WHERE id=?");
 			
 			query.setInt(1, id);
@@ -42,9 +46,9 @@ public class CompanyRequestHandler {
 		}
 	}
 	
-	public static Company getCompany(String name)
+	public Company getCompany(String name)
 	{
-		try (Connection connection = DBConnection.getConnection();){
+		try (Connection connection = dbConnection.getConnection();){
 			PreparedStatement query = connection.prepareStatement("SELECT * FROM `company` WHERE name=?");
 			
 			query.setString(1, name);
@@ -62,11 +66,11 @@ public class CompanyRequestHandler {
 	/**
 	 * @return All the companies in the database
 	 */
-	public static ArrayList<Company> getAllCompanies()
+	public ArrayList<Company> getAllCompanies()
 	{
 		ArrayList<Company> companies = new ArrayList<Company>();
 	
-		try (Connection connection = DBConnection.getConnection();) {
+		try (Connection connection = dbConnection.getConnection();) {
 			//Send the request to get all the companies
 			PreparedStatement query = connection.prepareStatement("SELECT * FROM `company`");
 			ResultSet result = query.executeQuery();
@@ -86,13 +90,13 @@ public class CompanyRequestHandler {
 		return companies;
 	}
 	
-	public static void deleteCompany(int id)
+	public void deleteCompany(int id)
 	{
-		Connection connection = DBConnection.getConnection();
+		Connection connection = dbConnection.getConnection();
 		try {
 			PreparedStatement query = connection.prepareStatement("DELETE FROM `computer` WHERE company_id=?");
 			
-			DBConnection.getLogger().debug("DELETE FROM `computer` WHERE company_id="+ id);
+			dbConnection.getLogger().debug("DELETE FROM `computer` WHERE company_id="+ id);
 			query.setInt(1, id);
 			query.executeUpdate();
 			
@@ -102,7 +106,7 @@ public class CompanyRequestHandler {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			try {
-				DBConnection.getLogger().error("Transaction is being rolled back");
+				dbConnection.getLogger().error("Transaction is being rolled back");
 				connection.rollback();
 				connection.close();
 				throw new RollbackHappened();

@@ -35,7 +35,7 @@ public class CompanyService {
 	
 	public Company getCompany(int id)
 	{
-		return CompanyRequestHandler.getCompany(id);
+		return companyRequestHandler.getCompany(id);
 	}
 	
 	public Company getCompany(String name)
@@ -50,11 +50,11 @@ public class CompanyService {
 	
 	public void removeCompany(String name)
 	{
-		CompanyRequestHandler.deleteCompany(CompanyRequestHandler.getCompany(name).getId());
+		companyRequestHandler.deleteCompany(companyRequestHandler.getCompany(name).getId());
 	}
 	
 	public ArrayList<Company> getAllCompanies()
 	{
-		return CompanyRequestHandler.getAllCompanies();
+		return companyRequestHandler.getAllCompanies();
 	}
 }

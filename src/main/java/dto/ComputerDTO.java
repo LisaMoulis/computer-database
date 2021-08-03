@@ -1,8 +1,5 @@
 package dto;
 
-import javax.servlet.http.HttpServletRequest;
-
-
 public class ComputerDTO {
 
 	private int id = -1;

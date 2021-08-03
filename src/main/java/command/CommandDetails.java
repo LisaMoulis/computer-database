@@ -1,7 +1,5 @@
 package command;
 
-import persistence.ComputerRequestHandler;
-
 /**
  * Class CommandDetails :
  * Display the details of a computer
