@@ -5,10 +5,10 @@ import java.io.PrintWriter;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
+import org.springframework.stereotype.Controller;
 
+@Controller
 public class Companies extends HttpServlet{
-	
-	
 	/**
 	 * 
 	 */

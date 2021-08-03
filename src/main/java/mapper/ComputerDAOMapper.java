@@ -4,6 +4,9 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import builder.ComputerBuilder;
 import model.*;
 import service.*;
@@ -13,14 +16,19 @@ import service.*;
  * Map the information between the database and computers
  * @author Lisa
  */
+
+@Component
 public class ComputerDAOMapper {
+	
+	@Autowired
+	private CompanyService companyService;
 	
 	/**
 	 * @param result	Representation of a computer from the database
 	 * @return A computer object created from one of the database
 	 * @throws SQLException
 	 */
-	public static Computer mapToComputer(ResultSet result) throws SQLException
+	public Computer mapToComputer(ResultSet result) throws SQLException
 	{
 		ComputerBuilder builder = new ComputerBuilder().setName(result.getString("name"));
 		//Verify if some columns are empty before getting them
@@ -43,7 +51,7 @@ public class ComputerDAOMapper {
 	 * @param computer	Computer to convert into a database representation
 	 * @return String representing the computer in an update request
 	 */
-	public static String mapToUpdate(Computer c)
+	public String mapToUpdate(Computer c)
 	{
 		//Create the part of an update request with the computer values
 		StringBuilder values = new StringBuilder("`id`='").append(c.getId()).append("', `name`='").append(c.getName()).append("'");
@@ -58,7 +66,7 @@ public class ComputerDAOMapper {
 		
 		if (c.getCompany() != null)
 		{
-			Company comp = CompanyService.getInstance().getCompany(c.getCompany());
+			Company comp = companyService.getCompany(c.getCompany());
 			values.append(", `company_id`='").append(comp.getId()).append("'");
 		}
 		return values.toString();	
@@ -68,7 +76,7 @@ public class ComputerDAOMapper {
 	 * @param computer	Computer to convert into a database representation
 	 * @return String representing the computer in a create request
 	 */
-	public static String mapToCreate(Computer c)
+	public String mapToCreate(Computer c)
 	{
 		//Create the part of a create request with the computer values
 		StringBuilder columns = new StringBuilder("(`name`");
@@ -83,10 +91,10 @@ public class ComputerDAOMapper {
 			columns.append(", `discontinued`");
 			values.append(", '").append(Timestamp.valueOf(LocalDateTime.of(c.getDiscontinued(),LocalTime.of(0, 0)))).append("'");
 		}
-		if (c.getCompany() != null && CompanyService.getInstance().getCompany(c.getCompany()) != null)
+		if (c.getCompany() != null && companyService.getCompany(c.getCompany()) != null)
 		{
 			columns.append(", `company_id`");
-			values.append(", ").append(CompanyService.getInstance().getCompany(c.getCompany()).getId());
+			values.append(", ").append(companyService.getCompany(c.getCompany()).getId());
 		}
 		values.append(")");
 		return columns.append(values).toString();		

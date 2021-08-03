@@ -1,7 +1,5 @@
 package command;
 
-import service.CompanyService;
-
 /**
  * Class CommandListCompanies :
  * Display a list of the companies
@@ -20,7 +18,7 @@ public class CommandListCompanies extends Command {
 		if (args.length == 1)
 		{
 			this.logger.debug("Displaying the list of the companies.");
-			System.out.println("List of the companies :\n" + CompanyService.getInstance().toString());
+			System.out.println("List of the companies :\n" + companyService.toString());
 		}
 		else
 		{

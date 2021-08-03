@@ -5,6 +5,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import dto.ComputerDTO;
 import model.Company;
 import model.Computer;
@@ -16,14 +19,18 @@ import builder.*;
  * Map the information between the database and computers
  * @author Lisa
  */
+
+@Component
 public class ComputerDTOMapper {
 	
+	@Autowired
+	private CompanyService companyService;
 	/**
 	 * @param result	Representation of a computer from the database
 	 * @return A computer object created from one of the database
 	 * @throws SQLException
 	 */
-	public static Computer mapToComputer(ComputerDTO dto)
+	public Computer mapToComputer(ComputerDTO dto)
 	{
 		ComputerBuilder builder = new ComputerBuilder().setName(dto.getName());
 		//Verify if some columns are empty before getting them
@@ -43,7 +50,7 @@ public class ComputerDTOMapper {
 		return builder.build();
 	}
 	
-	public static ComputerDTO mapToDTO(Computer computer)
+	public ComputerDTO mapToDTO(Computer computer)
 	{
 		ComputerDTOBuilder builder = new ComputerDTOBuilder().setId(computer.getId()).setName(computer.getName());
 		if (computer.getIntroduced() != null )
@@ -56,7 +63,7 @@ public class ComputerDTOMapper {
 		}
 		if (computer.getCompany() != null)
 		{
-			Company comp = CompanyService.getInstance().getCompany(computer.getCompany());
+			Company comp = companyService.getCompany(computer.getCompany());
 			if (comp != null)
 			{
 				builder.setCompany(comp.getName()).setCompanyId(comp.getId());
@@ -65,7 +72,7 @@ public class ComputerDTOMapper {
 		return builder.build();
 	}
 	
-	public static List<ComputerDTO> mapToDTOList(List<Computer> computers)
+	public List<ComputerDTO> mapToDTOList(List<Computer> computers)
 	{
 		List<ComputerDTO> dto = (List<ComputerDTO>) computers.stream().map(e -> mapToDTO(e)).toList();
 		return dto;

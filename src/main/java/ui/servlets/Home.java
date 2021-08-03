@@ -6,13 +6,28 @@ import java.io.PrintWriter;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+@Controller
 public class Home extends HttpServlet{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	private WebApplicationContext springContext;
+	
+	@Override
+	public void init(final ServletConfig config) throws ServletException {
+		super.init(config);
+		springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(config.getServletContext());
+		final AutowireCapableBeanFactory beanFactory = springContext.getAutowireCapableBeanFactory();
+		beanFactory.autowireBean(this);
+	}
+	
 	@Override
 	public String getServletInfo() {
 		return "My home page";

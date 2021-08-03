@@ -2,24 +2,44 @@ package ui.servlets;
 
 import java.io.IOException;
 
-
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 
 import dto.PageListDTO;
 import mapper.ComputerDTOMapper;
 import model.ComputerList;
 import service.PageService;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.*;
+import org.springframework.beans.factory.config.*;
 
+@Controller
 public class Computers extends HttpServlet{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private final Logger logger = LoggerFactory.getLogger(AddComputer.class);
+	private WebApplicationContext springContext;
+	@Autowired
+	private PageService pageService;
+	@Autowired
+	private ComputerDTOMapper computerDTOMapper;
+	
+	@Override
+	public void init(final ServletConfig config) throws ServletException {
+		super.init(config);
+		springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(config.getServletContext());
+		final AutowireCapableBeanFactory beanFactory = springContext.getAutowireCapableBeanFactory();
+		beanFactory.autowireBean(this);
+	}
 	
 	@Override
 	public String getServletInfo() {
@@ -75,9 +95,10 @@ public class Computers extends HttpServlet{
 			page.setPage(Integer.valueOf((String)request.getParameter("page")));
 			logger.debug("Number of the page changed to the asked one.");
 		}
+		page.setNbComputers(pageService.getNbComputers(page.getSearch()));
 		ComputerList list = new ComputerList(page.getPage(),page.getSize());
-		PageService.getInstance().getPage(list, page.getSearch(), page.getOrder());
-		page.setComputers(ComputerDTOMapper.mapToDTOList(list.getComputers()));
+		pageService.getPage(list, page.getSearch(), page.getOrder());
+		page.setComputers(computerDTOMapper.mapToDTOList(list.getComputers()));
 		
 		request.getRequestDispatcher("/WEB-INF/static/views/dashboard.jsp").include(request, response);
 	}

@@ -10,12 +10,15 @@ import mapper.CompanyMapper;
 import model.Company;
 import model.exceptions.RollbackHappened;
 
+import org.springframework.stereotype.*;
 
 /**
  * Class CompanyRequesthandler :
  * Manage the SQL requests for the companies
  * @author Lisa
  */
+
+@Repository
 public class CompanyRequestHandler {
 
 	/**

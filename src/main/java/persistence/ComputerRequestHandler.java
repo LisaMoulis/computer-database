@@ -13,23 +13,33 @@ import model.Computer;
 import model.exceptions.RollbackHappened;
 import service.Validator;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.*;
+
 /**
  * Class ComputersRequesthandler :
  * Manage the SQL requests for the computers
  * @author Lisa
  */
+
+@Repository
+@Scope("singleton")
 public class ComputerRequestHandler {
 
 	private static final String GET_WITH_NAME = "SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer`, `company.name` LEFT JOIN `company` ON company_id = company.id WHERE computer.name=?";
 	private static final String GET_WITH_ID = "SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE computer.id=?";
 	private static final String GET_PAGE = "SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ? ORDER BY "; 
 	private static final String GET_NB_COMPUTERS = "SELECT COUNT(computer.id) FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ?"; 
+	@Autowired
+	private ComputerDAOMapper computerDAOMapper;
+	
 	
 	/**
 	 * @param id	Identified of a computer
 	 * @return The computer found
 	 */
-	public static Computer getComputer(int id)
+	public Computer getComputer(int id)
 	{
 		try (Connection connection = DBConnection.getConnection();){
 			PreparedStatement query = connection.prepareStatement(GET_WITH_ID);
@@ -38,7 +48,7 @@ public class ComputerRequestHandler {
 			connection.commit();
 			result.next();
 			connection.commit();
-			return ComputerDAOMapper.mapToComputer(result);
+			return computerDAOMapper.mapToComputer(result);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -50,7 +60,7 @@ public class ComputerRequestHandler {
 	 * @param name	Name of a computer
 	 * @return The computer found
 	 */
-	public static Computer getComputer(String name)
+	public Computer getComputer(String name)
 	{			
 		try (Connection connection = DBConnection.getConnection();) {
 			PreparedStatement query = connection.prepareStatement(GET_WITH_NAME);
@@ -59,7 +69,7 @@ public class ComputerRequestHandler {
 			connection.commit();
 			result.next();
 			
-			return ComputerDAOMapper.mapToComputer(result);
+			return computerDAOMapper.mapToComputer(result);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return new ComputerBuilder().build();
@@ -69,7 +79,7 @@ public class ComputerRequestHandler {
 	/**
 	 * @return The list of all the computers
 	 */
-	public static HashMap<Integer,Computer> getAllComputers()
+	public HashMap<Integer,Computer> getAllComputers()
 	{
 		HashMap<Integer,Computer> computers = new HashMap<Integer,Computer>();
 		
@@ -81,7 +91,7 @@ public class ComputerRequestHandler {
 			//Create the list of all the computers
 			while (result.next())
 			{
-				computers.put(result.getInt("computer.id"),ComputerDAOMapper.mapToComputer(result));
+				computers.put(result.getInt("computer.id"),computerDAOMapper.mapToComputer(result));
 			}
 
 		} catch (SQLException e) {
@@ -91,7 +101,7 @@ public class ComputerRequestHandler {
 		return computers;
 	}
 	
-	public static ArrayList<Computer> getPage(int size, int offset, String search, String column)
+	public ArrayList<Computer> getPage(int size, int offset, String search, String column)
 	{
 		ArrayList<Computer> page = new ArrayList<Computer>();
 		try (Connection connection = DBConnection.getConnection();) {
@@ -107,7 +117,7 @@ public class ComputerRequestHandler {
 			connection.commit();
 			while (result.next())
 			{
-				page.add(ComputerDAOMapper.mapToComputer(result));
+				page.add(computerDAOMapper.mapToComputer(result));
 			}
 			try {
 				int id = Integer.valueOf(search);
@@ -129,7 +139,7 @@ public class ComputerRequestHandler {
 		return page;
 	}
 
-	public static int getNbComputers(String search)
+	public int getNbComputers(String search)
 	{
 		try (Connection connection = DBConnection.getConnection();) {
 			PreparedStatement query = connection.prepareStatement(GET_NB_COMPUTERS);
@@ -166,13 +176,13 @@ public class ComputerRequestHandler {
 	/**
 	 * @param computer	Computer to create
 	 */
-	public static void createComputer(Computer computer)
+	public void createComputer(Computer computer)
 	{
 		Connection connection = DBConnection.getConnection();
 		try {
 			//Use the mapper to get the representation of the computer to insert
-			PreparedStatement query = connection.prepareStatement("INSERT INTO `computer`"+ ComputerDAOMapper.mapToCreate(computer));
-			DBConnection.getLogger().debug("INSERT INTO `computer`"+ ComputerDAOMapper.mapToCreate(computer));
+			PreparedStatement query = connection.prepareStatement("INSERT INTO `computer`"+ computerDAOMapper.mapToCreate(computer));
+			DBConnection.getLogger().debug("INSERT INTO `computer`"+ computerDAOMapper.mapToCreate(computer));
 			query.executeUpdate();
 			connection.commit();
 			connection.close();
@@ -194,13 +204,13 @@ public class ComputerRequestHandler {
 	/**
 	 * @param computer	Computer to update
 	 */
-	public static void updateComputer(Computer computer)
+	public void updateComputer(Computer computer)
 	{
 		Connection connection = DBConnection.getConnection();
 		try {
 			//Use the mapper to get the representation of the computer to update
-			PreparedStatement query = connection.prepareStatement("UPDATE `computer` SET "+ ComputerDAOMapper.mapToUpdate(computer) + "WHERE id=?");
-			DBConnection.getLogger().debug("UPDATE `computer` SET "+ ComputerDAOMapper.mapToUpdate(computer) + "WHERE id=?");
+			PreparedStatement query = connection.prepareStatement("UPDATE `computer` SET "+ computerDAOMapper.mapToUpdate(computer) + "WHERE id=?");
+			DBConnection.getLogger().debug("UPDATE `computer` SET "+ computerDAOMapper.mapToUpdate(computer) + "WHERE id=?");
 			query.setInt(1, computer.getId());
 			query.executeUpdate();
 			connection.commit();
@@ -223,7 +233,7 @@ public class ComputerRequestHandler {
 	/**
 	 * @param id	Identifier of the computer to delete
 	 */
-	public static void deleteComputer(int id)
+	public void deleteComputer(int id)
 	{
 		Connection connection = DBConnection.getConnection();
 		try {
@@ -252,7 +262,7 @@ public class ComputerRequestHandler {
 	/**
 	 * @param name Name of the computer to delete
 	 */
-	public static void deleteComputer(String name)
+	public void deleteComputer(String name)
 	{
 		Connection connection = DBConnection.getConnection();
 		try {

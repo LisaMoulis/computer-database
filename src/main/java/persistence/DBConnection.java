@@ -8,11 +8,17 @@ import org.slf4j.LoggerFactory;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.*;
+
 /**
  * Class DBConnection :
  * Handle the connection
  * @author Lisa
  */
+
+@Repository
+@Scope("singleton")
 public class DBConnection {
 
 	private static DBConnection instance;

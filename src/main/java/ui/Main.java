@@ -3,6 +3,9 @@ package ui;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 
 import command.*;
 
@@ -11,6 +14,8 @@ import command.*;
  * Entry point
  * @author Lisa
  */
+
+@Component
 public class Main {
 
 	private static CommandHandler commands = CommandHandler.getInstance();
@@ -19,10 +24,14 @@ public class Main {
 	public static void main(String[] str)
 	{
 		logger.debug("Program started.");
-		//System.out.println(ComputerRequestHandler.getComputer(5).toString());
-		//ComputerBuilder builder = new ComputerBuilder();
-		//System.out.println(builder.build());
-		getFromCommandLine();
+
+		startWithSpring();
+		//getFromCommandLine();
+	}
+	
+	private static void startWithSpring()
+	{
+		ApplicationContext vApplicationContext = new ClassPathXmlApplicationContext("classpath:/applicationContext.xml");
 	}
 	
 	private static void getFromCommandLine()

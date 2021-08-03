@@ -1,61 +1,72 @@
 package service;
 
 import model.Computer;
+import persistence.CompanyRequestHandler;
 import persistence.ComputerRequestHandler;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.*;
+
+@Component("computerService")
+@Scope("singleton")
 public class ComputerService {
 
-	private static ComputerService instance;
+	//private static ComputerService instance;
+	@Autowired
+	private ComputerRequestHandler computerRequestHandler;
+	@Autowired
+	private CompanyRequestHandler companyRequestHandler;
 	
-	private ComputerService()
+	public ComputerService()
 	{}
 	
-	public static ComputerService getInstance()
+	/*public static ComputerService getInstance()
 	{
 		if (instance == null)
 		{
 			instance = new ComputerService();
 		}
 		return instance;
-	}
+	}*/
 	
 	public Computer getComputer(int id)
 	{
-		return ComputerRequestHandler.getComputer(id);
+		return computerRequestHandler.getComputer(id);
 	}
 	
 	public Computer getComputer(String name)
 	{
-		return ComputerRequestHandler.getComputer(name);
+		return computerRequestHandler.getComputer(name);
 	}
 	
 	public void removeComputer(int id)
 	{
-		ComputerRequestHandler.deleteComputer(id);
+		computerRequestHandler.deleteComputer(id);
 	}
 	
 	public void removeComputer(String name)
 	{
-		ComputerRequestHandler.deleteComputer(name);
+		computerRequestHandler.deleteComputer(name);
 	}
 	
 	public void removeSelectedComputer(String[] computers)
 	{
 		for (String nb : computers)
 		{
-			ComputerRequestHandler.deleteComputer(Integer.valueOf(nb));
+			computerRequestHandler.deleteComputer(Integer.valueOf(nb));
 		}
 	}
 	
 	public void createComputer(Computer computer) throws RuntimeException
 	{	
 		Validator.validate(computer);
-		ComputerRequestHandler.createComputer(computer);
+		computerRequestHandler.createComputer(computer);
 	}
 	
 	public void updateComputer(Computer computer) throws RuntimeException
 	{
 		Validator.validate(computer);
-		ComputerRequestHandler.updateComputer(computer);
+		computerRequestHandler.updateComputer(computer);
 	}
 }

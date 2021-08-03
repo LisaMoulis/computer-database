@@ -2,14 +2,13 @@ package dto;
 
 import java.util.List;
 
-import service.PageService;
-
 public class PageListDTO {
 	
 	private int page = 1;
 	private int size = 10;
 	private String search = "";
 	private String order = "computer.name";
+	private int nbComputers = 1;
 	
 	private List<ComputerDTO> computers;
 	
@@ -66,7 +65,12 @@ public class PageListDTO {
 	
 	public int getNbComputers()
 	{
-		return PageService.getInstance().getNbComputers(this.search);
+		return this.nbComputers;
+	}
+	
+	public void setNbComputers(int nb)
+	{
+		this.nbComputers = nb;
 	}
 	
 	public String getOrder()

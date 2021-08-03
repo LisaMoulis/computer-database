@@ -6,21 +6,32 @@ import model.Company;
 import persistence.CompanyRequestHandler;
 import persistence.ComputerRequestHandler;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.*;
+
+@Component("companyService")
+@Scope("singleton")
 public class CompanyService {
 
-	private static CompanyService instance;
+	//private static CompanyService instance;
+	@Autowired
+	private ComputerRequestHandler computerRequestHandler;
+	@Autowired
+	private CompanyRequestHandler companyRequestHandler;
 	
-	private CompanyService()
+	
+	public CompanyService()
 	{}
 	
-	public static CompanyService getInstance()
+	/*public static CompanyService getInstance()
 	{
 		if (instance == null)
 		{
 			instance = new CompanyService();
 		}
 		return instance;
-	}
+	}*/
 	
 	public Company getCompany(int id)
 	{
@@ -29,12 +40,12 @@ public class CompanyService {
 	
 	public Company getCompany(String name)
 	{
-		return CompanyRequestHandler.getCompany(name);
+		return companyRequestHandler.getCompany(name);
 	}
 	
 	public void removeCompany(int id)
 	{
-		ComputerRequestHandler.deleteComputer(id);
+		computerRequestHandler.deleteComputer(id);
 	}
 	
 	public void removeCompany(String name)

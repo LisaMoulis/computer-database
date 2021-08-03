@@ -1,7 +1,5 @@
 package command;
 
-import service.CompanyService;
-
 /**
  * Class CommandDelete :
  * Delete a computer
@@ -23,11 +21,11 @@ public class CommandDeleteCompany extends Command {
 		{
 			try {
 				int id = Integer.valueOf(args[1]);
-				CompanyService.getInstance().removeCompany(id);
+				companyService.removeCompany(id);
 			}
 			catch (NumberFormatException e)
 			{
-				CompanyService.getInstance().removeCompany(args[1]);
+				companyService.removeCompany(args[1]);
 			}
 			this.logger.debug("Company deleted.");
 		}

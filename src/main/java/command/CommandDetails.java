@@ -1,6 +1,5 @@
 package command;
 
-import service.ComputerService;
 import persistence.ComputerRequestHandler;
 
 /**
@@ -24,11 +23,11 @@ public class CommandDetails extends Command {
 			String str = "Details of the computer :\n";
 			try {
 				int id = Integer.valueOf(args[1]);
-				str += ComputerRequestHandler.getComputer(id);
+				str += computerRequestHandler.getComputer(id);
 			}
 			catch (NumberFormatException e)
 			{
-				str += ComputerService.getInstance().getComputer(args[1]);
+				str += computerService.getComputer(args[1]);
 			}
 			System.out.println(str);
 			logger.debug("Details of the computer displayed.");
