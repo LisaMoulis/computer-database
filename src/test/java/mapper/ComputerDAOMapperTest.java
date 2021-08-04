@@ -24,7 +24,7 @@ import service.CompanyService;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:mockContext.xml"})
+@ContextConfiguration(locations = {"classpath:applicationContext.xml"})
 @TestExecutionListeners(DependencyInjectionTestExecutionListener.class)
 public class ComputerDAOMapperTest {
 	

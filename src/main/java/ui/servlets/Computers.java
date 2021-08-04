@@ -27,10 +27,22 @@ public class Computers extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	private final Logger logger = LoggerFactory.getLogger(AddComputer.class);
 	private WebApplicationContext springContext;
-	@Autowired
+	
 	private PageService pageService;
-	@Autowired
+	
 	private ComputerDTOMapper computerDTOMapper;
+	
+	@Autowired
+	public void setPageService(PageService pageService)
+	{
+		this.pageService = pageService;
+	}
+	
+	@Autowired
+	public void setComputerDTOMapper(ComputerDTOMapper computerDTOMapper)
+	{
+		this.computerDTOMapper = computerDTOMapper;
+	}
 	
 	@Override
 	public void init(final ServletConfig config) throws ServletException {

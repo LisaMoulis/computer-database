@@ -21,16 +21,43 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 
 import com.zaxxer.hikari.HikariDataSource;
 
+import mapper.ComputerDAOMapper;
 import model.Computer;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:mockContext.xml"})
+@ContextConfiguration(locations = {"classpath:applicationContext.xml"})
 @TestExecutionListeners(DependencyInjectionTestExecutionListener.class)
 public class ComputerRequestHandlerTest {
 	
-	@Autowired
 	private ComputerRequestHandler computerRequestHandler;
+	
+	private Connection connection =  Mockito.mock(Connection.class);
+	private ResultSet result = Mockito.mock(ResultSet.class);
+	private PreparedStatement query = Mockito.mock(PreparedStatement.class);
+	private HikariDataSource dataSource = Mockito.mock(HikariDataSource.class);
+	
+	@Before
+	public void setMethods() throws NoSuchFieldException, SecurityException, SQLException, IllegalArgumentException, IllegalAccessException
+	{
+		Mockito.when(result.getString("name")).thenReturn("test");
+		Mockito.when(result.getBytes("introduced")).thenReturn(new String("2021-01-01").getBytes());
+		Mockito.when(result.getString("introduced")).thenReturn("2021-01-01 00:00:00");
+		Mockito.when(result.getTimestamp("introduced")).thenReturn(Timestamp.valueOf("2021-01-01 00:00:00"));
+		Mockito.when(result.getBytes("discontinued")).thenReturn(new String("2021-02-02").getBytes());
+		Mockito.when(result.getString("discontinued")).thenReturn("2021-02-02 00:00:00");
+		Mockito.when(result.getTimestamp("discontinued")).thenReturn(Timestamp.valueOf("2021-02-02 00:00:00"));
+		Mockito.when(result.getString("company.name")).thenReturn("testcompany");
+		Mockito.when(result.getInt("computer.id")).thenReturn(3);
+		Mockito.when(result.next()).thenReturn(true).thenReturn(false);
+		
+		Mockito.when(query.executeQuery()).thenReturn(result);
+		Mockito.when(connection.prepareStatement(Mockito.anyString())).thenReturn(query);
+		
+		Mockito.when(dataSource.getConnection()).thenReturn(connection);
+		DBConnection dbConnection = new DBConnection(dataSource);
+		computerRequestHandler = new ComputerRequestHandler(dbConnection, new ComputerDAOMapper());
+	}
 	
 	@Test
 	public void testGetComputerByName()
