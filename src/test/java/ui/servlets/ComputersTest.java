@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.Enumeration;
 import java.util.HashMap;
 

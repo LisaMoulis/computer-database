@@ -7,22 +7,30 @@
            http://www.springframework.org/schema/context
            http://www.springframework.org/schema/context/spring-context-3.0.xsd">
                
-     <context:annotation-config/>
-     <context:component-scan base-package="service/"/>
-     <context:component-scan base-package="persistence"/>
-     <context:component-scan base-package="mapper"/>
-     <context:component-scan base-package="ui.servlets/"/>
+    <context:annotation-config/>
+    <context:component-scan base-package="service/"/>
+    <context:component-scan base-package="persistence"/>
+    <context:component-scan base-package="mapper"/>
+    <context:component-scan base-package="ui.servlets/"/>
+     
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		    <property name="locations">
+		        <list>
+		            <value>classpath:datasource.properties</value>
+		        </list>
+		    </property>
+	</bean>
      
 
-	 <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
      	<property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
      	<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/computer-database-db?"/>
      	<property name="dataSourceProperties">
-     		<props>
-     			<prop key="url">jdbc:mysql://localhost:3306/computer-database-db?</prop>
-	            <prop key="user">admincdb</prop>
-	            <prop key="password">qwerty1234</prop>
-	        </props>
-	    </property>
+        <props>
+            <prop key="url">${jdbcUrl}</prop>
+            <prop key="user">${dataSource.user}</prop>
+            <prop key="password">${dataSource.password}</prop>
+        </props>
+    </property>
 	</bean>
 </beans>

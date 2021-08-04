@@ -9,7 +9,6 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 
 import static org.junit.Assert.*;
 
-import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -18,9 +17,7 @@ import java.time.LocalDate;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import model.Company;
 import model.Computer;
-import service.CompanyService;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)

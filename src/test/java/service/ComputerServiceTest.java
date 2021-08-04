@@ -2,7 +2,6 @@ package service;
 
 import static org.junit.Assert.*;
 
-import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,13 +10,10 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -62,14 +58,7 @@ public class ComputerServiceTest {
 		
 		Mockito.when(dataSource.getConnection()).thenReturn(connection);
 	}
-	
-	/*@Before
-	public void getCoAndQuery() throws SQLException
-	{
-		connection = dbConnection.getConnection();
-		query = connection.prepareStatement("FROM `computer`");
-	}*/
-	
+
 	@Test
 	public void testGetComputerByName()
 	{
