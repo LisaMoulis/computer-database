@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import persistence.CompanyRequestHandler;
 import persistence.ComputerRequestHandler;
 import service.CompanyService;
 import service.ComputerService;
@@ -28,6 +29,8 @@ public abstract class Command {
 	protected PageService pageService;
 	@Autowired
 	protected ComputerRequestHandler computerRequestHandler;
+	@Autowired
+	protected CompanyRequestHandler companyRequestHandler;
 	
 	/**
 	 * @param args	keyword of the command + arguments

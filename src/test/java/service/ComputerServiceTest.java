@@ -9,26 +9,38 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import com.zaxxer.hikari.HikariDataSource;
 
 import mapper.ComputerDAOMapper;
 import model.Computer;
+import persistence.CompanyRequestHandler;
+import persistence.ComputerRequestHandler;
 import persistence.DBConnection;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath:mockContext.xml"})
+@TestExecutionListeners(DependencyInjectionTestExecutionListener.class)
 public class ComputerServiceTest {
 
+	
 	private Connection connection =  Mockito.mock(Connection.class);
 	private ResultSet result = Mockito.mock(ResultSet.class);
 	private PreparedStatement query = Mockito.mock(PreparedStatement.class);
 	private HikariDataSource dataSource = Mockito.mock(HikariDataSource.class);
-	private HikariDataSource actualSource;
 	
 	@Before
 	public void setMethods() throws NoSuchFieldException, SecurityException, SQLException, IllegalArgumentException, IllegalAccessException
@@ -48,25 +60,22 @@ public class ComputerServiceTest {
 		Mockito.when(connection.prepareStatement(Mockito.anyString())).thenReturn(query);
 		
 		Mockito.when(dataSource.getConnection()).thenReturn(connection);
-		
-		Field co = DBConnection.class.getDeclaredField("dataSource");
-        co.setAccessible(true);
-        actualSource = (HikariDataSource) co.get(co);
-        co.set(co, dataSource);	
 	}
 	
-	@After
-	public void goBack() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
+	/*@Before
+	public void getCoAndQuery() throws SQLException
 	{
-		Field co = DBConnection.class.getDeclaredField("dataSource");
-        co.setAccessible(true);
-        co.set(co, actualSource);	
-	}
+		connection = dbConnection.getConnection();
+		query = connection.prepareStatement("FROM `computer`");
+	}*/
 	
 	@Test
 	public void testGetComputerByName()
-	{		
-		Computer c = ComputerService.getInstance().getComputer("test");
+	{
+		DBConnection dbConnection = new DBConnection(dataSource);
+		CompanyRequestHandler companyHandler = new CompanyRequestHandler(dbConnection);
+		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dbConnection,new ComputerDAOMapper(new CompanyService()));
+		Computer c = new ComputerService(new ComputerRequestHandler(dbConnection,new ComputerDAOMapper(new CompanyService()))).getComputer("test");
 		assertEquals("test",c.getName());
 		assertEquals(LocalDate.of(2021, 1, 1),c.getIntroduced());
 		assertEquals(LocalDate.of(2021, 2, 2),c.getDiscontinued());
@@ -76,7 +85,7 @@ public class ComputerServiceTest {
 	@Test
 	public void testGetComputerById()
 	{		
-		Computer c = ComputerService.getInstance().getComputer(3);
+		Computer c = computerService.getComputer(3);
 		assertEquals("test",c.getName());
 		assertEquals(LocalDate.of(2021, 1, 1),c.getIntroduced());
 		assertEquals(LocalDate.of(2021, 2, 2),c.getDiscontinued());
@@ -86,7 +95,9 @@ public class ComputerServiceTest {
 	@Test
 	public void testDeleteComputerWithId() throws SQLException
 	{
-		ComputerService.getInstance().removeComputer(3);
+		Connection connection = dbConnection.getConnection();
+		PreparedStatement query = connection.prepareStatement("FROM `computer`");
+		computerService.removeComputer(3);
 		ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
 		Mockito.verify(query).setInt(Mockito.eq(1),argument.capture());
 		assertEquals(3,argument.getValue().intValue());	
@@ -95,7 +106,9 @@ public class ComputerServiceTest {
 	@Test
 	public void testDeleteComputerWithName() throws SQLException
 	{
-		ComputerService.getInstance().removeComputer("test");
+		Connection connection = dbConnection.getConnection();
+		PreparedStatement query = connection.prepareStatement("FROM `computer`");
+		computerService.removeComputer("test");
 		ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
 		Mockito.verify(query).setString(Mockito.anyInt(),argument.capture());
 		assertEquals("test",argument.getValue());	
@@ -105,9 +118,12 @@ public class ComputerServiceTest {
 	public void testDeleteAllComputers() throws SQLException
 	{
 		String [] args = {"3"};
-		ComputerService.getInstance().removeSelectedComputer(args);
+		Connection connection = dbConnection.getConnection();
+		PreparedStatement query = connection.prepareStatement("FROM `computer`");
+		computerService.removeSelectedComputer(args);
 		ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
-		Mockito.verify(query).setInt(Mockito.eq(1),argument.capture());
+		Mockito.verify(query,Mockito.atLeastOnce()).setInt(Mockito.eq(1),argument.capture());
+		//List<String> values = argument.getAllValues()
 		assertEquals(3,argument.getValue().intValue());	
 	}
 	
@@ -116,10 +132,14 @@ public class ComputerServiceTest {
 	{
 		Computer computer = new Computer(1,"test",LocalDate.of(2021,1,1),LocalDate.of(2021,2,2),"testcompany");
 		ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
-		ComputerService.getInstance().createComputer(computer);
-		Mockito.verify(connection).prepareStatement(argument.capture());
-		
-		assertEquals("INSERT INTO `computer`" + ComputerDAOMapper.mapToCreate(computer), argument.getValue());
+
+		Connection connection = dbConnection.getConnection();
+		Mockito.verify(connection,Mockito.atLeastOnce()).prepareStatement(argument.capture());
+		computerService.createComputer(computer);
+		Mockito.verify(connection,Mockito.atLeastOnce()).prepareStatement(argument.capture());
+		List<String> values = argument.getAllValues();
+		//System.out.println(values);
+		assertEquals(values.toString(),"INSERT INTO `computer`" + computerDAOMapper.mapToCreate(computer), argument.getValue());
 	}
 	
 	@Test
@@ -127,9 +147,10 @@ public class ComputerServiceTest {
 	{
 		Computer computer = new Computer(1,"test",LocalDate.of(2021,1,1),LocalDate.of(2021,2,2),"testcompany");
 		ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
-		ComputerService.getInstance().updateComputer(computer);
-		Mockito.verify(connection).prepareStatement(argument.capture());
+		Connection connection = dbConnection.getConnection();
+		computerService.updateComputer(computer);
+		Mockito.verify(connection,Mockito.atLeastOnce()).prepareStatement(argument.capture());
 		
-		assertEquals("UPDATE `computer` SET " + ComputerDAOMapper.mapToUpdate(computer) + "WHERE id=?", argument.getValue());
+		assertEquals("UPDATE `computer` SET " + computerDAOMapper.mapToUpdate(computer) + "WHERE id=?", argument.getValue());
 	}
 }

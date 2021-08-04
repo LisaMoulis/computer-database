@@ -15,14 +15,15 @@ import org.springframework.stereotype.*;
 public class CompanyService {
 
 	//private static CompanyService instance;
-	@Autowired
 	private ComputerRequestHandler computerRequestHandler;
-	@Autowired
 	private CompanyRequestHandler companyRequestHandler;
 	
-	
-	public CompanyService()
-	{}
+	@Autowired
+	public CompanyService(ComputerRequestHandler computerRequestHandler,CompanyRequestHandler companyRequestHandler)
+	{
+		this.companyRequestHandler = companyRequestHandler;
+		this.computerRequestHandler = computerRequestHandler;
+	}
 	
 	/*public static CompanyService getInstance()
 	{

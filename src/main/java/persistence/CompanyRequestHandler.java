@@ -26,8 +26,14 @@ public class CompanyRequestHandler {
 	 * @param id	Identifier of a company
 	 * @return The company found
 	 */
-	@Autowired
+	
 	private DBConnection dbConnection;
+	
+	@Autowired
+	public CompanyRequestHandler(DBConnection dbConnection)
+	{
+		this.dbConnection = dbConnection;
+	}
 	
 	public Company getCompany(int id)
 	{

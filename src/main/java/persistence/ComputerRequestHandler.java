@@ -31,10 +31,16 @@ public class ComputerRequestHandler {
 	private static final String GET_WITH_ID = "SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE computer.id=?";
 	private static final String GET_PAGE = "SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ? ORDER BY "; 
 	private static final String GET_NB_COMPUTERS = "SELECT COUNT(computer.id) FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ?"; 
-	@Autowired
+
 	private ComputerDAOMapper computerDAOMapper;
-	@Autowired
 	private DBConnection dbConnection;
+	
+	@Autowired
+	public ComputerRequestHandler(DBConnection dbConnection,ComputerDAOMapper computerDAOMapper)
+	{
+		this.computerDAOMapper = computerDAOMapper;
+		this.dbConnection = dbConnection;
+	}
 	
 	/**
 	 * @param id	Identified of a computer
@@ -177,13 +183,13 @@ public class ComputerRequestHandler {
 	/**
 	 * @param computer	Computer to create
 	 */
-	public void createComputer(Computer computer)
+	public void createComputer(Computer computer, int company_id)
 	{
 		Connection connection = dbConnection.getConnection();
 		try {
 			//Use the mapper to get the representation of the computer to insert
-			PreparedStatement query = connection.prepareStatement("INSERT INTO `computer`"+ computerDAOMapper.mapToCreate(computer));
-			dbConnection.getLogger().debug("INSERT INTO `computer`"+ computerDAOMapper.mapToCreate(computer));
+			PreparedStatement query = connection.prepareStatement("INSERT INTO `computer`"+ computerDAOMapper.mapToCreate(computer, company_id));
+			dbConnection.getLogger().debug("INSERT INTO `computer`"+ computerDAOMapper.mapToCreate(computer, company_id));
 			query.executeUpdate();
 			connection.commit();
 			connection.close();
@@ -205,13 +211,13 @@ public class ComputerRequestHandler {
 	/**
 	 * @param computer	Computer to update
 	 */
-	public void updateComputer(Computer computer)
+	public void updateComputer(Computer computer,int company_id)
 	{
 		Connection connection = dbConnection.getConnection();
 		try {
 			//Use the mapper to get the representation of the computer to update
-			PreparedStatement query = connection.prepareStatement("UPDATE `computer` SET "+ computerDAOMapper.mapToUpdate(computer) + "WHERE id=?");
-			dbConnection.getLogger().debug("UPDATE `computer` SET "+ computerDAOMapper.mapToUpdate(computer) + "WHERE id=?");
+			PreparedStatement query = connection.prepareStatement("UPDATE `computer` SET "+ computerDAOMapper.mapToUpdate(computer,company_id) + "WHERE id=?");
+			dbConnection.getLogger().debug("UPDATE `computer` SET "+ computerDAOMapper.mapToUpdate(computer, company_id) + "WHERE id=?");
 			query.setInt(1, computer.getId());
 			query.executeUpdate();
 			connection.commit();

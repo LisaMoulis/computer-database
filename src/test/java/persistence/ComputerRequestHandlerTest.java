@@ -11,58 +11,31 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 
 import org.junit.*;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import com.zaxxer.hikari.HikariDataSource;
 
 import model.Computer;
 
-public class ComputerRequestHandlerTest {
 
-	private Connection connection =  Mockito.mock(Connection.class);
-	private ResultSet result = Mockito.mock(ResultSet.class);
-	private PreparedStatement query = Mockito.mock(PreparedStatement.class);
-	private HikariDataSource dataSource = Mockito.mock(HikariDataSource.class);
-	private HikariDataSource actualSource;
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath:mockContext.xml"})
+@TestExecutionListeners(DependencyInjectionTestExecutionListener.class)
+public class ComputerRequestHandlerTest {
 	
-	@Before
-	public void setMethods() throws NoSuchFieldException, SecurityException, SQLException, IllegalArgumentException, IllegalAccessException
-	{
-		Mockito.when(result.getString("name")).thenReturn("test");
-		Mockito.when(result.getBytes("introduced")).thenReturn(new String("2021-01-01").getBytes());
-		Mockito.when(result.getString("introduced")).thenReturn("2021-01-01 00:00:00");
-		Mockito.when(result.getTimestamp("introduced")).thenReturn(Timestamp.valueOf("2021-01-01 00:00:00"));
-		Mockito.when(result.getBytes("discontinued")).thenReturn(new String("2021-02-02").getBytes());
-		Mockito.when(result.getString("discontinued")).thenReturn("2021-02-02 00:00:00");
-		Mockito.when(result.getTimestamp("discontinued")).thenReturn(Timestamp.valueOf("2021-02-02 00:00:00"));
-		Mockito.when(result.getString("company.name")).thenReturn("testcompany");
-		Mockito.when(result.getInt("computer.id")).thenReturn(3);
-		Mockito.when(result.next()).thenReturn(true).thenReturn(false);
-		
-		Mockito.when(connection.prepareStatement(Mockito.anyString())).thenReturn(query);
-		
-		Mockito.when(query.executeQuery()).thenReturn(result);
-		
-		Mockito.when(dataSource.getConnection()).thenReturn(connection);
-		
-		Field co = DBConnection.class.getDeclaredField("dataSource");
-        co.setAccessible(true);
-        actualSource = (HikariDataSource) co.get(co);
-        co.set(co, dataSource);	
-	}
-	
-	@After
-	public void goBack() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
-	{
-		Field co = DBConnection.class.getDeclaredField("dataSource");
-        co.setAccessible(true);
-        co.set(co, actualSource);	
-	}
+	@Autowired
+	private ComputerRequestHandler computerRequestHandler;
 	
 	@Test
 	public void testGetComputerByName()
 	{		
-		Computer c = ComputerRequestHandler.getComputer("test");
+		Computer c = computerRequestHandler.getComputer("test");
 		assertEquals("test",c.getName());
 		assertEquals(LocalDate.of(2021, 1, 1),c.getIntroduced());
 		assertEquals(LocalDate.of(2021, 2, 2),c.getDiscontinued());
@@ -72,7 +45,7 @@ public class ComputerRequestHandlerTest {
 	@Test
 	public void testGetComputerById()
 	{		
-		Computer c = ComputerRequestHandler.getComputer(3);
+		Computer c = computerRequestHandler.getComputer(3);
 		assertEquals("test",c.getName());
 		assertEquals(LocalDate.of(2021, 1, 1),c.getIntroduced());
 		assertEquals(LocalDate.of(2021, 2, 2),c.getDiscontinued());
@@ -82,7 +55,7 @@ public class ComputerRequestHandlerTest {
 	@Test
 	public void testAllComputers()
 	{		
-		Computer c = ComputerRequestHandler.getComputer(3);
+		Computer c = computerRequestHandler.getComputer(3);
 		assertEquals("test",c.getName());
 		assertEquals(LocalDate.of(2021, 1, 1),c.getIntroduced());
 		assertEquals(LocalDate.of(2021, 2, 2),c.getDiscontinued());

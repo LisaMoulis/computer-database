@@ -1,35 +1,41 @@
 package persistence;
 
-import java.lang.reflect.Field;
+import static org.junit.Assert.*;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
-public class DBConnectionTest extends TestCase {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath:applicationContext.xml"})
+@TestExecutionListeners(DependencyInjectionTestExecutionListener.class)
+public class DBConnectionTest {
 
-	public void testInstance() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
-	{
-		Field instance = DBConnection.class.getDeclaredField("instance");
-        instance.setAccessible(true);
-        instance.set(instance, null);
-        DBConnection newInstance = DBConnection.getInstance();
-        assertNotNull(newInstance);
-	}
+	@Autowired
+	private DBConnection dbConnection;
 	
+	@Test
 	public void testOpen() throws SQLException
 	{
-		Connection connection = DBConnection.getConnection();
+		Connection connection = dbConnection.getConnection();
         assertNotNull(connection);
         assertFalse(connection.isClosed());
         connection.close();
 	}
 	
+	@Test
 	public void testClose() throws SQLException
 	{
-        Connection connection = DBConnection.getConnection();
+        Connection connection = dbConnection.getConnection();
         assertNotNull(connection);
-        DBConnection.close();
+        dbConnection.close();
         assertTrue(connection.isClosed());
 	}
 }

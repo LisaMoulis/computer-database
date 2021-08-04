@@ -4,12 +4,10 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import builder.ComputerBuilder;
 import model.*;
-import service.*;
 
 /**
  * Class ComputerMapper :
@@ -19,9 +17,6 @@ import service.*;
 
 @Component
 public class ComputerDAOMapper {
-	
-	@Autowired
-	private CompanyService companyService;
 	
 	/**
 	 * @param result	Representation of a computer from the database
@@ -51,7 +46,7 @@ public class ComputerDAOMapper {
 	 * @param computer	Computer to convert into a database representation
 	 * @return String representing the computer in an update request
 	 */
-	public String mapToUpdate(Computer c)
+	public String mapToUpdate(Computer c, int company_id)
 	{
 		//Create the part of an update request with the computer values
 		StringBuilder values = new StringBuilder("`id`='").append(c.getId()).append("', `name`='").append(c.getName()).append("'");
@@ -66,8 +61,7 @@ public class ComputerDAOMapper {
 		
 		if (c.getCompany() != null)
 		{
-			Company comp = companyService.getCompany(c.getCompany());
-			values.append(", `company_id`='").append(comp.getId()).append("'");
+			values.append(", `company_id`='").append(company_id).append("'");
 		}
 		return values.toString();	
 	}
@@ -76,7 +70,7 @@ public class ComputerDAOMapper {
 	 * @param computer	Computer to convert into a database representation
 	 * @return String representing the computer in a create request
 	 */
-	public String mapToCreate(Computer c)
+	public String mapToCreate(Computer c, int company_id)
 	{
 		//Create the part of a create request with the computer values
 		StringBuilder columns = new StringBuilder("(`name`");
@@ -91,10 +85,10 @@ public class ComputerDAOMapper {
 			columns.append(", `discontinued`");
 			values.append(", '").append(Timestamp.valueOf(LocalDateTime.of(c.getDiscontinued(),LocalTime.of(0, 0)))).append("'");
 		}
-		if (c.getCompany() != null && companyService.getCompany(c.getCompany()) != null)
+		if (c.getCompany() != null)
 		{
 			columns.append(", `company_id`");
-			values.append(", ").append(companyService.getCompany(c.getCompany()).getId());
+			values.append(", ").append(company_id);
 		}
 		values.append(")");
 		return columns.append(values).toString();		

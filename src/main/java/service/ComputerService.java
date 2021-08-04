@@ -1,5 +1,6 @@
 package service;
 
+import model.Company;
 import model.Computer;
 import persistence.CompanyRequestHandler;
 import persistence.ComputerRequestHandler;
@@ -13,22 +14,16 @@ import org.springframework.stereotype.*;
 public class ComputerService {
 
 	//private static ComputerService instance;
-	@Autowired
+	
 	private ComputerRequestHandler computerRequestHandler;
-	@Autowired
 	private CompanyRequestHandler companyRequestHandler;
 	
-	public ComputerService()
-	{}
-	
-	/*public static ComputerService getInstance()
+	@Autowired
+	public ComputerService(ComputerRequestHandler computerRequestHandler,CompanyRequestHandler companyRequestHandler)
 	{
-		if (instance == null)
-		{
-			instance = new ComputerService();
-		}
-		return instance;
-	}*/
+		this.computerRequestHandler = computerRequestHandler;
+		this.companyRequestHandler = companyRequestHandler;
+	}
 	
 	public Computer getComputer(int id)
 	{
@@ -61,12 +56,27 @@ public class ComputerService {
 	public void createComputer(Computer computer) throws RuntimeException
 	{	
 		Validator.validate(computer);
-		computerRequestHandler.createComputer(computer);
+		int company_id = -1;
+
+		Company company = companyRequestHandler.getCompany(computer.getCompany());
+		if (company != null)
+		{
+			company_id = company.getId();
+		}
+		
+		computerRequestHandler.createComputer(computer,company_id);
 	}
 	
 	public void updateComputer(Computer computer) throws RuntimeException
 	{
 		Validator.validate(computer);
-		computerRequestHandler.updateComputer(computer);
+		int company_id = -1;
+
+		Company company = companyRequestHandler.getCompany(computer.getCompany());
+		if (company != null)
+		{
+			company_id = company.getId();
+		}
+		computerRequestHandler.updateComputer(computer,company_id);
 	}
 }

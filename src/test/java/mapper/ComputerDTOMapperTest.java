@@ -10,17 +10,29 @@ import java.lang.reflect.Field;
 import java.time.LocalDate;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath:applicationContext.xml"})
+@TestExecutionListeners(DependencyInjectionTestExecutionListener.class)
 public class ComputerDTOMapperTest extends TestCase {
 
+	@Autowired
+	private ComputerDTOMapper computerDTOMapper;
 	
 	@Test
 	public void testToComputer() throws Exception
 	{
 		ComputerDTO dto = new ComputerDTO(1,"test","2021-01-01","2021-02-02","testcompany",3);
 		
-		Computer c = ComputerDTOMapper.mapToComputer(dto);
+		Computer c = computerDTOMapper.mapToComputer(dto);
 		
 		assertEquals("test",c.getName());
 		assertEquals(LocalDate.of(2021, 1, 1),c.getIntroduced());
@@ -40,7 +52,7 @@ public class ComputerDTOMapperTest extends TestCase {
         instance.setAccessible(true);
         instance.set(instance, service);
 		
-		ComputerDTO dto = ComputerDTOMapper.mapToDTO(c);
+		ComputerDTO dto = computerDTOMapper.mapToDTO(c);
 		
 		assertEquals("test",dto.getName());
 		assertEquals("2021-01-01",dto.getIntroduced());

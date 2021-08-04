@@ -45,7 +45,15 @@ public class CommandCreate extends Command {
 		Computer newc = newone.build();
 		//Create the computer in the database and locally
 		Validator.validate(newc);
-		computerRequestHandler.createComputer(newc);
+		
+		int company_id = -1;
+
+		Company company = companyRequestHandler.getCompany(newc.getCompany());
+		if (company != null)
+		{
+			company_id = company.getId();
+		}
+		computerRequestHandler.createComputer(newc,company_id);
 		this.logger.info("Computer created.");
 		this.logger.info(newc.toString());
 		System.out.println("Done.\n");

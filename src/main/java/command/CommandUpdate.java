@@ -48,8 +48,17 @@ public class CommandUpdate extends Command{
 					toupdate.setCompany(args[i+1]);
 					break;
 				}
+				
+				int company_id = -1;
+
+				Company company = companyRequestHandler.getCompany(toupdate.getCompany());
+				if (company != null)
+				{
+					company_id = company.getId();
+				}
+				
 				//Update the computer in the database
-				computerRequestHandler.updateComputer(toupdate);
+				computerRequestHandler.updateComputer(toupdate,company_id);
 			}
 			this.logger.debug("Computer info updated.");
 			

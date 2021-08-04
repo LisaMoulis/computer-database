@@ -3,7 +3,6 @@ package service;
 import java.util.List;
 
 import model.*;
-import persistence.CompanyRequestHandler;
 import persistence.ComputerRequestHandler;
 
 import org.springframework.beans.factory.annotation.Autowired;

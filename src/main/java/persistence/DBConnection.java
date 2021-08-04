@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +21,18 @@ import org.springframework.stereotype.*;
 @Scope("singleton")
 public class DBConnection {
 
-	private static DBConnection instance;
+	//private static DBConnection instance;
 	private static Connection connection;
 	private static final Logger logger =  LoggerFactory.getLogger(DBConnection.class);
 	//private static HikariConfig config = new HikariConfig("/datasource.properties");
     
-	@Autowired
+	
 	private HikariDataSource dataSource;  
     
-    
-	private DBConnection()
+    @Autowired
+	public DBConnection(HikariDataSource dataSource)
 	{
+		this.dataSource = dataSource;
 		/*config.setDriverClassName("com.mysql.cj.jdbc.Driver");
 		dataSource  = new HikariDataSource(config);*/
 	}
@@ -79,10 +79,10 @@ public class DBConnection {
 	public Connection getConnection()
 	{
 		//Create the instance if it's not existing
-		if (instance == null)
+		/*if (instance == null)
 		{
 			instance = new DBConnection();
-		}
+		}*/
 		
 		try {
 			connection = dataSource.getConnection();

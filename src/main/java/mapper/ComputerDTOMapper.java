@@ -23,8 +23,14 @@ import builder.*;
 @Component
 public class ComputerDTOMapper {
 	
-	@Autowired
 	private CompanyService companyService;
+	
+	@Autowired
+	public ComputerDTOMapper(CompanyService companyService)
+	{
+		this.companyService = companyService;
+	}
+	
 	/**
 	 * @param result	Representation of a computer from the database
 	 * @return A computer object created from one of the database
