@@ -22,7 +22,7 @@ public class CommandNextPage extends Command{
 			ComputerList page = handler.getPage();
 			page.setPage(page.getPage()+1);
 			this.logger.debug("Next page of computers displayed.");
-			System.out.println("List of the computers :\n" + pageService.getPage(page,"","computer.id"));
+			System.out.println("List of the computers :\n" + pageService.getPage(page,"","computer.id","asc"));
 		}
 		else
 		{

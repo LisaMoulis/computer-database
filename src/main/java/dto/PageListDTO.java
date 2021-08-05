@@ -9,6 +9,7 @@ public class PageListDTO {
 	private String search = "";
 	private String order = "computer.name";
 	private int nbComputers = 1;
+	private String sense = "asc";
 	
 	private List<ComputerDTO> computers;
 	
@@ -92,4 +93,13 @@ public class PageListDTO {
 		this.search = s;
 	}
 
+	public String getSense()
+	{
+		return this.sense;
+	}
+	
+	public void setSense(String str)
+	{
+		this.sense = str;
+	}
 }

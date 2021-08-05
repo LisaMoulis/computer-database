@@ -27,9 +27,13 @@
                     <form id="searchForm" action="#" method="GET" class="form-inline">
 
                         <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${search}" />
+                        <br/>
                         <input type="submit" id="searchsubmit" name="searchsubmit" value="Filter by name" class="btn btn-primary" />
                         <input type="submit" id="searchsubmit" name="searchsubmit" value="Filter by company" class="btn btn-primary" />
                         <input type="submit" id="searchsubmit" name="searchsubmit" value="Cancel" class="btn btn-primary" />
+                        <br/>
+                        <input type="submit" id="searchorder" name="searchorder" value="Ascending" class="btn btn-primary" />
+                        <input type="submit" id="searchorder" name="searchorder" value="Descending" class="btn btn-primary" />
                     </form>
                 </div>
                 <div class="pull-right">
@@ -77,8 +81,6 @@
                 <!-- Browse attribute computers -->
                 <tbody id="results">
                 	<c:forEach items="${page.computers}" var="entry">
-					
-					 
 	                    <tr>
 	                        <td class="editMode">
                             	<input type="checkbox" name="cb" class="cb" value="${entry.id}">

@@ -29,9 +29,9 @@ public class PageService {
 		return instance;
 	}*/
 	
-	public List<Computer> getPage(ComputerList page, String search, String column)
+	public List<Computer> getPage(ComputerList page, String search, String column, String sense)
 	{
-		page.setComputers(computerRequestHandler.getPage(page.getSize(),page.getOffset(),search,column));
+		page.setComputers(computerRequestHandler.getPage(page.getSize(),page.getOffset(),search,column,sense.toUpperCase()));
 		return page.getComputers();
 	}
 	

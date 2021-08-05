@@ -108,11 +108,11 @@ public class ComputerRequestHandler {
 		return computers;
 	}
 	
-	public ArrayList<Computer> getPage(int size, int offset, String search, String column)
+	public ArrayList<Computer> getPage(int size, int offset, String search, String column, String sense)
 	{
 		ArrayList<Computer> page = new ArrayList<Computer>();
 		try (Connection connection = dbConnection.getConnection();) {
-			PreparedStatement query = connection.prepareStatement(GET_PAGE + column + " LIMIT ? OFFSET ?");
+			PreparedStatement query = connection.prepareStatement(GET_PAGE + column + " " + sense + " LIMIT ? OFFSET ?");
 			dbConnection.getLogger().info("Getting page from database with size "+ size + ", offset "+ offset + ", searched "+search + " and order " + column);
 			query.setString(1, "%"+search.toLowerCase()+"%");
 			query.setString(2, "%"+search.toLowerCase()+"%");

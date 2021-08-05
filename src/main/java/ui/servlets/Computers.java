@@ -78,7 +78,7 @@ public class Computers extends HttpServlet{
 			request.setAttribute("search", page.getSearch());
 		}
 		
-		if (request.getParameter("searchsubmit") != null && request.getParameter("searchsubmit") != "")
+		if (request.getParameter("searchsubmit") != null && !request.getParameter("searchsubmit").equals(""))
 		{			
 			if (request.getParameter("searchsubmit").equals("Filter by company"))
 			{
@@ -95,6 +95,18 @@ public class Computers extends HttpServlet{
 			}
 		}
 		
+		if (request.getParameter("searchorder") != null && !request.getParameter("searchorder").equals(""))
+		{
+			if (request.getParameter("searchorder").equals("Descending"))
+			{
+				page.setSense("desc");
+			}
+			else
+			{
+				page.setSense("asc");
+			}
+		}
+		
 		if (request.getParameter("size") != null)
 		{
 			page.setSize(Integer.valueOf(request.getParameter("size")));
@@ -108,7 +120,7 @@ public class Computers extends HttpServlet{
 		}
 		page.setNbComputers(pageService.getNbComputers(page.getSearch()));
 		ComputerList list = new ComputerList(page.getPage(),page.getSize());
-		pageService.getPage(list, page.getSearch(), page.getOrder());
+		pageService.getPage(list, page.getSearch(), page.getOrder(),page.getSense());
 		page.setComputers(computerDTOMapper.mapToDTOList(list.getComputers()));
 		
 		request.getRequestDispatcher("/WEB-INF/static/views/dashboard.jsp").include(request, response);

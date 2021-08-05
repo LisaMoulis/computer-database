@@ -22,13 +22,13 @@ public class CommandListComputers extends Command{
 		{
 			page.setPage(1);
 			this.logger.debug("Displaying the list of computers.");
-			System.out.println("List of the computers :\n" + pageService.getPage(page,"","computer.id"));
+			System.out.println("List of the computers :\n" + pageService.getPage(page,"","computer.id","asc"));
 		}
 		else if (args.length == 2)
 		{
 			this.logger.debug("Displaying the list of computers.");
 			page.setPage(Integer.valueOf(args[2]));
-			System.out.println("List of the computers :\n" + pageService.getPage(page,"","computer.id"));
+			System.out.println("List of the computers :\n" + pageService.getPage(page,"","computer.id","asc"));
 		}
 		else
 		{
