@@ -40,7 +40,7 @@ public class ComputersTest {
 	private ComputerDTOMapper computerDTOMapper;
 	
 	
-	private RequestDispatcher dispatcher = mock(RequestDispatcher.class);;
+	private RequestDispatcher dispatcher = mock(RequestDispatcher.class);
 	private HttpSession session = new HttpSession()
 			{
 				private HashMap<String,Object> attributes = new HashMap<String,Object>();
@@ -168,15 +168,38 @@ public class ComputersTest {
 	    
 	    Mockito.when(request.getSession()).thenReturn(session);
 	    Mockito.when(request.getRequestDispatcher("/WEB-INF/static/views/dashboard.jsp")).thenReturn(dispatcher);
-
-	    servlet.setPageService(pageService);
-	    System.out.println(pageService);
-		servlet.doGet(request, response);
+		servlet.doPost(request, response);
 		PageListDTO page = (PageListDTO) session.getAttribute("page");
 		assertNotNull(page);
 		assertEquals("computer.name",page.getOrder());
 		assertEquals(1,page.getPage());
 		assertEquals(10,page.getSize());
+
+	    
+	}
+	
+	@Test
+	public void testFull() throws IOException, ServletException
+	{
+		HttpServletRequest request = mock(HttpServletRequest.class);       
+	    HttpServletResponse response = mock(HttpServletResponse.class);
+	    
+	    Mockito.when(request.getSession()).thenReturn(session);
+	    Mockito.when(request.getRequestDispatcher("/WEB-INF/static/views/dashboard.jsp")).thenReturn(dispatcher);
+	    Mockito.when(request.getParameter("search")).thenReturn("something");
+	    Mockito.when(request.getParameter("searchsubmit")).thenReturn("Filter by company");
+	    Mockito.when(request.getParameter("searchorder")).thenReturn("Descending");
+	    Mockito.when(request.getParameter("size")).thenReturn("50");
+
+		servlet.doGet(request, response);
+		PageListDTO page = (PageListDTO) session.getAttribute("page");
+		assertNotNull(page);
+		assertEquals("something",page.getSearch());
+		assertEquals("company.name",page.getOrder());
+		assertEquals("desc",page.getSense());
+		assertEquals(1,page.getPage());
+		assertEquals(50,page.getSize());
+		
 
 	    
 	}

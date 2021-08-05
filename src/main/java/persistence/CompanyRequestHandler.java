@@ -108,19 +108,19 @@ public class CompanyRequestHandler {
 			
 			query.execute("DELETE FROM `company` WHERE id="+id);
 			connection.commit();
-			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			dbConnection.getLogger().error("Transaction failed");
+			throw new RollbackHappened();
+		}
+		finally
+		{
 			try {
-				dbConnection.getLogger().error("Transaction is being rolled back");
-				connection.rollback();
 				connection.close();
-				throw new RollbackHappened();
-		    } 
-			catch (SQLException excep) 
-			{
-		    	excep.printStackTrace();
-		    }
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }

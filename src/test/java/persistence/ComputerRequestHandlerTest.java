@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.HashMap;
 
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -80,7 +81,8 @@ public class ComputerRequestHandlerTest {
 	@Test
 	public void testAllComputers()
 	{		
-		Computer c = computerRequestHandler.getComputer(3);
+		HashMap<Integer,Computer> alls = computerRequestHandler.getAllComputers();
+		Computer c = alls.get(3);
 		assertEquals("test",c.getName());
 		assertEquals(LocalDate.of(2021, 1, 1),c.getIntroduced());
 		assertEquals(LocalDate.of(2021, 2, 2),c.getDiscontinued());

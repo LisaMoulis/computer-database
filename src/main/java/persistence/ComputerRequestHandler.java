@@ -11,7 +11,6 @@ import builder.ComputerBuilder;
 import mapper.ComputerDAOMapper;
 import model.Computer;
 import model.exceptions.RollbackHappened;
-import service.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -54,7 +53,6 @@ public class ComputerRequestHandler {
 			ResultSet result = query.executeQuery();
 			connection.commit();
 			result.next();
-			connection.commit();
 			return computerDAOMapper.mapToComputer(result);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -112,7 +110,16 @@ public class ComputerRequestHandler {
 	{
 		ArrayList<Computer> page = new ArrayList<Computer>();
 		try (Connection connection = dbConnection.getConnection();) {
-			PreparedStatement query = connection.prepareStatement(GET_PAGE + column + " " + sense + " LIMIT ? OFFSET ?");
+			
+			String str = GET_PAGE + column + " " + sense;
+			try {
+				int id = Integer.valueOf(search);
+				str = str+ " OR computer.id = " + id;
+			}
+			catch (Exception e)
+			{}
+			
+			PreparedStatement query = connection.prepareStatement(str + " LIMIT ? OFFSET ?");
 			dbConnection.getLogger().info("Getting page from database with size "+ size + ", offset "+ offset + ", searched "+search + " and order " + column);
 			query.setString(1, "%"+search.toLowerCase()+"%");
 			query.setString(2, "%"+search.toLowerCase()+"%");
@@ -126,18 +133,6 @@ public class ComputerRequestHandler {
 			{
 				page.add(computerDAOMapper.mapToComputer(result));
 			}
-			try {
-				int id = Integer.valueOf(search);
-				Computer toAdd = getComputer(id);
-				try {
-					Validator.validate(toAdd);
-					page.add(toAdd);
-				}
-				catch(RuntimeException re)
-				{}
-			}
-			catch (Exception e)
-			{}
 			dbConnection.getLogger().info("Page gathered : " + page);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -187,19 +182,20 @@ public class ComputerRequestHandler {
 			dbConnection.getLogger().debug("INSERT INTO `computer`"+ computerDAOMapper.mapToCreate(computer, company_id));
 			query.executeUpdate();
 			connection.commit();
-			connection.close();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
+			dbConnection.getLogger().error("Transaction failed");
+			throw new RollbackHappened();
+		}
+		finally
+		{
 			try {
-				dbConnection.getLogger().error("Transaction is being rolled back");
-		        connection.rollback();
-		        connection.close();
-		        throw new RollbackHappened();
-		    } 
-			catch (SQLException excep) 
-			{
-		    	excep.printStackTrace();
-		    }
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -216,19 +212,19 @@ public class ComputerRequestHandler {
 			query.setInt(1, computer.getId());
 			query.executeUpdate();
 			connection.commit();
-			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			dbConnection.getLogger().error("Transaction failed");
+			throw new RollbackHappened();
+		}
+		finally
+		{
 			try {
-				dbConnection.getLogger().error("Transaction is being rolled back");
-				connection.rollback();
 				connection.close();
-				throw new RollbackHappened();
-		    } 
-			catch (SQLException excep) 
-			{
-		    	excep.printStackTrace();
-		    }
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -245,19 +241,19 @@ public class ComputerRequestHandler {
 			query.setInt(1, id);
 			query.executeUpdate();
 			connection.commit();
-			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			dbConnection.getLogger().error("Transaction failed");
+			throw new RollbackHappened();
+		}
+		finally
+		{
 			try {
-				dbConnection.getLogger().error("Transaction is being rolled back");
-				connection.rollback();
 				connection.close();
-				throw new RollbackHappened();
-		    } 
-			catch (SQLException excep) 
-			{
-		    	excep.printStackTrace();
-		    }
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -273,19 +269,19 @@ public class ComputerRequestHandler {
 			query.setString(1, name);
 			query.executeUpdate();
 			connection.commit();
-			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			dbConnection.getLogger().error("Transaction failed");
+			throw new RollbackHappened();
+		}
+		finally
+		{
 			try {
-				dbConnection.getLogger().error("Transaction is being rolled back");
-				connection.rollback();
 				connection.close();
-				throw new RollbackHappened();
-		    } 
-			catch (SQLException excep) 
-			{
-		    	excep.printStackTrace();
-		    }
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	

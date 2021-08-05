@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -60,7 +61,7 @@ public class CompanyServiceTest {
 	}	
 	
 	@Test
-	public void testGetComputerById()
+	public void testGetCompanyById()
 	{		
 		DBConnection dbConnection = new DBConnection(dataSource);
 		CompanyRequestHandler companyHandler = new CompanyRequestHandler(dbConnection);
@@ -68,5 +69,17 @@ public class CompanyServiceTest {
 		Company c = new CompanyService(computerHandler, companyHandler).getCompany(3);
 		assertEquals("testcompany",c.getName());
 		assertEquals(3,c.getId());
+	}
+	
+	@Test
+	public void testDeleteCompany() throws SQLException
+	{
+		DBConnection dbConnection = new DBConnection(dataSource);
+		CompanyRequestHandler companyHandler = new CompanyRequestHandler(dbConnection);
+		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dbConnection,new ComputerDAOMapper());
+		new CompanyService(computerHandler,companyHandler).removeCompany("testcompany");
+		ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
+		Mockito.verify(query).setInt(Mockito.anyInt(),argument.capture());
+		assertEquals(3,argument.getValue().intValue());	
 	}
 }

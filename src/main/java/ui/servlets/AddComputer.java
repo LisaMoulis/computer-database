@@ -19,6 +19,7 @@ import builder.ComputerDTOBuilder;
 import model.*;
 import service.CompanyService;
 import service.ComputerService;
+import service.PageService;
 import mapper.*;
 
 @Controller
@@ -30,15 +31,32 @@ public class AddComputer extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	private final Logger logger = LoggerFactory.getLogger(AddComputer.class);
 	private WebApplicationContext springContext;
-	@Autowired
+
 	private CompanyService companyService;
-	@Autowired
 	private ComputerService computerService;
-	@Autowired
 	private ComputerDTOMapper computerDTOMapper;
 	
+	@Autowired
+	public void setCompanyService(CompanyService companyService)
+	{
+		this.companyService = companyService;
+	}
+	
+	@Autowired
+	public void setComputerService(ComputerService computerService)
+	{
+		this.computerService = computerService;
+	}
+	
+	@Autowired
+	public void setComputerDTOMapper(ComputerDTOMapper computerDTOMapper)
+	{
+		this.computerDTOMapper = computerDTOMapper;
+	}
+	
 	@Override
-	public String getServletInfo() {
+	public String getServletInfo()
+	{
 		return "Add computer";
 	}
 	
