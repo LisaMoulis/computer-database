@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import service.ComputerService;
 
 @Controller
+@WebServlet("/delete")
 public class Delete extends HttpServlet{
 
 	/**

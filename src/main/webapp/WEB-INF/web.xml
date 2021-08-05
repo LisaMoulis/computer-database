@@ -30,49 +30,15 @@
 </error-page>
 
 <servlet>
-	<servlet-name>Home</servlet-name>
-	<servlet-class>ui.servlets.Home</servlet-class>
- </servlet>
-<servlet-mapping>
-	<servlet-name>Home</servlet-name>
-	<url-pattern>/home</url-pattern>
-</servlet-mapping>
+    <servlet-name>dispatcher</servlet-name>
+    <servlet-class>
+        org.springframework.web.servlet.DispatcherServlet
+    </servlet-class>
+</servlet>
 
-
-<servlet>
-	<servlet-name>Computers</servlet-name>
-	<servlet-class>ui.servlets.Computers</servlet-class>
- </servlet>
 <servlet-mapping>
-	<servlet-name>Computers</servlet-name>
-	<url-pattern>/computers</url-pattern>
-</servlet-mapping>
-
-<servlet>
-	<servlet-name>AddComputer</servlet-name>
-	<servlet-class>ui.servlets.AddComputer</servlet-class>
- </servlet>
-<servlet-mapping>
-	<servlet-name>AddComputer</servlet-name>
-	<url-pattern>/add</url-pattern>
-</servlet-mapping>
-
-<servlet>
-	<servlet-name>Edit</servlet-name>
-	<servlet-class>ui.servlets.Edit</servlet-class>
- </servlet>
-<servlet-mapping>
-	<servlet-name>Edit</servlet-name>
-	<url-pattern>/edit</url-pattern>
-</servlet-mapping>
-
-<servlet>
-	<servlet-name>Delete</servlet-name>
-	<servlet-class>ui.servlets.Delete</servlet-class>
- </servlet>
-<servlet-mapping>
-	<servlet-name>Delete</servlet-name>
-	<url-pattern>/delete</url-pattern>
+    <servlet-name>dispatcher</servlet-name>
+    <url-pattern>/*^(.html)</url-pattern>
 </servlet-mapping>
 
 </web-app>

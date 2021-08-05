@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ import org.springframework.web.context.support.*;
 import org.springframework.beans.factory.config.*;
 
 @Controller
+@WebServlet("/computers")
 public class Computers extends HttpServlet{
 	/**
 	 * 
