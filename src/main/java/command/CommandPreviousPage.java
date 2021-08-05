@@ -16,10 +16,10 @@ public class CommandPreviousPage extends Command{
 	}
 	
 	@Override
-	public void exec(String...args) {
+	public void exec(CommandHandler handler, String...args) {
 		if (args.length == 1)
 		{
-			ComputerList page = CommandHandler.getInstance().getPage();
+			ComputerList page = handler.getPage();
 			page.setPage(page.getPage()-1);
 			this.logger.debug("List of computers displayed.");
 			System.out.println("List of the computers :\n" + pageService.getPage(page,"","computer.id"));

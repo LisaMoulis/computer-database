@@ -3,7 +3,6 @@ package ui;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -18,21 +17,18 @@ import command.*;
 @Component
 public class Main {
 
-	private static CommandHandler commands = CommandHandler.getInstance();
+	private static CommandHandler commands;
 	protected static final Logger logger = LoggerFactory.getLogger(Main.class);
 	
 	public static void main(String[] str)
 	{
 		logger.debug("Program started.");
-
-		startWithSpring();
-		//getFromCommandLine();
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:/applicationContext.xml");
+		commands = context.getBean(CommandHandler.class);
+		getFromCommandLine();
+		context.close();
 	}
 	
-	private static void startWithSpring()
-	{
-		ApplicationContext vApplicationContext = new ClassPathXmlApplicationContext("classpath:/applicationContext.xml");
-	}
 	
 	private static void getFromCommandLine()
 	{

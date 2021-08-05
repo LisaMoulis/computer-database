@@ -15,7 +15,7 @@ public class CommandDeleteCompany extends Command {
 	}
 	
 	@Override
-	public void exec(String...args) {
+	public void exec(CommandHandler handler, String...args) {
 		System.out.println("coucou");
 		if (args.length == 2)
 		{

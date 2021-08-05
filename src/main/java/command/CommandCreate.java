@@ -21,7 +21,7 @@ public class CommandCreate extends Command {
 	}
 	
 	@Override
-	public void exec(String...args) {
+	public void exec(CommandHandler handler, String...args) {
 		ComputerBuilder newone = new ComputerBuilder();
 		for (int i = 1; i+1 < args.length;i+=2)
 		{

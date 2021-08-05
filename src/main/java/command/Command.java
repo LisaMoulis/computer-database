@@ -2,7 +2,6 @@ package command;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import persistence.CompanyRequestHandler;
@@ -21,21 +20,41 @@ import service.PageService;
 public abstract class Command {
 
 	protected final Logger logger = LoggerFactory.getLogger(Command.class);
-	@Autowired
 	protected ComputerService computerService;
-	@Autowired
 	protected CompanyService companyService;
-	@Autowired
 	protected PageService pageService;
-	@Autowired
 	protected ComputerRequestHandler computerRequestHandler;
-	@Autowired
 	protected CompanyRequestHandler companyRequestHandler;
+	
+	public void setComputerService(ComputerService computerService)
+	{
+		this.computerService = computerService;
+	}
+	
+	public void setCompanyService(CompanyService companyService)
+	{
+		this.companyService = companyService;
+	}
+	
+	public void setPageService(PageService pageService)
+	{
+		this.pageService = pageService;
+	}
+	
+	public void setComputerRequestHandler(ComputerRequestHandler computerRequestHandler)
+	{
+		this.computerRequestHandler = computerRequestHandler;
+	}
+	
+	public void setCompanyRequestHandler(CompanyRequestHandler companyRequestHandler)
+	{
+		this.companyRequestHandler = companyRequestHandler;
+	}
 	
 	/**
 	 * @param args	keyword of the command + arguments
 	 */
-	public abstract void exec(String...args);
+	public abstract void exec(CommandHandler handler,String...args);
 	
 	public abstract String getName();
 	

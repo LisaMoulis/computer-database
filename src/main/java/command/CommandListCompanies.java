@@ -14,7 +14,7 @@ public class CommandListCompanies extends Command {
 	}
 	
 	@Override
-	public void exec(String...args) {
+	public void exec(CommandHandler handler, String...args) {
 		if (args.length == 1)
 		{
 			this.logger.debug("Displaying the list of the companies.");

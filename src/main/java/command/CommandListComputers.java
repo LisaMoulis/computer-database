@@ -16,8 +16,8 @@ public class CommandListComputers extends Command{
 	}
 	
 	@Override
-	public void exec(String...args) {
-		ComputerList page = CommandHandler.getInstance().getPage();
+	public void exec(CommandHandler handler, String...args) {
+		ComputerList page = handler.getPage();
 		if (args.length == 1)
 		{
 			page.setPage(1);

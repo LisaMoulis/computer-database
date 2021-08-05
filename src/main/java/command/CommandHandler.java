@@ -3,19 +3,29 @@ package command;
 import java.util.ArrayList;
 
 import model.ComputerList;
+import persistence.CompanyRequestHandler;
+import persistence.ComputerRequestHandler;
+import service.CompanyService;
+import service.ComputerService;
+import service.PageService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Class CommandHandler :
  * Manage the commands and execute them
  * @author Lisa
  */
+
+@Component("commandHandler")
 public class CommandHandler {
 
 	private ArrayList<Command> commands;
-	private static CommandHandler instance;
+	//private static CommandHandler instance;
 	private ComputerList computerList = new ComputerList();
-	
-	private CommandHandler()
+	@Autowired
+	private CommandHandler(ComputerService computerService,CompanyService companyService,PageService pageService,ComputerRequestHandler computerRequestHandler,CompanyRequestHandler companyRequestHandler)
 	{
 		//Create the list of commands with the basic ones
 		this.commands = new ArrayList<Command>();
@@ -29,15 +39,14 @@ public class CommandHandler {
 		this.commands.add(new CommandQuit());
 		this.commands.add(new CommandNextPage());
 		this.commands.add(new CommandPreviousPage());
-	}
-	
-	public static CommandHandler getInstance()
-	{
-		if (instance == null)
-		{
-			instance = new CommandHandler();
-		}
-		return instance;
+		
+		this.commands.forEach(c -> {
+			c.setCompanyRequestHandler(companyRequestHandler);
+			c.setCompanyService(companyService);
+			c.setComputerRequestHandler(computerRequestHandler);
+			c.setComputerService(computerService);
+			c.setPageService(pageService);
+		});
 	}
 	
 	/**
@@ -50,7 +59,7 @@ public class CommandHandler {
 		{
 			if (c.getName().equals(args[0]))
 			{
-				c.exec(args);
+				c.exec(this,args);
 			}
 		}
 	}

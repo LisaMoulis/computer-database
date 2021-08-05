@@ -14,7 +14,7 @@ public class CommandDetails extends Command {
 	}
 	
 	@Override
-	public void exec(String...args) {
+	public void exec(CommandHandler handler, String...args) {
 		if (args.length == 2)
 		{
 			this.logger.debug("Details of the computer displayed.");

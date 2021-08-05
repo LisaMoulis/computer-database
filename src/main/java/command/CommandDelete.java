@@ -15,7 +15,7 @@ public class CommandDelete extends Command {
 	}
 	
 	@Override
-	public void exec(String...args) {
+	public void exec(CommandHandler handler, String...args) {
 		if (args.length == 2)
 		{
 			try {

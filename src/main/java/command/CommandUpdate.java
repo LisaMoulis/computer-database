@@ -19,7 +19,7 @@ public class CommandUpdate extends Command{
 	}
 	
 	@Override
-	public void exec(String...args) {
+	public void exec(CommandHandler handler, String...args) {
 		Computer toupdate = null;
 		try {
 			int id = Integer.valueOf(args[1]);

@@ -17,7 +17,7 @@ public class CommandQuit extends Command {
 	}
 	
 	@Override
-	public void exec(String...args) {
+	public void exec(CommandHandler handler, String...args) {
 		CLIReader.close();
 		System.out.println("Bye!");
 	}
