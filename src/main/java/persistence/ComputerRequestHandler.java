@@ -149,29 +149,24 @@ public class ComputerRequestHandler {
 	public int getNbComputers(String search)
 	{
 		try (Connection connection = dbConnection.getConnection();) {
-			PreparedStatement query = connection.prepareStatement(GET_NB_COMPUTERS);
-			dbConnection.getLogger().debug(GET_NB_COMPUTERS);
+			String str = GET_NB_COMPUTERS;
+			try {
+				int id = Integer.valueOf(search);
+				str = str+ " OR computer.id = " + id;
+			}
+			catch (Exception e)
+			{}
+			
+			PreparedStatement query = connection.prepareStatement(str);
+			dbConnection.getLogger().debug(str);
 			query.setString(1, "%"+search.toLowerCase()+"%");
 			query.setString(2, "%"+search.toLowerCase()+"%");
 			ResultSet result = query.executeQuery();
 			connection.commit();
 			result.next();
 			dbConnection.getLogger().info("Nb computers : " + result.getInt(1));
-			int plusOne = 0;
-			
-			try {
-				int id = Integer.valueOf(search);
-				Computer toAdd = getComputer(id);
-				try {
-					Validator.validate(toAdd);
-					plusOne = 1;
-				}
-				catch(RuntimeException re)
-				{}
-			}
-			catch (Exception e)
-			{}
-			return result.getInt(1) + plusOne;
+
+			return result.getInt(1);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
