@@ -4,6 +4,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import builder.ComputerBuilder;
@@ -16,15 +17,17 @@ import model.*;
  */
 
 @Component
-public class ComputerDAOMapper {
+public class ComputerDAOMapper implements RowMapper<Computer> {
 	
 	/**
 	 * @param result	Representation of a computer from the database
 	 * @return A computer object created from one of the database
 	 * @throws SQLException
 	 */
-	public Computer mapToComputer(ResultSet result) throws SQLException
-	{
+	
+	@Override
+	public Computer mapRow(ResultSet result, int rowNum) throws SQLException {
+		
 		ComputerBuilder builder = new ComputerBuilder().setName(result.getString("name"));
 		//Verify if some columns are empty before getting them
 		if (result.getBytes("introduced") != null && !result.getString("introduced").equals("0000-00-00 00:00:00"))

@@ -9,7 +9,7 @@ import java.util.*;
  */
 public class ComputerList {
 
-	private ArrayList<Computer> computers;
+	private List<Computer> computers;
 	private int page = 1;
 	private int size = 10;
 	
@@ -29,9 +29,9 @@ public class ComputerList {
 		return computers;
 	}
 	
-	public void setComputers(ArrayList<Computer> computers)
+	public void setComputers(List<Computer> list)
 	{
-		this.computers = computers;
+		this.computers = list;
 	}
 	
 	public int getPage()

@@ -1,6 +1,6 @@
 package service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import model.Company;
 import persistence.CompanyRequestHandler;
@@ -54,7 +54,7 @@ public class CompanyService {
 		companyRequestHandler.deleteCompany(companyRequestHandler.getCompany(name).getId());
 	}
 	
-	public ArrayList<Company> getAllCompanies()
+	public List<Company> getAllCompanies()
 	{
 		return companyRequestHandler.getAllCompanies();
 	}

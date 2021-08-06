@@ -1,17 +1,17 @@
 package persistence;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import java.sql.Types;
+import java.util.List;
+
+import javax.sql.DataSource;
 
 import mapper.CompanyMapper;
 import model.Company;
-import model.exceptions.RollbackHappened;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.jdbc.core.*;
 
 /**
  * Class CompanyRequesthandler :
@@ -27,100 +27,48 @@ public class CompanyRequestHandler {
 	 * @return The company found
 	 */
 	
+	private JdbcTemplate jdbcTemplate;
 	private DBConnection dbConnection;
 	
 	@Autowired
-	public CompanyRequestHandler(DBConnection dbConnection)
+	public CompanyRequestHandler(DataSource dataSource)
 	{
-		this.dbConnection = dbConnection;
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
+		//this.dbConnection = dbConnection;
 	}
 	
 	public Company getCompany(int id)
 	{
-		try (Connection connection = dbConnection.getConnection();){
-			PreparedStatement query = connection.prepareStatement("SELECT * FROM `company` WHERE id=?");
-			
-			query.setInt(1, id);
-			ResultSet result = query.executeQuery();
-			connection.commit();
-			result.next();
-			return CompanyMapper.mapToCompany(result);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		List<Company> companies =  jdbcTemplate.query("SELECT * FROM `company` WHERE id=?", new Object[] {id}, new int[] { Types.INTEGER}, new CompanyMapper());
+		if (companies.isEmpty())
+		{
 			return new Company(-1,null);
 		}
+		return companies.get(0);
 	}
 	
 	public Company getCompany(String name)
 	{
-		try (Connection connection = dbConnection.getConnection();){
-			PreparedStatement query = connection.prepareStatement("SELECT * FROM `company` WHERE name=?");
-			
-			query.setString(1, name);
-			ResultSet result = query.executeQuery();
-			connection.commit();
-			result.next();
-			return CompanyMapper.mapToCompany(result);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		List<Company> companies =  jdbcTemplate.query("SELECT * FROM `company` WHERE name=?", new Object[] { name }, new int[] { Types.VARCHAR}, new CompanyMapper());	
+		if (companies.isEmpty())
+		{
 			return new Company(-1,null);
 		}
+		return companies.get(0);
 	}
 	
 	/**
 	 * @return All the companies in the database
 	 */
-	public ArrayList<Company> getAllCompanies()
+	public List<Company> getAllCompanies()
 	{
-		ArrayList<Company> companies = new ArrayList<Company>();
-	
-		try (Connection connection = dbConnection.getConnection();) {
-			//Send the request to get all the companies
-			PreparedStatement query = connection.prepareStatement("SELECT * FROM `company`");
-			ResultSet result = query.executeQuery();
-			connection.commit();
-			//Put all the companies into a list
-			while (result.next())
-			{
-				Company c = CompanyMapper.mapToCompany(result);
-				c.setId(result.getInt("id"));
-				companies.add(c);
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return companies;
+		return jdbcTemplate.query("SELECT * FROM `company`",new CompanyMapper());
 	}
 	
+	@Transactional
 	public void deleteCompany(int id)
 	{
-		Connection connection = dbConnection.getConnection();
-		try {
-			PreparedStatement query = connection.prepareStatement("DELETE FROM `computer` WHERE company_id=?");
-			
-			dbConnection.getLogger().debug("DELETE FROM `computer` WHERE company_id="+ id);
-			query.setInt(1, id);
-			query.executeUpdate();
-			
-			query.execute("DELETE FROM `company` WHERE id="+id);
-			connection.commit();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			dbConnection.getLogger().error("Transaction failed");
-			throw new RollbackHappened();
-		}
-		finally
-		{
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		jdbcTemplate.update("DELETE FROM `computer` WHERE company_id=?",new Object[] { id }, new int[] { Types.INTEGER});
+		jdbcTemplate.update("DELETE FROM `company` WHERE id=?",new Object[] { id }, new int[] { Types.INTEGER});
 	}
 }

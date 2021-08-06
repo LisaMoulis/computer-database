@@ -1,6 +1,6 @@
 package model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class CompanyList :
@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class CompanyList {
 
-	private ArrayList<Company> companies;
+	private List<Company> companies;
 	
 	public CompanyList()
 	{
@@ -19,14 +19,14 @@ public class CompanyList {
 	 * @param id Identifier of a company
 	 * @return The company found
 	 */
-	public ArrayList<Company> getCompanies()
+	public List<Company> getCompanies()
 	{
 		return this.companies;
 	}
 	
-	public void setCompanies(ArrayList<Company> c)
+	public void setCompanies(List<Company> list)
 	{
-		this.companies = c;
+		this.companies = list;
 	}
 	
 	

@@ -1,19 +1,17 @@
 package persistence;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.sql.Types;
+import java.util.List;
+
+import javax.sql.*;
 
 import builder.ComputerBuilder;
 import mapper.ComputerDAOMapper;
 import model.Computer;
-import model.exceptions.RollbackHappened;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.*;
 
 /**
@@ -31,14 +29,14 @@ public class ComputerRequestHandler {
 	private static final String GET_PAGE = "SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ? ORDER BY "; 
 	private static final String GET_NB_COMPUTERS = "SELECT COUNT(computer.id) FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ?"; 
 
+	private JdbcTemplate jdbcTemplate;
 	private ComputerDAOMapper computerDAOMapper;
-	private DBConnection dbConnection;
 	
 	@Autowired
-	public ComputerRequestHandler(DBConnection dbConnection,ComputerDAOMapper computerDAOMapper)
+	public ComputerRequestHandler(DataSource dataSource,ComputerDAOMapper computerDAOMapper)
 	{
 		this.computerDAOMapper = computerDAOMapper;
-		this.dbConnection = dbConnection;
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	
 	/**
@@ -47,18 +45,12 @@ public class ComputerRequestHandler {
 	 */
 	public Computer getComputer(int id)
 	{
-		try (Connection connection = dbConnection.getConnection();){
-			PreparedStatement query = connection.prepareStatement(GET_WITH_ID);
-			query.setInt(1, id);
-			ResultSet result = query.executeQuery();
-			connection.commit();
-			result.next();
-			return computerDAOMapper.mapToComputer(result);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		List<Computer> result = jdbcTemplate.query(GET_WITH_ID, new Object[] { id }, new int[] { Types.INTEGER}, this.computerDAOMapper);
+		if (result.isEmpty())
+		{
 			return new ComputerBuilder().build();
 		}
+		return result.get(0);
 	}
 	
 	/**
@@ -67,107 +59,52 @@ public class ComputerRequestHandler {
 	 */
 	public Computer getComputer(String name)
 	{			
-		try (Connection connection = dbConnection.getConnection();) {
-			PreparedStatement query = connection.prepareStatement(GET_WITH_NAME);
-			query.setString(1, name);
-			ResultSet result = query.executeQuery();
-			connection.commit();
-			result.next();
-			
-			return computerDAOMapper.mapToComputer(result);
-		} catch (SQLException e) {
-			e.printStackTrace();
+		List<Computer> result = jdbcTemplate.query(GET_WITH_NAME, new Object[] { name }, new int[] { Types.VARCHAR}, this.computerDAOMapper);
+		if (result.isEmpty())
+		{
 			return new ComputerBuilder().build();
 		}
+		return result.get(0);
 	}
 	
 	/**
 	 * @return The list of all the computers
 	 */
-	public HashMap<Integer,Computer> getAllComputers()
+	public List<Computer> getAllComputers()
 	{
-		HashMap<Integer,Computer> computers = new HashMap<Integer,Computer>();
-		
-		try (Connection connection = dbConnection.getConnection();){
-			//Send the request to get all the computers
-			PreparedStatement query = connection.prepareStatement("SELECT * FROM `computer` LEFT JOIN `company` ON company_id = company.id");
-			ResultSet result = query.executeQuery();
-			connection.commit();
-			//Create the list of all the computers
-			while (result.next())
-			{
-				computers.put(result.getInt("computer.id"),computerDAOMapper.mapToComputer(result));
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return computers;
+		return jdbcTemplate.query("SELECT * FROM `computer` LEFT JOIN `company` ON company_id = company.id", this.computerDAOMapper);
 	}
 	
-	public ArrayList<Computer> getPage(int size, int offset, String search, String column, String sense)
+	public List<Computer> getPage(int size, int offset, String search, String column, String sense)
 	{
-		ArrayList<Computer> page = new ArrayList<Computer>();
-		try (Connection connection = dbConnection.getConnection();) {
-			
-			String str = GET_PAGE + column + " " + sense;
-			try {
-				int id = Integer.valueOf(search);
-				str = str+ " OR computer.id = " + id;
-			}
-			catch (Exception e)
-			{}
-			
-			PreparedStatement query = connection.prepareStatement(str + " LIMIT ? OFFSET ?");
-			dbConnection.getLogger().info("Getting page from database with size "+ size + ", offset "+ offset + ", searched "+search + " and order " + column);
-			query.setString(1, "%"+search.toLowerCase()+"%");
-			query.setString(2, "%"+search.toLowerCase()+"%");
-			//query.setString(3, column);
-			query.setInt(3, size);
-			query.setInt(4, offset);
-			dbConnection.getLogger().debug(query.toString());
-			ResultSet result = query.executeQuery();
-			connection.commit();
-			while (result.next())
-			{
-				page.add(computerDAOMapper.mapToComputer(result));
-			}
-			dbConnection.getLogger().info("Page gathered : " + page);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		String str = GET_PAGE + column + " " + sense;
+		try {
+			int id = Integer.valueOf(search);
+			str = str+ " OR computer.id = " + id;
 		}
+		catch (Exception e)
+		{}
+			
+		str = str + " LIMIT ? OFFSET ?";
+		List<Computer> page = jdbcTemplate.query(str, new Object[] { "%"+search.toLowerCase()+"%", "%"+search.toLowerCase()+"%", size, offset}, new int[] { Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER}, this.computerDAOMapper);
+
+		//dbConnection.getLogger().info("Page gathered : " + page);
 		return page;
 	}
 
 	public int getNbComputers(String search)
 	{
-		try (Connection connection = dbConnection.getConnection();) {
-			String str = GET_NB_COMPUTERS;
-			try {
-				int id = Integer.valueOf(search);
-				str = str+ " OR computer.id = " + id;
-			}
-			catch (Exception e)
-			{}
-			
-			PreparedStatement query = connection.prepareStatement(str);
-			dbConnection.getLogger().debug(str);
-			query.setString(1, "%"+search.toLowerCase()+"%");
-			query.setString(2, "%"+search.toLowerCase()+"%");
-			ResultSet result = query.executeQuery();
-			connection.commit();
-			result.next();
-			dbConnection.getLogger().info("Nb computers : " + result.getInt(1));
-
-			return result.getInt(1);
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return 0;
+		String str = GET_NB_COMPUTERS;
+		try {
+			int id = Integer.valueOf(search);
+			str = str+ " OR computer.id = " + id;
 		}
+		catch (Exception e)
+		{}
+			
+		//dbConnection.getLogger().info("Nb computers : " + result.getInt(1));
+
+		return jdbcTemplate.queryForObject(str, new Object[] {"%"+search.toLowerCase()+"%","%"+search.toLowerCase()+"%"}, new int[] {Types.VARCHAR, Types.VARCHAR}, Integer.class);
 	}
 	
 	/**
@@ -175,28 +112,7 @@ public class ComputerRequestHandler {
 	 */
 	public void createComputer(Computer computer, int company_id)
 	{
-		Connection connection = dbConnection.getConnection();
-		try {
-			//Use the mapper to get the representation of the computer to insert
-			PreparedStatement query = connection.prepareStatement("INSERT INTO `computer`"+ computerDAOMapper.mapToCreate(computer, company_id));
-			dbConnection.getLogger().debug("INSERT INTO `computer`"+ computerDAOMapper.mapToCreate(computer, company_id));
-			query.executeUpdate();
-			connection.commit();
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-			dbConnection.getLogger().error("Transaction failed");
-			throw new RollbackHappened();
-		}
-		finally
-		{
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		jdbcTemplate.update("INSERT INTO `computer`"+ computerDAOMapper.mapToCreate(computer, company_id));
 	}
 	
 	/**
@@ -204,28 +120,7 @@ public class ComputerRequestHandler {
 	 */
 	public void updateComputer(Computer computer,int company_id)
 	{
-		Connection connection = dbConnection.getConnection();
-		try {
-			//Use the mapper to get the representation of the computer to update
-			PreparedStatement query = connection.prepareStatement("UPDATE `computer` SET "+ computerDAOMapper.mapToUpdate(computer,company_id) + "WHERE id=?");
-			dbConnection.getLogger().debug("UPDATE `computer` SET "+ computerDAOMapper.mapToUpdate(computer, company_id) + "WHERE id=?");
-			query.setInt(1, computer.getId());
-			query.executeUpdate();
-			connection.commit();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			dbConnection.getLogger().error("Transaction failed");
-			throw new RollbackHappened();
-		}
-		finally
-		{
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		jdbcTemplate.update("UPDATE `computer` SET "+ computerDAOMapper.mapToUpdate(computer,company_id) + "WHERE id=?",new Object[] {computer.getId()}, new int[] {Types.INTEGER});
 	}
 	
 	/**
@@ -233,28 +128,7 @@ public class ComputerRequestHandler {
 	 */
 	public void deleteComputer(int id)
 	{
-		Connection connection = dbConnection.getConnection();
-		try {
-			PreparedStatement query = connection.prepareStatement("DELETE FROM `computer` WHERE id=?");
-			
-			dbConnection.getLogger().debug("DELETE FROM `computer` WHERE id="+ id);
-			query.setInt(1, id);
-			query.executeUpdate();
-			connection.commit();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			dbConnection.getLogger().error("Transaction failed");
-			throw new RollbackHappened();
-		}
-		finally
-		{
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		jdbcTemplate.update("DELETE FROM `computer` WHERE id=?",new Object[] { id }, new int[] {Types.INTEGER});
 	}
 	
 	/**
@@ -262,27 +136,7 @@ public class ComputerRequestHandler {
 	 */
 	public void deleteComputer(String name)
 	{
-		Connection connection = dbConnection.getConnection();
-		try {
-			PreparedStatement query = connection.prepareStatement("DELETE FROM `computer` WHERE name=?");
-			dbConnection.getLogger().debug("DELETE FROM `computer` WHERE name=?");
-			query.setString(1, name);
-			query.executeUpdate();
-			connection.commit();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			dbConnection.getLogger().error("Transaction failed");
-			throw new RollbackHappened();
-		}
-		finally
-		{
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		jdbcTemplate.update("DELETE FROM `computer` WHERE name=?",new Object[] { name }, new int[] {Types.VARCHAR});
 	}
 	
 }
