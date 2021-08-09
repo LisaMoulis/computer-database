@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
 <head>
 <title>Computer Database</title>
@@ -20,7 +21,7 @@
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                <c:out value="${page.nbComputers}"/> Computers found
+                <c:out value="${page.nbComputers}"/> <spring:message code="computersFound" text="default" />
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
@@ -28,12 +29,12 @@
 
                         <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${search}" />
                         <br/>
-                        <input type="submit" id="searchsubmit" name="searchsubmit" value="Filter by name" class="btn btn-primary" />
-                        <input type="submit" id="searchsubmit" name="searchsubmit" value="Filter by company" class="btn btn-primary" />
-                        <input type="submit" id="searchsubmit" name="searchsubmit" value="Cancel" class="btn btn-primary" />
+                        <button type="submit" id="searchsubmit" name="searchsubmit" value="Filter by name" class="btn btn-primary" >Filter by name</button>
+                        <button type="submit" id="searchsubmit" name="searchsubmit" value="Filter by company" class="btn btn-primary">Filter by company</button>
+                        <button type="submit" id="searchsubmit" name="searchsubmit" value="Cancel" class="btn btn-primary">Cancel</button>
                         <br/>
-                        <input type="submit" id="searchorder" name="searchorder" value="Ascending" class="btn btn-primary" />
-                        <input type="submit" id="searchorder" name="searchorder" value="Descending" class="btn btn-primary" />
+                        <button type="submit" id="searchorder" name="searchorder" value="Ascending" class="btn btn-primary" >Ascending</button>
+                        <button type="submit" id="searchorder" name="searchorder" value="Descending" class="btn btn-primary" >Descending</button>
                     </form>
                 </div>
                 <div class="pull-right">
