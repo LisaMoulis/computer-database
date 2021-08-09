@@ -2,9 +2,7 @@ package ui.servlets;
 
 import java.io.IOException;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
 import org.slf4j.Logger;
@@ -16,20 +14,18 @@ import mapper.ComputerDTOMapper;
 import model.ComputerList;
 import service.PageService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.*;
-import org.springframework.beans.factory.config.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@WebServlet("/computers")
+@RequestMapping("/computers")
 public class Computers extends HttpServlet{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private final Logger logger = LoggerFactory.getLogger(AddComputer.class);
-	private WebApplicationContext springContext;
-	
+
 	private PageService pageService;
 	
 	private ComputerDTOMapper computerDTOMapper;
@@ -45,21 +41,8 @@ public class Computers extends HttpServlet{
 	{
 		this.computerDTOMapper = computerDTOMapper;
 	}
-	
-	@Override
-	public void init(final ServletConfig config) throws ServletException {
-		super.init(config);
-		springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(config.getServletContext());
-		final AutowireCapableBeanFactory beanFactory = springContext.getAutowireCapableBeanFactory();
-		beanFactory.autowireBean(this);
-	}
-	
-	@Override
-	public String getServletInfo() {
-		return "Computer list";
-	}
-	
-	@Override
+
+	@RequestMapping(method = RequestMethod.GET)
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		
 		PageListDTO page;
@@ -129,6 +112,7 @@ public class Computers extends HttpServlet{
 	}
 	
 	@Override
+	@RequestMapping(method = RequestMethod.POST)
 	public void doPost(HttpServletRequest request,HttpServletResponse response) throws ServletException,IOException 
 	{		
 		logger.debug("Settings changed.");

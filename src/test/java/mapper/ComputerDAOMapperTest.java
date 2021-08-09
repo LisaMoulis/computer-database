@@ -43,7 +43,7 @@ public class ComputerDAOMapperTest {
 		Mockito.when(result.getTimestamp("discontinued")).thenReturn(Timestamp.valueOf("2021-02-02 00:00:00"));
 		Mockito.when(result.getString("company.name")).thenReturn("testcompany");
 		Mockito.when(result.getInt("computer.id")).thenReturn(3);
-		c = computerDAOMapper.mapToComputer(result);
+		c = computerDAOMapper.mapRow(result,1);
 		assertEquals("test",c.getName());
 		assertEquals(LocalDate.of(2021, 1, 1),c.getIntroduced());
 		assertEquals(LocalDate.of(2021, 2, 2),c.getDiscontinued());

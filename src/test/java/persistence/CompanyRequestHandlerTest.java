@@ -6,7 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -35,8 +36,7 @@ public class CompanyRequestHandlerTest {
 		Mockito.when(connection.prepareStatement(Mockito.anyString())).thenReturn(query);
 		
 		Mockito.when(dataSource.getConnection()).thenReturn(connection);
-		DBConnection dbConnection = new DBConnection(dataSource);
-		companyRequestHandler = new CompanyRequestHandler(dbConnection);
+		companyRequestHandler = new CompanyRequestHandler(dataSource);
 		
 	}
 
@@ -59,7 +59,7 @@ public class CompanyRequestHandlerTest {
 	@Test
 	public void testAllCompanies()
 	{		
-		ArrayList<Company> alls = companyRequestHandler.getAllCompanies();
+		List<Company> alls = companyRequestHandler.getAllCompanies();
 		Company c = alls.get(0);
 		assertEquals(3,c.getId());
 		assertEquals("testcompany",c.getName());

@@ -26,7 +26,6 @@ import model.Company;
 import model.Computer;
 import persistence.CompanyRequestHandler;
 import persistence.ComputerRequestHandler;
-import persistence.DBConnection;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:applicationContext.xml"})
@@ -62,9 +61,8 @@ public class ComputerServiceTest {
 	@Test
 	public void testGetComputerByName()
 	{
-		DBConnection dbConnection = new DBConnection(dataSource);
-		CompanyRequestHandler companyHandler = new CompanyRequestHandler(dbConnection);
-		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dbConnection,new ComputerDAOMapper());
+		CompanyRequestHandler companyHandler = new CompanyRequestHandler(dataSource);
+		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dataSource,new ComputerDAOMapper());
 		Computer c = new ComputerService(computerHandler,companyHandler).getComputer("test");
 		assertEquals("test",c.getName());
 		assertEquals(LocalDate.of(2021, 1, 1),c.getIntroduced());
@@ -75,9 +73,8 @@ public class ComputerServiceTest {
 	@Test
 	public void testGetComputerById()
 	{		
-		DBConnection dbConnection = new DBConnection(dataSource);
-		CompanyRequestHandler companyHandler = new CompanyRequestHandler(dbConnection);
-		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dbConnection,new ComputerDAOMapper());
+		CompanyRequestHandler companyHandler = new CompanyRequestHandler(dataSource);
+		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dataSource,new ComputerDAOMapper());
 		Computer c = new ComputerService(computerHandler,companyHandler).getComputer(3);
 		assertEquals("test",c.getName());
 		assertEquals(LocalDate.of(2021, 1, 1),c.getIntroduced());
@@ -88,9 +85,8 @@ public class ComputerServiceTest {
 	@Test
 	public void testDeleteComputerWithId() throws SQLException
 	{
-		DBConnection dbConnection = new DBConnection(dataSource);
-		CompanyRequestHandler companyHandler = new CompanyRequestHandler(dbConnection);
-		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dbConnection,new ComputerDAOMapper());
+		CompanyRequestHandler companyHandler = new CompanyRequestHandler(dataSource);
+		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dataSource,new ComputerDAOMapper());
 		PreparedStatement query = connection.prepareStatement("FROM `computer`");
 		new ComputerService(computerHandler,companyHandler).removeComputer(3);
 		ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
@@ -101,9 +97,8 @@ public class ComputerServiceTest {
 	@Test
 	public void testDeleteComputerWithName() throws SQLException
 	{
-		DBConnection dbConnection = new DBConnection(dataSource);
-		CompanyRequestHandler companyHandler = new CompanyRequestHandler(dbConnection);
-		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dbConnection,new ComputerDAOMapper());
+		CompanyRequestHandler companyHandler = new CompanyRequestHandler(dataSource);
+		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dataSource,new ComputerDAOMapper());
 		new ComputerService(computerHandler,companyHandler).removeComputer("test");
 		ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
 		Mockito.verify(query).setString(Mockito.anyInt(),argument.capture());
@@ -114,9 +109,8 @@ public class ComputerServiceTest {
 	public void testDeleteAllComputers() throws SQLException
 	{
 		String [] args = {"3"};
-		DBConnection dbConnection = new DBConnection(dataSource);
-		CompanyRequestHandler companyHandler = new CompanyRequestHandler(dbConnection);
-		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dbConnection,new ComputerDAOMapper());
+		CompanyRequestHandler companyHandler = new CompanyRequestHandler(dataSource);
+		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dataSource,new ComputerDAOMapper());
 		new ComputerService(computerHandler,companyHandler).removeSelectedComputer(args);
 		ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
 		Mockito.verify(query,Mockito.atLeastOnce()).setInt(Mockito.eq(1),argument.capture());
@@ -129,13 +123,12 @@ public class ComputerServiceTest {
 	{
 		Computer computer = new Computer(1,"test",LocalDate.of(2021,1,1),LocalDate.of(2021,2,2),"testcompany");
 		ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
-		DBConnection dbConnection = new DBConnection(dataSource);
 		CompanyRequestHandler companyHandler = Mockito.mock(CompanyRequestHandler.class);
 		Company comp = new Company(3,"testcompany");
 		Mockito.when(companyHandler.getCompany("testcompany")).thenReturn(comp);
 		Mockito.when(companyHandler.getCompany(3)).thenReturn(comp);
 		
-		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dbConnection,new ComputerDAOMapper());
+		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dataSource,new ComputerDAOMapper());
 		new ComputerService(computerHandler,companyHandler).createComputer(computer);
 		Mockito.verify(connection,Mockito.atLeastOnce()).prepareStatement(argument.capture());
 		List<String> values = argument.getAllValues();
@@ -148,12 +141,11 @@ public class ComputerServiceTest {
 	{
 		Computer computer = new Computer(1,"test",LocalDate.of(2021,1,1),LocalDate.of(2021,2,2),"testcompany");
 		ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
-		DBConnection dbConnection = new DBConnection(dataSource);
 		CompanyRequestHandler companyHandler = Mockito.mock(CompanyRequestHandler.class);
 		Company comp = new Company(3,"testcompany");
 		Mockito.when(companyHandler.getCompany("testcompany")).thenReturn(comp);
 		Mockito.when(companyHandler.getCompany(3)).thenReturn(comp);
-		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dbConnection,new ComputerDAOMapper());
+		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dataSource,new ComputerDAOMapper());
 		new ComputerService(computerHandler,companyHandler).updateComputer(computer);
 		Mockito.verify(connection,Mockito.atLeastOnce()).prepareStatement(argument.capture());
 		

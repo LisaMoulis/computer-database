@@ -29,6 +29,7 @@
 	<location>/WEB-INF/static/views/500.html</location>
 </error-page>
 
+
 <servlet>
     <servlet-name>dispatcher</servlet-name>
     <servlet-class>
@@ -38,7 +39,7 @@
 
 <servlet-mapping>
     <servlet-name>dispatcher</servlet-name>
-    <url-pattern>/*^(.html)</url-pattern>
+    <url-pattern>/</url-pattern>
 </servlet-mapping>
 
 </web-app>

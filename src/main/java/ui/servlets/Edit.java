@@ -4,16 +4,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.*;
-import javax.servlet.annotation.*;
 import javax.servlet.http.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.web.bind.annotation.*;
 
 import builder.ComputerDTOBuilder;
 import dto.ComputerDTO;
@@ -22,15 +19,10 @@ import model.*;
 import service.*;
 
 @Controller
-@WebServlet("/edit")
-public class Edit extends HttpServlet{
+@RequestMapping("/edit")
+public class Edit {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private final Logger logger = LoggerFactory.getLogger(Edit.class);
-	private WebApplicationContext springContext;
 	@Autowired
 	private CompanyService companyService;
 	@Autowired
@@ -38,23 +30,9 @@ public class Edit extends HttpServlet{
 	@Autowired
 	private ComputerDTOMapper computerDTOMapper;
 	
-	@Override
-	public void init(final ServletConfig config) throws ServletException {
-		super.init(config);
-		springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(config.getServletContext());
-		final AutowireCapableBeanFactory beanFactory = springContext.getAutowireCapableBeanFactory();
-		beanFactory.autowireBean(this);
-	}
-	
-	@Override
-	public String getServletInfo() {
-		return "Edit computer";
-	}
-	
-	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	@RequestMapping(method = RequestMethod.GET)
+	public String doGet(HttpServletRequest request, HttpServletResponse response,@RequestParam(name="id") int id) throws IOException, ServletException {
 		logger.debug("Edit page displayed.");
-		int id = Integer.parseInt(request.getParameter("id"));
 		ComputerDTO c = computerDTOMapper.mapToDTO(computerService.getComputer(id));
 		request.setAttribute("computer", c);
 		if (c.getCompany() != null)
@@ -68,29 +46,26 @@ public class Edit extends HttpServlet{
 		request.setAttribute("companies", companyService.getAllCompanies());
 		logger.debug("The companies are "+ companyService.getAllCompanies());
 		request.getRequestDispatcher("/WEB-INF/static/views/editComputer.jsp").forward(request, response);
+		return "editComputer";
 	}
 	
-	@Override
-	public void doPost(HttpServletRequest request,HttpServletResponse response) throws ServletException,IOException 
+	@RequestMapping(method = RequestMethod.POST)
+	public String doPost(HttpServletRequest request, HttpServletResponse response, @RequestParam("computerName") String computerName, @RequestParam(name = "introduced", required = false) String introduced, @RequestParam(name = "discontinued", required = false) String discontinued,  @RequestParam(name = "companyId", required = false, defaultValue = "-1") int companyId) throws IOException, ServletException 
 	{
-		logger.debug("Computer info retrieved. Trying to update the computer.");
+		logger.debug("Computer info retrieved. Trying to create the computer.");
 		ComputerDTOBuilder builder = new ComputerDTOBuilder();
-		builder.setName((String) request.getParameter("computerName"));
-		builder.setIntroduced((String) request.getParameter("introduced"));
-		builder.setDiscontinued( (String) request.getParameter("discontinued"));
-		if (request.getParameter("companyId") != null && !request.getParameter("companyId").equals("") && companyService.getCompany(Integer.parseInt((String) request.getParameter("companyId")))!= null)
-		{
-			int companyId = Integer.parseInt((String) request.getParameter("companyId"));
-			builder.setCompanyId(companyId);
-			builder.setCompany(companyService.getCompany(companyId).getName());
-		}
+		builder.setName(computerName);
+		builder.setIntroduced(introduced);
+		builder.setDiscontinued(discontinued);
+		builder.setCompanyId(companyId);
+		builder.setCompany(companyService.getCompany(companyId).getName());
 		Computer computer = computerDTOMapper.mapToComputer(builder.build());
 		computer.setId(Integer.valueOf(request.getParameter("id")));
 		try
 		{	
 			computerService.updateComputer(computer);
 			logger.debug("Computer updated. Redirection to the computer list.");
-			response.sendRedirect("computers");
+			return "redirect:/computers";
 		}
 		catch (RuntimeException e)
 		{
@@ -99,7 +74,9 @@ public class Edit extends HttpServlet{
 			logger.debug("Computer update failed. Error message : "+e.getMessage());
 			out.println("<script>alert(\""+ e.getMessage()+"\")</script>");
 			request.setAttribute("companies", companyService.getAllCompanies());
-			request.getRequestDispatcher("/WEB-INF/static/views/editComputer.jsp").include(request, response);
+			RequestDispatcher rd= request.getRequestDispatcher("/add");
+			rd.include(request, response);
+			return "editComputer";
 		}
 	}
 }

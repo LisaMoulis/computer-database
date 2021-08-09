@@ -23,7 +23,6 @@ import mapper.ComputerDAOMapper;
 import model.Company;
 import persistence.CompanyRequestHandler;
 import persistence.ComputerRequestHandler;
-import persistence.DBConnection;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:applicationContext.xml"})
@@ -52,9 +51,8 @@ public class CompanyServiceTest {
 	@Test
 	public void testGetCompanyByName()
 	{		
-		DBConnection dbConnection = new DBConnection(dataSource);
-		CompanyRequestHandler companyHandler = new CompanyRequestHandler(dbConnection);
-		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dbConnection,new ComputerDAOMapper());
+		CompanyRequestHandler companyHandler = new CompanyRequestHandler(dataSource);
+		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dataSource,new ComputerDAOMapper());
 		Company c = new CompanyService(computerHandler,companyHandler).getCompany("testcompany");
 		assertEquals("testcompany",c.getName());
 		assertEquals(3,c.getId());
@@ -63,9 +61,8 @@ public class CompanyServiceTest {
 	@Test
 	public void testGetCompanyById()
 	{		
-		DBConnection dbConnection = new DBConnection(dataSource);
-		CompanyRequestHandler companyHandler = new CompanyRequestHandler(dbConnection);
-		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dbConnection,new ComputerDAOMapper());
+		CompanyRequestHandler companyHandler = new CompanyRequestHandler(dataSource);
+		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dataSource,new ComputerDAOMapper());
 		Company c = new CompanyService(computerHandler, companyHandler).getCompany(3);
 		assertEquals("testcompany",c.getName());
 		assertEquals(3,c.getId());
@@ -74,9 +71,8 @@ public class CompanyServiceTest {
 	@Test
 	public void testDeleteCompany() throws SQLException
 	{
-		DBConnection dbConnection = new DBConnection(dataSource);
-		CompanyRequestHandler companyHandler = new CompanyRequestHandler(dbConnection);
-		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dbConnection,new ComputerDAOMapper());
+		CompanyRequestHandler companyHandler = new CompanyRequestHandler(dataSource);
+		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dataSource,new ComputerDAOMapper());
 		new CompanyService(computerHandler,companyHandler).removeCompany("testcompany");
 		ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
 		Mockito.verify(query).setInt(Mockito.anyInt(),argument.capture());
