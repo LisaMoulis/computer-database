@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import builder.ComputerDTOBuilder;
 import dto.ComputerDTO;
@@ -31,22 +32,23 @@ public class Edit {
 	private ComputerDTOMapper computerDTOMapper;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public String doGet(HttpServletRequest request, HttpServletResponse response,@RequestParam(name="id") int id) throws IOException, ServletException {
+	public ModelAndView doGet(@RequestParam(name="id") int id) throws IOException, ServletException {
+		ModelAndView page = new ModelAndView("editComputer");
 		logger.debug("Edit page displayed.");
 		ComputerDTO c = computerDTOMapper.mapToDTO(computerService.getComputer(id));
-		request.setAttribute("computer", c);
+		page.addObject("computer", c);
 		if (c.getCompany() != null)
 		{
-			request.setAttribute("companyId",companyService.getCompany(c.getCompany()).getId());
+			page.addObject("companyId",companyService.getCompany(c.getCompany()).getId());
 		}
 		else
 		{
-			request.setAttribute("companyId",0);
+			page.addObject("companyId",0);
 		}
-		request.setAttribute("companies", companyService.getAllCompanies());
+		page.addObject("companies", companyService.getAllCompanies());
 		logger.debug("The companies are "+ companyService.getAllCompanies());
-		request.getRequestDispatcher("/WEB-INF/static/views/editComputer.jsp").forward(request, response);
-		return "editComputer";
+		//request.getRequestDispatcher("/WEB-INF/static/views/editComputer.jsp").forward(request, response);
+		return page;
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)

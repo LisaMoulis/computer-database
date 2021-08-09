@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import builder.ComputerDTOBuilder;
 import model.*;
@@ -47,14 +48,15 @@ public class AddComputer {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public String doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	public ModelAndView doGet() throws IOException, ServletException {
+		ModelAndView page = new ModelAndView("addComputer");
 		logger.debug("Add page displayed.");
 		CompanyList companies = new CompanyList();
 		companies.setCompanies(companyService.getAllCompanies());
-		request.setAttribute("companies", companies.getCompanies());
+		page.addObject("companies",companies.getCompanies());
 		logger.debug("The companies are "+ companies.getCompanies());
-		request.getRequestDispatcher("/WEB-INF/static/views/addComputer.jsp").forward(request, response);
-		return "addComputer";
+
+		return page;
 	}
 	
     @RequestMapping(method = RequestMethod.POST)
