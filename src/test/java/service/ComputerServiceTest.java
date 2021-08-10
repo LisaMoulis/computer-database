@@ -89,11 +89,10 @@ public class ComputerServiceTest {
 	public void testDeleteComputerWithId() throws SQLException
 	{
 		CompanyRequestHandler companyHandler = new CompanyRequestHandler(dataSource);
-		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dataSource,new ComputerDAOMapper());
-		PreparedStatement query = connection.prepareStatement("FROM `computer`");
+		ComputerRequestHandler computerHandler = Mockito.mock(ComputerRequestHandler.class);
 		new ComputerService(computerHandler,companyHandler).removeComputer(3);
 		ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
-		Mockito.verify(query).setInt(Mockito.eq(1),argument.capture());
+		Mockito.verify(computerHandler).deleteComputer(argument.capture());
 		assertEquals(3,argument.getValue().intValue());	
 	}
 	
@@ -113,10 +112,10 @@ public class ComputerServiceTest {
 	{
 		String [] args = {"3"};
 		CompanyRequestHandler companyHandler = new CompanyRequestHandler(dataSource);
-		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dataSource,new ComputerDAOMapper());
+		ComputerRequestHandler computerHandler = Mockito.mock(ComputerRequestHandler.class);
 		new ComputerService(computerHandler,companyHandler).removeSelectedComputer(args);
 		ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
-		Mockito.verify(query,Mockito.atLeastOnce()).setInt(Mockito.eq(1),argument.capture());
+		Mockito.verify(computerHandler,Mockito.atLeastOnce()).deleteComputer(argument.capture());
 		//List<String> values = argument.getAllValues()
 		assertEquals(3,argument.getValue().intValue());	
 	}
@@ -131,12 +130,12 @@ public class ComputerServiceTest {
 		Mockito.when(companyHandler.getCompany("testcompany")).thenReturn(comp);
 		Mockito.when(companyHandler.getCompany(3)).thenReturn(comp);
 		
-		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dataSource,new ComputerDAOMapper());
+		ComputerRequestHandler computerHandler = Mockito.mock(ComputerRequestHandler.class);
 		new ComputerService(computerHandler,companyHandler).createComputer(computer);
-		Mockito.verify(connection,Mockito.atLeastOnce()).prepareStatement(argument.capture());
-		List<String> values = argument.getAllValues();
+		Mockito.verify(computerHandler,Mockito.atLeastOnce()).createComputer(computer, 3);
+		//List<String> values = argument.getAllValues();
 		//System.out.println(values);
-		assertEquals(values.toString(),"INSERT INTO `computer`" + new ComputerDAOMapper().mapToCreate(computer,3), argument.getValue());
+		//assertEquals(values.toString(),"INSERT INTO `computer`" + new ComputerDAOMapper().mapToCreate(computer,3), argument.getValue());
 	}
 	
 	@Test

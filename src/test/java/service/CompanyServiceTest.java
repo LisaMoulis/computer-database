@@ -73,11 +73,13 @@ public class CompanyServiceTest {
 	@Test
 	public void testDeleteCompany() throws SQLException
 	{
-		CompanyRequestHandler companyHandler = new CompanyRequestHandler(dataSource);
+		CompanyRequestHandler companyHandler =  Mockito.mock(CompanyRequestHandler.class);
+		Mockito.when(companyHandler.getCompany(3)).thenReturn(new Company(3,"testcompany"));
+		Mockito.when(companyHandler.getCompany("testcompany")).thenReturn(new Company(3,"testcompany"));
 		ComputerRequestHandler computerHandler = new ComputerRequestHandler(dataSource,new ComputerDAOMapper());
 		new CompanyService(computerHandler,companyHandler).removeCompany("testcompany");
 		ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
-		Mockito.verify(query).setInt(Mockito.anyInt(),argument.capture());
+		Mockito.verify(companyHandler).deleteCompany(argument.capture());
 		assertEquals(3,argument.getValue().intValue());	
 	}
 }

@@ -19,18 +19,6 @@ public class ComputerDTOTest extends TestCase {
 	
 	public void testFullRequest() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
 	{
-		/*Mockito.when(request.getParameter("computerName")).thenReturn("test");
-		Mockito.when(request.getParameter("introduced")).thenReturn("2021-01-01");
-		Mockito.when(request.getParameter("discontinued")).thenReturn("2021-02-02");
-		Mockito.when(request.getParameter("companyId")).thenReturn("3");
-		
-		CompanyService service =  Mockito.mock(CompanyService.class);
-		Mockito.when(service.getCompany(3)).thenReturn(new Company(3,"testcompany"));
-		Mockito.when(service.getCompany("testcompany")).thenReturn(new Company(3,"testcompany"));
-		
-		Field instance = CompanyService.class.getDeclaredField("instance");
-        instance.setAccessible(true);
-        instance.set(instance, service);*/
 		ComputerDTO dto = new ComputerDTOBuilder().setName("test").setIntroduced("2021-01-01").setDiscontinued("2021-02-02").setCompany("testcompany").setCompanyId(3).build();
 		assertEquals("test",dto.getName());
 		assertEquals("2021-01-01",dto.getIntroduced());
