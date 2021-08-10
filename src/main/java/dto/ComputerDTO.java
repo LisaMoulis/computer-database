@@ -1,8 +1,12 @@
 package dto;
 
+import javax.validation.constraints.*;
+
 public class ComputerDTO {
 
+	@NotNull
 	private int id = -1;
+	@NotBlank
 	private String name;
 	private String introduced;
 	private String discontinued;
@@ -18,6 +22,9 @@ public class ComputerDTO {
 		this.company = company;
 		this.companyId = companyId;
 	}
+	
+	public ComputerDTO()
+	{}
 	
 	public int getId()
 	{

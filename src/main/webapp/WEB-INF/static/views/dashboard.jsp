@@ -3,7 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
 <head>
-<title>Computer Database</title>
+<title><spring:message code="computerDatabase" text="Computer Database"/></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
@@ -15,13 +15,13 @@
 	<%@ page import="model.ComputerList" %>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="computers"> Application - Computer Database </a>
+            <a class="navbar-brand" href="computers"> <spring:message code="appName" text="Application - Computers Database"/> </a>
         </div>
     </header>
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                <c:out value="${page.nbComputers}"/> <spring:message code="computersFound" text="default" />
+                <c:out value="${page.nbComputers}"/> <spring:message code="computersFound" text="Computers Found" />
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
@@ -29,17 +29,17 @@
 
                         <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${search}" />
                         <br/>
-                        <button type="submit" id="searchsubmit" name="searchsubmit" value="Filter by name" class="btn btn-primary" >Filter by name</button>
-                        <button type="submit" id="searchsubmit" name="searchsubmit" value="Filter by company" class="btn btn-primary">Filter by company</button>
-                        <button type="submit" id="searchsubmit" name="searchsubmit" value="Cancel" class="btn btn-primary">Cancel</button>
+                        <button type="submit" id="searchsubmit" name="searchsubmit" value="Filter by name" class="btn btn-primary" ><spring:message code="filterName" text="Filter by name"/></button>
+                        <button type="submit" id="searchsubmit" name="searchsubmit" value="Filter by company" class="btn btn-primary"><spring:message code="filterCompany" text="Filter by company"/></button>
+                        <button type="submit" id="searchsubmit" name="searchsubmit" value="Cancel" class="btn btn-primary"><spring:message code="cancel" text="Cancel"/></button>
                         <br/>
-                        <button type="submit" id="searchorder" name="searchorder" value="Ascending" class="btn btn-primary" >Ascending</button>
-                        <button type="submit" id="searchorder" name="searchorder" value="Descending" class="btn btn-primary" >Descending</button>
+                        <button type="submit" id="searchorder" name="searchorder" value="Ascending" class="btn btn-primary" ><spring:message code="ascending" text="Ascending"/></button>
+                        <button type="submit" id="searchorder" name="searchorder" value="Descending" class="btn btn-primary" ><spring:message code="descending" text="Descending"/></button>
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="add">Add Computer</a> 
-                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
+                    <a class="btn btn-success" id="addComputer" href="add"><spring:message code="add" text="Add Computer"/></a> 
+                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message code="edit" text="Edit"/></a>
                 </div>
             </div>
         </div>
@@ -63,18 +63,18 @@
                             </span>
                         </th>
                         <th>
-                            Computer name
+                            <spring:message code="name" text="Computer name"/>
                         </th>
                         <th>
-                            Introduced date
+                            <spring:message code="introduced" text="Introduced date"/>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                            Discontinued date
+                            <spring:message code="discontinued" text="Discontinued date"/>
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                            Company
+                            <spring:message code="company" text="Company"/>
                         </th>
 
                     </tr>
