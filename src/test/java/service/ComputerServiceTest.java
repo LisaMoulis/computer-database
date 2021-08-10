@@ -18,6 +18,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -28,6 +29,7 @@ import persistence.CompanyRequestHandler;
 import persistence.ComputerRequestHandler;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
 @ContextConfiguration(locations = {"classpath:applicationContext.xml"})
 @TestExecutionListeners(DependencyInjectionTestExecutionListener.class)
 public class ComputerServiceTest {
@@ -54,6 +56,7 @@ public class ComputerServiceTest {
 		
 		Mockito.when(query.executeQuery()).thenReturn(result);
 		Mockito.when(connection.prepareStatement(Mockito.anyString())).thenReturn(query);
+		Mockito.when(connection.createStatement()).thenReturn(query);
 		
 		Mockito.when(dataSource.getConnection()).thenReturn(connection);
 	}

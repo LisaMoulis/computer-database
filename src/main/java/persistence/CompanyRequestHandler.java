@@ -28,7 +28,6 @@ public class CompanyRequestHandler {
 	 */
 	
 	private JdbcTemplate jdbcTemplate;
-	private DBConnection dbConnection;
 	
 	@Autowired
 	public CompanyRequestHandler(DataSource dataSource)

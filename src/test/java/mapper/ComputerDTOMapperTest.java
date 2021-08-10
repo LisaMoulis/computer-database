@@ -1,31 +1,41 @@
 package mapper;
 
 import dto.ComputerDTO;
-import junit.framework.TestCase;
 import model.Company;
 import model.Computer;
 import service.CompanyService;
 
-import java.lang.reflect.Field;
+import static org.junit.Assert.*;
+
 import java.time.LocalDate;
 
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
 @ContextConfiguration(locations = {"classpath:applicationContext.xml"})
 @TestExecutionListeners(DependencyInjectionTestExecutionListener.class)
-public class ComputerDTOMapperTest extends TestCase {
+public class ComputerDTOMapperTest {
 
-	@Autowired
 	private ComputerDTOMapper computerDTOMapper;
+	
+	@Before
+	public void setMapper()
+	{
+		CompanyService service =  Mockito.mock(CompanyService.class);
+		Mockito.when(service.getCompany(3)).thenReturn(new Company(3,"testcompany"));
+		Mockito.when(service.getCompany("testcompany")).thenReturn(new Company(3,"testcompany"));
+		
+		computerDTOMapper = new ComputerDTOMapper(service);
+	}
 	
 	@Test
 	public void testToComputer() throws Exception
@@ -40,18 +50,10 @@ public class ComputerDTOMapperTest extends TestCase {
 		assertEquals("testcompany",c.getCompany());
 	}
 	
+	@Test
 	public void testToDTO() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
 	{
 		Computer c = new Computer(1,"test",LocalDate.of(2021,1,1),LocalDate.of(2021,2,2),"testcompany");
-		
-		CompanyService service =  Mockito.mock(CompanyService.class);
-		Mockito.when(service.getCompany(3)).thenReturn(new Company(3,"testcompany"));
-		Mockito.when(service.getCompany("testcompany")).thenReturn(new Company(3,"testcompany"));
-		
-		Field instance = CompanyService.class.getDeclaredField("instance");
-        instance.setAccessible(true);
-        instance.set(instance, service);
-		
 		ComputerDTO dto = computerDTOMapper.mapToDTO(c);
 		
 		assertEquals("test",dto.getName());

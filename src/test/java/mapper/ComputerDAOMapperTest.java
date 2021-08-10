@@ -6,6 +6,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import static org.junit.Assert.*;
 
@@ -19,8 +20,8 @@ import org.mockito.Mockito;
 
 import model.Computer;
 
-
 @RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
 @ContextConfiguration(locations = {"classpath:applicationContext.xml"})
 @TestExecutionListeners(DependencyInjectionTestExecutionListener.class)
 public class ComputerDAOMapperTest {

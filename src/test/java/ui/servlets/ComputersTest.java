@@ -23,12 +23,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import dto.PageListDTO;
 import mapper.ComputerDTOMapper;
 import service.PageService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
 @ContextConfiguration(locations = {"classpath:applicationContext.xml"})
 @TestExecutionListeners(DependencyInjectionTestExecutionListener.class)
 public class ComputersTest {
@@ -155,12 +157,6 @@ public class ComputersTest {
 	}
 	
 	@Test
-	public void testInfo()
-	{
-		assertEquals("Computer list",servlet.getServletInfo());
-	}	
-	
-	@Test
 	public void testEmpty() throws IOException, ServletException
 	{
 		HttpServletRequest request = mock(HttpServletRequest.class);       
@@ -173,9 +169,7 @@ public class ComputersTest {
 		assertNotNull(page);
 		assertEquals("computer.name",page.getOrder());
 		assertEquals(1,page.getPage());
-		assertEquals(10,page.getSize());
-
-	    
+		assertEquals(10,page.getSize()); 
 	}
 	
 	@Test

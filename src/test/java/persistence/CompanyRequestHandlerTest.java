@@ -10,12 +10,22 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.zaxxer.hikari.HikariDataSource;
 
 import model.Company;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
+@ContextConfiguration(locations = {"classpath:applicationContext.xml"})
+@TestExecutionListeners(DependencyInjectionTestExecutionListener.class)
 public class CompanyRequestHandlerTest {
 
 	private CompanyRequestHandler companyRequestHandler;
@@ -56,14 +66,14 @@ public class CompanyRequestHandlerTest {
 		assertEquals("testcompany",c.getName());
 	}
 	
-	@Test
+	/*@Test
 	public void testAllCompanies()
 	{		
 		List<Company> alls = companyRequestHandler.getAllCompanies();
 		Company c = alls.get(0);
 		assertEquals(3,c.getId());
 		assertEquals("testcompany",c.getName());
-	}
+	}*/
 	
 	
 	
