@@ -2,15 +2,16 @@ package dto;
 
 import javax.validation.constraints.*;
 
-public class ComputerDTO {
+import validation.ValidateDates;
 
-	@NotNull
+@ValidateDates(message = "Invalid date!")
+public class ComputerDTO {
 	private int id = -1;
-	@NotBlank
-	private String name;
-	private String introduced;
-	private String discontinued;
-	private String company;
+	@NotBlank(message="The name is empty!")
+	private String name = "";
+	private String introduced = "";
+	private String discontinued = "";
+	private String company = "";
 	private int companyId = -1;
 	
 	public ComputerDTO(int id, String name, String introduced, String discontinued, String company, int companyId)
@@ -57,6 +58,32 @@ public class ComputerDTO {
 		return this.companyId;
 	}
 	
+	
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setIntroduced(String introduced) {
+		this.introduced = introduced;
+	}
+
+	public void setDiscontinued(String discontinued) {
+		this.discontinued = discontinued;
+	}
+
+	public void setCompany(String company) {
+		this.company = company;
+	}
+
+	public void setCompanyId(int companyId) {
+		this.companyId = companyId;
+	}
+
 	@Override
 	public boolean equals(Object o)
 	{

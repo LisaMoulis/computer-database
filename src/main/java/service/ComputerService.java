@@ -4,6 +4,9 @@ import model.Company;
 import model.Computer;
 import persistence.CompanyRequestHandler;
 import persistence.ComputerRequestHandler;
+import validation.Validator;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -53,7 +56,7 @@ public class ComputerService {
 		}
 	}
 	
-	public void createComputer(Computer computer) throws RuntimeException
+	public void createComputer(@Valid Computer computer) throws RuntimeException
 	{	
 		Validator.validate(computer);
 		int company_id = -1;

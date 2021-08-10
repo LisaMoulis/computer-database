@@ -39,12 +39,6 @@ public class AddComputerTest {
 	}
 	
 	@Test
-	public void testInfo()
-	{
-		assertEquals("Add computer",servlet.getServletInfo());
-	}
-	
-	@Test
 	public void testEmpty() throws IOException, ServletException
 	{
 		HttpServletRequest request = mock(HttpServletRequest.class);       

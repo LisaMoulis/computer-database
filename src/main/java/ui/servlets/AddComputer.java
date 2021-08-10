@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import builder.ComputerDTOBuilder;
+import dto.ComputerDTO;
 import model.*;
 import service.CompanyService;
 import service.ComputerService;
@@ -60,17 +61,11 @@ public class AddComputer {
 	}
 	
     @RequestMapping(method = RequestMethod.POST)
-	public String doPost(HttpServletRequest request, HttpServletResponse response, @RequestParam("computerName") String computerName, @RequestParam(name = "introduced", required = false) String introduced, @RequestParam(name = "discontinued", required = false) String discontinued,  @RequestParam(name = "companyId", required = false, defaultValue = "-1") int companyId) throws IOException, ServletException 
+	public String doPost(HttpServletRequest request, HttpServletResponse response, @Valid ComputerDTO dto) throws IOException, ServletException 
 	{
 		logger.debug("Computer info retrieved. Trying to create the computer.");
-		ComputerDTOBuilder builder = new ComputerDTOBuilder();
-		builder.setName(computerName);
-		builder.setIntroduced(introduced);
-		builder.setDiscontinued(discontinued);
-		builder.setCompanyId(companyId);
-		builder.setCompany(companyService.getCompany(companyId).getName());
 		
-		Computer computer = computerDTOMapper.mapToComputer(builder.build());
+		Computer computer = computerDTOMapper.mapToComputer(dto);
 		try
 		{
 			computerService.createComputer(computer);

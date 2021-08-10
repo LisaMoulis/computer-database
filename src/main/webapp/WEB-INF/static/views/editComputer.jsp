@@ -32,7 +32,7 @@
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName"><spring:message code="name" text="Computer name"/></label>
-                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name" value="${computer.name}">
+                                <input type="text" class="form-control" id="computerName" name="name" placeholder="Computer name" value="${computer.name}">
                             </div>
                             <div class="form-group">
                                 <label for="introduced"><spring:message code="introduced" text="Introduced date"/></label>

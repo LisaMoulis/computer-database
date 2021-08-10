@@ -28,7 +28,6 @@ public class Delete {
 	{
 		logger.debug("Computer info retrieved. Trying to delete the computers.");
 		String[] selection = select.split(",");
-			
 		try
 		{
 			computerService.removeSelectedComputer(selection);

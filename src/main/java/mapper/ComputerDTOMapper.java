@@ -38,7 +38,7 @@ public class ComputerDTOMapper {
 	 */
 	public Computer mapToComputer(ComputerDTO dto)
 	{
-		ComputerBuilder builder = new ComputerBuilder().setName(dto.getName());
+		ComputerBuilder builder = new ComputerBuilder().setName(dto.getName()).setId(dto.getId());
 		//Verify if some columns are empty before getting them
 		if (dto.getIntroduced() != null && dto.getIntroduced() != "")
 		{
@@ -49,9 +49,13 @@ public class ComputerDTOMapper {
 		{
 			builder.setDiscontinued(LocalDate.parse(dto.getDiscontinued(), DateTimeFormatter.ISO_LOCAL_DATE));
 		}
-		if (dto.getCompany() != null)
+		if (dto.getCompanyId() > 0)
 		{
-			builder.setCompany(dto.getCompany());
+			Company comp = companyService.getCompany(dto.getCompanyId());
+			if (comp != null)
+			{
+				builder.setCompany(comp.getName());
+			}
 		}
 		return builder.build();
 	}

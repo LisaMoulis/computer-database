@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import builder.ComputerBuilder;
 import junit.framework.TestCase;
 import model.Computer;
+import validation.Validator;
 
 public class ValidatorTest extends TestCase {
 
