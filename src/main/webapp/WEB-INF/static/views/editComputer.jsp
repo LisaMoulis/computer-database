@@ -60,8 +60,8 @@
                             </div>            
                         </fieldset>
                         <div class="actions pull-right">
-                            <input type="submit" value="Edit" class="btn btn-primary">
-                            or
+                            <button type="submit" value="Edit" class="btn btn-primary"><spring:message code="edit" text="Edit"/></button>
+                            <spring:message code="or" text="or"/>
                             <a href="computers" class="btn btn-default"><spring:message code="cancel" text="Cancel"/></a>
                         </div>
                     </form>

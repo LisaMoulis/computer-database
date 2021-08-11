@@ -1,11 +1,14 @@
 package ui.servlets;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -13,11 +16,14 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ErrorPages {
 
+	@Autowired
+	private ResourceBundleMessageSource messages;
+	
 	@RequestMapping("/403")
 	public ModelAndView page403(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		ModelAndView page = new ModelAndView("error");
-		page.addObject("message","Error 403: Access denied!");
+		page.addObject("message",messages.getMessage("error403",new Object[] {},Locale.getDefault()));
 		return page;
 	}
 	
@@ -25,7 +31,7 @@ public class ErrorPages {
 	public ModelAndView page404(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		ModelAndView page = new ModelAndView("error");
-		page.addObject("message","Error 404: Page not found. Too bad bitch!");
+		page.addObject("message",messages.getMessage("error404",new Object[] {},Locale.getDefault()));
 		return page;
 	}
 	
@@ -33,7 +39,7 @@ public class ErrorPages {
 	public ModelAndView page500(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		ModelAndView page = new ModelAndView("error");
-		page.addObject("message","Error 500: An error has occured!");
+		page.addObject("message",messages.getMessage("error500",new Object[] {},Locale.getDefault()));
 		return page;
 	}
 }
