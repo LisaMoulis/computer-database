@@ -26,8 +26,9 @@
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
                     <form id="searchForm" action="#" method="GET" class="form-inline">
-
-                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${search}" />
+						<input type="hidden" name="page" value="${page.page}">
+						<input type="hidden" name="size" value="${page.size}">
+                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${page.search}" />
                         <br/>
                         <button type="submit" id="searchsubmit" name="searchsubmit" value="Filter by name" class="btn btn-primary" ><spring:message code="filterName" text="Filter by name"/></button>
                         <button type="submit" id="searchsubmit" name="searchsubmit" value="Filter by company" class="btn btn-primary"><spring:message code="filterCompany" text="Filter by company"/></button>
@@ -103,7 +104,7 @@
         <div class="container text-center">
             <ul class="pagination">
                 <li>
-                    <a href="computers?page=${page.page-1}&size=${page.size}" aria-label="Previous">
+                    <a href="computers?page=${page.page-1}&size=${page.size}&search=${page.search}" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
@@ -122,11 +123,11 @@
               	</c:if>
               	
 				<c:forEach begin="${beginning}" end="${end}" var="i" step="1">
-					<li><a href="computers?page=${i}&size=${page.size}&search=${search}">${i}</a></li>
+					<li><a href="computers?page=${i}&size=${page.size}&search=${page.search}">${i}</a></li>
 				</c:forEach>
 				
               <li>
-                <a href="computers?page=${page.page+1}&size=${page.size}&search=${search}" aria-label="Next">
+                <a href="computers?page=${page.page+1}&size=${page.size}&search=${page.search}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

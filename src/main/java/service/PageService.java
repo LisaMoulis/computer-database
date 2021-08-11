@@ -20,15 +20,6 @@ public class PageService {
 	public PageService()
 	{}
 	
-	/*public static PageService getInstance()
-	{
-		if (instance == null)
-		{
-			instance = new PageService();
-		}
-		return instance;
-	}*/
-	
 	public List<Computer> getPage(ComputerList page, String search, String column, String sense)
 	{
 		page.setComputers(computerRequestHandler.getPage(page.getSize(),page.getOffset(),search,column,sense.toUpperCase()));

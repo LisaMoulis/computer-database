@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.List;
 
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -124,7 +123,6 @@ public class ComputerServiceTest {
 	public void testCreate() throws SQLException
 	{
 		Computer computer = new Computer(1,"test",LocalDate.of(2021,1,1),LocalDate.of(2021,2,2),"testcompany");
-		ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
 		CompanyRequestHandler companyHandler = Mockito.mock(CompanyRequestHandler.class);
 		Company comp = new Company(3,"testcompany");
 		Mockito.when(companyHandler.getCompany("testcompany")).thenReturn(comp);
@@ -133,9 +131,6 @@ public class ComputerServiceTest {
 		ComputerRequestHandler computerHandler = Mockito.mock(ComputerRequestHandler.class);
 		new ComputerService(computerHandler,companyHandler).createComputer(computer);
 		Mockito.verify(computerHandler,Mockito.atLeastOnce()).createComputer(computer, 3);
-		//List<String> values = argument.getAllValues();
-		//System.out.println(values);
-		//assertEquals(values.toString(),"INSERT INTO `computer`" + new ComputerDAOMapper().mapToCreate(computer,3), argument.getValue());
 	}
 	
 	@Test

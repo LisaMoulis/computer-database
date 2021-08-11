@@ -2,14 +2,17 @@ package dto;
 
 import java.util.List;
 
+import javax.validation.constraints.*;
+
 public class PageListDTO {
 	
+	@Min(0)
 	private int page = 1;
+	@Min(1)
 	private int size = 10;
+	@NotNull
 	private String search = "";
-	private String order = "computer.name";
 	private int nbComputers = 1;
-	private String sense = "asc";
 	
 	private List<ComputerDTO> computers;
 	
@@ -20,18 +23,7 @@ public class PageListDTO {
 	
 	public void setPage(int page)
 	{
-		if (page < 1)
-		{
-			this.page = 1;
-		}
-		else if (page > getNbPages())
-		{
-			this.page = getNbPages();
-		}
-		else
-		{
-			this.page = page;
-		}
+		this.page = page;
 	}
 	
 	public int getSize()
@@ -74,16 +66,6 @@ public class PageListDTO {
 		this.nbComputers = nb;
 	}
 	
-	public String getOrder()
-	{
-		return this.order;
-	}
-	
-	public void setOrder(String o)
-	{
-		this.order = o;
-	}
-	
 	public String getSearch() {
 		return search;
 	}
@@ -91,15 +73,5 @@ public class PageListDTO {
 	public void setSearch(String s)
 	{
 		this.search = s;
-	}
-
-	public String getSense()
-	{
-		return this.sense;
-	}
-	
-	public void setSense(String str)
-	{
-		this.sense = str;
 	}
 }
