@@ -40,12 +40,12 @@ public class ComputerDTOMapper {
 	{
 		ComputerBuilder builder = new ComputerBuilder().setName(dto.getName()).setId(dto.getId());
 		//Verify if some columns are empty before getting them
-		if (dto.getIntroduced() != null && dto.getIntroduced() != "")
+		if (dto.getIntroduced() != null && !dto.getIntroduced().equals(""))
 		{
 			builder.setIntroduced(LocalDate.parse(dto.getIntroduced(), DateTimeFormatter.ISO_LOCAL_DATE));
 		}
 		
-		if (dto.getDiscontinued() != null && dto.getDiscontinued() != "")
+		if (dto.getDiscontinued() != null && !dto.getDiscontinued().equals(""))
 		{
 			builder.setDiscontinued(LocalDate.parse(dto.getDiscontinued(), DateTimeFormatter.ISO_LOCAL_DATE));
 		}
