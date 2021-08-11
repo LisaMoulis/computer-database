@@ -50,7 +50,7 @@ public class Computers {
 		}
 		else if (page.getPage() > page.getNbPages())
 		{
-			page.setPage( page.getNbPages());
+			page.setPage(page.getNbPages());
 		}
 		ComputerList list = new ComputerList(page.getPage(),page.getSize());
 		pageService.getPage(list, page.getSearch(), settings.getFilter(),settings.getOrder());
@@ -58,7 +58,7 @@ public class Computers {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView doPost(HttpServletRequest request) throws ServletException,IOException 
+	public ModelAndView emptyGet(HttpServletRequest request) throws ServletException,IOException 
 	{	
 		ModelAndView view = new ModelAndView("/dashboard");
 		PageSettings settings = new PageSettings();

@@ -15,21 +15,8 @@ public class PageListDTOTest extends TestCase {
 		assertEquals(1,page.getPage());
 		assertEquals(10,page.getSize());
 		assertEquals("",page.getSearch());
-		assertEquals("computer.name",page.getOrder());
 	}
-	
-	public void testPageDownLimit()
-	{
-		page.setPage(0);;
-		assertEquals(1,page.getPage());
-	}
-	
-	public void testPageUpperLimit()
-	{
-		page.setPage(page.getNbPages()+1);
-		assertEquals(page.getNbPages(),page.getPage());
-	}
-	
+		
 	public void testSearch()
 	{
 		page.setSearch("something");
@@ -40,12 +27,6 @@ public class PageListDTOTest extends TestCase {
 	{
 		page.setSize(20);
 		assertEquals(20,page.getSize());
-	}
-	
-	public void testOrder()
-	{
-		page.setOrder("something else");
-		assertEquals("something else",page.getOrder());
 	}
 	
 	public void testPage()

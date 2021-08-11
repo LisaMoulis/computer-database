@@ -24,8 +24,10 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.web.servlet.ModelAndView;
 
 import dto.PageListDTO;
+import dto.PageSettings;
 import mapper.ComputerDTOMapper;
 import service.PageService;
 
@@ -159,42 +161,73 @@ public class ComputersTest {
 	@Test
 	public void testEmpty() throws IOException, ServletException
 	{
-		HttpServletRequest request = mock(HttpServletRequest.class);       
-	    HttpServletResponse response = mock(HttpServletResponse.class);
+		HttpServletRequest request = mock(HttpServletRequest.class);  
 	    
 	    Mockito.when(request.getSession()).thenReturn(session);
 	    Mockito.when(request.getRequestDispatcher("/WEB-INF/static/views/dashboard.jsp")).thenReturn(dispatcher);
-		servlet.doPost(request, response);
-		PageListDTO page = (PageListDTO) session.getAttribute("page");
+		ModelAndView view = servlet.emptyGet(request);
+		PageListDTO page = (PageListDTO) view.getModel().get("page");
+		PageSettings settings = (PageSettings) session.getAttribute("pageSettings");
 		assertNotNull(page);
-		assertEquals("computer.name",page.getOrder());
+		assertEquals("",page.getSearch());
 		assertEquals(1,page.getPage());
 		assertEquals(10,page.getSize()); 
+		assertEquals("computer.name",settings.getFilter());
+		assertEquals("asc",settings.getOrder());
 	}
 	
 	@Test
-	public void testFull() throws IOException, ServletException
+	public void testWithPage() throws IOException, ServletException
 	{
-		HttpServletRequest request = mock(HttpServletRequest.class);       
-	    HttpServletResponse response = mock(HttpServletResponse.class);
+		HttpServletRequest request = mock(HttpServletRequest.class);  
 	    
 	    Mockito.when(request.getSession()).thenReturn(session);
 	    Mockito.when(request.getRequestDispatcher("/WEB-INF/static/views/dashboard.jsp")).thenReturn(dispatcher);
-	    Mockito.when(request.getParameter("search")).thenReturn("something");
-	    Mockito.when(request.getParameter("searchsubmit")).thenReturn("Filter by company");
-	    Mockito.when(request.getParameter("searchorder")).thenReturn("Descending");
-	    Mockito.when(request.getParameter("size")).thenReturn("50");
-
-		servlet.doGet(request, response);
-		PageListDTO page = (PageListDTO) session.getAttribute("page");
+		session.setAttribute("pageSettings",new PageSettings());
+	    PageListDTO entry = new PageListDTO();
+		entry.setPage(1);
+		entry.setSearch("apple");
+		entry.setSize(50);
+	    ModelAndView view = servlet.withPage(request,entry);
+		PageListDTO page = (PageListDTO) view.getModel().get("page");
 		assertNotNull(page);
-		assertEquals("something",page.getSearch());
-		assertEquals("company.name",page.getOrder());
-		assertEquals("desc",page.getSense());
+		assertEquals("apple",page.getSearch());
 		assertEquals(1,page.getPage());
 		assertEquals(50,page.getSize());
-		
-
-	    
 	}
+	
+
+	@Test
+	public void testWithFilter() throws IOException, ServletException
+	{
+		HttpServletRequest request = mock(HttpServletRequest.class);  
+	    
+	    Mockito.when(request.getSession()).thenReturn(session);
+	    Mockito.when(request.getRequestDispatcher("/WEB-INF/static/views/dashboard.jsp")).thenReturn(dispatcher);
+		PageSettings settings = new PageSettings();
+	    session.setAttribute("pageSettings",settings);
+	    PageListDTO entry = new PageListDTO();
+	    servlet.withFilter(request,entry,"Filter by company");
+	    
+	    assertEquals("company.name",settings.getFilter());
+
+	}
+	
+
+	@Test
+	public void testWithOrder() throws IOException, ServletException
+	{
+		HttpServletRequest request = mock(HttpServletRequest.class);  
+	    
+	    Mockito.when(request.getSession()).thenReturn(session);
+	    Mockito.when(request.getRequestDispatcher("/WEB-INF/static/views/dashboard.jsp")).thenReturn(dispatcher);
+		PageSettings settings = new PageSettings();
+	    session.setAttribute("pageSettings",settings);
+	    PageListDTO entry = new PageListDTO();
+	    servlet.withOrder(request,entry,"Descending");
+	    
+	    assertEquals("desc",settings.getOrder());
+
+	}
+
 }
