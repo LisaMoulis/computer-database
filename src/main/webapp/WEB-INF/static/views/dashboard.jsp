@@ -40,7 +40,8 @@
                 </div>
                 <div class="pull-right">
                     <a class="btn btn-success" id="addComputer" href="add"><spring:message code="add" text="Add Computer"/></a> 
-                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message code="edit" text="Edit"/></a>
+                    <a class="btn btn-default" id="editComputerEdit" href="#" onclick="$.fn.toggleEditMode();"><spring:message code="edit" text="Edit"/></a>
+                    <a style="display:none" class="btn btn-default" id="editComputerView" href="#" onclick="$.fn.toggleEditMode();"><spring:message code="view" text="View"/></a>
                 </div>
             </div>
         </div>

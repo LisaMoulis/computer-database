@@ -47,11 +47,13 @@ $(function() {
     $.fn.toggleEditMode = function() {
         if($(".editMode").is(":visible")) {
             $(".editMode").hide();
-            $("#editComputer").text("<spring:message code='edit' text='Edit'/>");
+            $("#editComputerEdit").show();
+			$("#editComputerView").hide();
         }
         else {
             $(".editMode").show();
-            $("#editComputer").text("<spring:message code='view' text='View'/>");
+            $("#editComputerEdit").hide();
+			$("#editComputerView").show();
         }
         return this;
     };
