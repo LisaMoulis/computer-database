@@ -2,6 +2,7 @@ package builder;
 
 import java.time.LocalDate;
 
+import model.Company;
 import model.Computer;
 
 public class ComputerBuilder {
@@ -10,7 +11,7 @@ public class ComputerBuilder {
 	private String name;
 	private LocalDate introduced;
 	private LocalDate discontinued;
-	private String company;
+	private Company company;
 
 	
 	public ComputerBuilder setName(String name)
@@ -31,7 +32,7 @@ public class ComputerBuilder {
 		return this;
 	}
 	
-	public ComputerBuilder setCompany(String company)
+	public ComputerBuilder setCompany(Company company)
 	{
 		this.company = company;
 		return this;

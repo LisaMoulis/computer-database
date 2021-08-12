@@ -48,6 +48,7 @@ public class CompanyRequestHandlerTest {
 		companyRequestHandler = new CompanyRequestHandler(dataSource);
 		
 	}
+	
 
 	@Test
 	public void testGetCompanyByName()

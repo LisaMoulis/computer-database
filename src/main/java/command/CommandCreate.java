@@ -37,7 +37,7 @@ public class CommandCreate extends Command {
 				newone.setDiscontinued(LocalDate.parse(args[i+1],DateTimeFormatter.ISO_LOCAL_DATE));
 				break;
 			case("company"):
-				newone.setCompany(args[i+1]);
+				newone.setCompany(companyService.getCompany(args[i+1]));
 				break;
 			}
 		}
@@ -48,7 +48,7 @@ public class CommandCreate extends Command {
 		
 		int company_id = -1;
 
-		Company company = companyRequestHandler.getCompany(newc.getCompany());
+		Company company = newc.getCompany();
 		if (company != null)
 		{
 			company_id = company.getId();

@@ -40,7 +40,10 @@ public class ComputerDAOMapper implements RowMapper<Computer> {
 			builder.setDiscontinued(result.getTimestamp("discontinued").toLocalDateTime().toLocalDate());
 			
 		}
-		builder.setCompany(result.getString("company.name"));
+		if(result.getString("company.name") != null)
+		{
+			builder.setCompany(new Company(result.getInt("company.id"),result.getString("company.name")));
+		}
 		builder.setId(result.getInt("computer.id"));
 		return builder.build();
 	}

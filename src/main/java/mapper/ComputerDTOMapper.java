@@ -51,11 +51,7 @@ public class ComputerDTOMapper {
 		}
 		if (dto.getCompanyId() > 0)
 		{
-			Company comp = companyService.getCompany(dto.getCompanyId());
-			if (comp != null)
-			{
-				builder.setCompany(comp.getName());
-			}
+			builder.setCompany(companyService.getCompany(dto.getCompanyId()));
 		}
 		return builder.build();
 	}
@@ -73,7 +69,7 @@ public class ComputerDTOMapper {
 		}
 		if (computer.getCompany() != null)
 		{
-			Company comp = companyService.getCompany(computer.getCompany());
+			Company comp = computer.getCompany();
 			if (comp != null)
 			{
 				builder.setCompany(comp.getName()).setCompanyId(comp.getId());

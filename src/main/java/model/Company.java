@@ -1,8 +1,14 @@
 package model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "company")
 public class Company {
 
+	@Id
 	private int id = -1;
+	@Column
 	private String name;
 	
 	public Company(int id, String name)

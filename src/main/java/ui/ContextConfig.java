@@ -56,6 +56,7 @@ public class ContextConfig extends WebMvcConfigurationSupport {
 		 ResourceBundleMessageSource source = new ResourceBundleMessageSource();
 	        source.setBasenames("/messages");
 	        source.setUseCodeAsDefaultMessage(true);
+	       source.setDefaultEncoding("UTF-8");
 
 	        return source;
 	    }

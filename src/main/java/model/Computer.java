@@ -2,17 +2,27 @@ package model;
 
 import java.time.LocalDate;
 
+import javax.persistence.*;
+
 /**
  * Class Computer :
  * Represent a computer and its information
  * @author Lisa
  */
+@Entity
+@Table(name = "computer")
 public class Computer {
+	@Id
 	private int id = -1;
+	@Column
 	private String name;
+	@Column
 	private LocalDate introduced;
+	@Column
 	private LocalDate discontinued;
-	private String company;
+	@ManyToOne
+	@JoinColumn(name = "company_id")
+	private Company company;
 	
 	/**
 	 * @param name
@@ -48,7 +58,7 @@ public class Computer {
 	 * @param discontinued
 	 * @param company
 	 */
-	public Computer(String name, LocalDate introduced, LocalDate discontinued, String company)
+	public Computer(String name, LocalDate introduced, LocalDate discontinued, Company company)
 	{
 		this(name,introduced,discontinued);
 		this.company = company;
@@ -61,7 +71,7 @@ public class Computer {
 	 * @param discontinued
 	 * @param company
 	 */
-	public Computer(int id,String name, LocalDate introduced, LocalDate discontinued, String company)
+	public Computer(int id,String name, LocalDate introduced, LocalDate discontinued, Company company)
 	{ 	this(name,introduced,discontinued,company);
 		this.id = id;
 	}
@@ -96,12 +106,12 @@ public class Computer {
 		this.discontinued = discontinued;
 	}
 	
-	public String getCompany()
+	public Company getCompany()
 	{
 		return this.company;
 	}
 	
-	public void setCompany(String company)
+	public void setCompany(Company company)
 	{
 		this.company = company;
 	}

@@ -19,13 +19,11 @@ public class ComputerService {
 	//private static ComputerService instance;
 	
 	private ComputerRequestHandler computerRequestHandler;
-	private CompanyRequestHandler companyRequestHandler;
 	
 	@Autowired
 	public ComputerService(ComputerRequestHandler computerRequestHandler,CompanyRequestHandler companyRequestHandler)
 	{
 		this.computerRequestHandler = computerRequestHandler;
-		this.companyRequestHandler = companyRequestHandler;
 	}
 	
 	public Computer getComputer(int id)
@@ -61,7 +59,7 @@ public class ComputerService {
 		Validator.validate(computer);
 		int company_id = -1;
 
-		Company company = companyRequestHandler.getCompany(computer.getCompany());
+		Company company = computer.getCompany();
 		if (company != null)
 		{
 			company_id = company.getId();
@@ -75,7 +73,7 @@ public class ComputerService {
 		Validator.validate(computer);
 		int company_id = -1;
 
-		Company company = companyRequestHandler.getCompany(computer.getCompany());
+		Company company = computer.getCompany();
 		if (company != null)
 		{
 			company_id = company.getId();
