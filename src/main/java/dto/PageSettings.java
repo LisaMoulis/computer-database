@@ -2,7 +2,7 @@ package dto;
 
 public class PageSettings {
 
-	private String filter = "computer.name";
+	private String filter = "c.name";
 	private String order = "asc";
 	
 	public String getOrder()

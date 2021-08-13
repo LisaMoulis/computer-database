@@ -3,6 +3,10 @@ package persistence;
 import java.sql.Types;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Expression;
 import javax.sql.*;
 
 import builder.ComputerBuilder;
@@ -10,8 +14,10 @@ import mapper.ComputerDAOMapper;
 import model.Company;
 import model.Computer;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -28,9 +34,9 @@ import org.springframework.stereotype.*;
 @Scope("singleton")
 public class ComputerRequestHandler {
 
-	private static final String GET_WITH_NAME = "SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer`, `company.name` LEFT JOIN `company` ON company_id = company.id WHERE computer.name=?";
-	private static final String GET_WITH_ID = "SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE computer.id=?";
-	private static final String GET_PAGE = "SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ? ORDER BY "; 
+	private static final String GET_WITH_NAME = "from Computer c where c.name=:name";//"SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer`, `company.name` LEFT JOIN `company` ON company_id = company.id WHERE computer.name=?";
+	//private static final String GET_WITH_ID = "SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE computer.id=?";
+	private static final String GET_PAGE = "from Computer c where lower(c.name) like ?1 or lower(c.company.name) like ?2 order by ";//"SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ? ORDER BY "; 
 	private static final String GET_NB_COMPUTERS = "SELECT COUNT(computer.id) FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ?"; 
 
 	private JdbcTemplate jdbcTemplate;
@@ -51,14 +57,11 @@ public class ComputerRequestHandler {
 	 */
 	public Computer getComputer(int id)
 	{
-		/*List<Computer> result = jdbcTemplate.query(GET_WITH_ID, new Object[] { id }, new int[] { Types.INTEGER}, this.computerDAOMapper);
-		if (result.isEmpty())
-		{
-			return new ComputerBuilder().build();
-		}
-		return result.get(0);*/
+		
 		Session session = sessionFactory.openSession();
-		return session.find(Computer.class, id);
+		Computer computer = session.find(Computer.class, id);
+		session.close();
+		return computer;
 	}
 	
 	/**
@@ -67,16 +70,11 @@ public class ComputerRequestHandler {
 	 */
 	public Computer getComputer(String name)
 	{			
-		/*List<Computer> result = jdbcTemplate.query(GET_WITH_NAME, new Object[] { name }, new int[] { Types.VARCHAR}, this.computerDAOMapper);
-		if (result.isEmpty())
-		{
-			return new ComputerBuilder().build();
-		}
-		return result.get(0);*/
 		Session session = sessionFactory.openSession();
-		Query<Computer> query = session.createQuery("from Computer c where c.name=:name", Computer.class);
+		Query<Computer> query = session.createQuery(GET_WITH_NAME, Computer.class);
 	    query.setParameter("name", name);
 	    Computer computer = query.uniqueResult();
+	    session.close();
 		return computer;
 	}
 	
@@ -90,18 +88,39 @@ public class ComputerRequestHandler {
 	
 	public List<Computer> getPage(int size, int offset, String search, String column, String sense)
 	{
+		Session session = sessionFactory.openSession();
 		String str = GET_PAGE + column + " " + sense;
 		try {
 			int id = Integer.valueOf(search);
-			str = str+ " OR computer.id = " + id;
+			str = str+ " OR c.id = " + id;
 		}
 		catch (Exception e)
 		{}
 			
-		str = str + " LIMIT ? OFFSET ?";
-		List<Computer> page = jdbcTemplate.query(str, new Object[] { "%"+search.toLowerCase()+"%", "%"+search.toLowerCase()+"%", size, offset}, new int[] { Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER}, this.computerDAOMapper);
-
+		//str = str + " LIMIT ? OFFSET ?";
+		//List<Computer> page = jdbcTemplate.query(str, new Object[] { "%"+search.toLowerCase()+"%", "%"+search.toLowerCase()+"%", size, offset}, new int[] { Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER}, this.computerDAOMapper);
+		/*CriteriaBuilder cb = session.getCriteriaBuilder();
+		CriteriaQuery<Computer> cr = cb.createQuery(Computer.class);
+		Root<Computer> root = cr.from(Computer.class);
+		cr = cr.select(root);
+		if (sense.equals("DESC"))
+		{
+			cr = cr.orderBy(cb.desc(root.get(column)));
+		}
+		else
+		{
+			cr = cr.orderBy(cb.asc(root.get(column)));
+		}
+		cr.having(new Expression().("LIMIT ? OFFSET ?", new Object[] { "%"+search.toLowerCase()+"%", "%"+search.toLowerCase()+"%", size, offset}, new int[] { Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER}));*/
 		//dbConnection.getLogger().info("Page gathered : " + page);
+		Query<Computer> query = session.createQuery(str,Computer.class);
+		query.setParameter(1, "%"+search.toLowerCase()+"%");
+		query.setParameter(2, "%"+search.toLowerCase()+"%");
+		//query.setParameter(3, size);
+		//query.setParameter(4, offset);
+		query.setFirstResult(offset).setMaxResults(size);
+		List<Computer> page = query.getResultList();
+		session.close();
 		return page;
 	}
 

@@ -104,11 +104,11 @@ public class Computers {
 		
 		if (filter.equals("Filter by company"))
 		{
-			settings.setFilter("company.name");
+			settings.setFilter("c.company.name");
 		}
 		else if (filter.equals("Filter by name"))
 		{
-			settings.setFilter("computer.name");
+			settings.setFilter("c.name");
 		}
 		else if (filter.equals("Cancel"))
 		{

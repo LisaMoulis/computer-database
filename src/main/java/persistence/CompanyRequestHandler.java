@@ -1,21 +1,20 @@
 package persistence;
 
-import java.sql.Types;
 import java.util.List;
 
-import javax.sql.DataSource;
+import javax.persistence.RollbackException;
 
-import mapper.CompanyMapper;
 import model.Company;
+import model.Computer;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.Transactional;
 
-import org.springframework.jdbc.core.*;
 
 /**
  * Class CompanyRequesthandler :
@@ -31,40 +30,29 @@ public class CompanyRequestHandler {
 	 * @return The company found
 	 */
 	
-	private JdbcTemplate jdbcTemplate;
-	@Autowired
 	private SessionFactory sessionFactory;
 	
 	@Autowired
-	public CompanyRequestHandler(DataSource dataSource)
+	public CompanyRequestHandler(SessionFactory sessionFactory)
 	{
-		this.jdbcTemplate = new JdbcTemplate(dataSource);
-		//this.dbConnection = dbConnection;
+		this.sessionFactory = sessionFactory;
 	}
 	
 	public Company getCompany(int id)
 	{
-		/*List<Company> companies =  jdbcTemplate.query("SELECT * FROM `company` WHERE id=?", new Object[] {id}, new int[] { Types.INTEGER}, new CompanyMapper());
-		if (companies.isEmpty())
-		{
-			return new Company(-1,null);
-		}
-		return companies.get(0);*/
 		Session session = sessionFactory.openSession();
-		return session.find(Company.class, id);
+		Company company = session.find(Company.class, id);
+		session.close();
+		return company;
 	}
 	
 	public Company getCompany(String name)
 	{
-		/*List<Company> companies =  jdbcTemplate.query("SELECT * FROM `company` WHERE name=?", new Object[] { name }, new int[] { Types.VARCHAR}, new CompanyMapper());	
-		if (companies.isEmpty())
-		{
-			return new Company(-1,null);
-		}*/
 		Session session = sessionFactory.openSession();
 		Query<Company> query = session.createQuery("from Company c where c.name=:name", Company.class);
 	    query.setParameter("name", name);
 	    Company company = query.uniqueResult();
+	    session.close();
 		return company;
 	}
 	
@@ -73,13 +61,33 @@ public class CompanyRequestHandler {
 	 */
 	public List<Company> getAllCompanies()
 	{
-		return jdbcTemplate.query("SELECT * FROM `company`",new CompanyMapper());
+		Session session = sessionFactory.openSession();
+		Query<Company> query = session.createQuery("from Company c", Company.class);
+		List<Company> companies = query.getResultList();
+		session.close();
+		return companies;
 	}
 	
 	@Transactional
 	public void deleteCompany(int id)
 	{
-		jdbcTemplate.update("DELETE FROM `computer` WHERE company_id=?",new Object[] { id }, new int[] { Types.INTEGER});
-		jdbcTemplate.update("DELETE FROM `company` WHERE id=?",new Object[] { id }, new int[] { Types.INTEGER});
+		//jdbcTemplate.update("DELETE FROM `computer` WHERE company_id=?",new Object[] { id }, new int[] { Types.INTEGER});
+		Session session = sessionFactory.openSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+		  Query<Computer> queryComputer = session.createQuery("delete from Computer where company_id = :id",Computer.class);
+		  queryComputer.setParameter("id", id);
+		  queryComputer.executeUpdate();
+		  Query<Company> queryCompany  = session.createQuery("delete from Company where id = :id",Company.class);
+		  queryCompany.setParameter("id", id);
+		  queryCompany.executeUpdate();
+
+		  transaction.commit();
+		} catch (RollbackException t) {
+		  transaction.rollback();
+		  throw t;
+		}
+		session.remove(id);
+		session.close();
 	}
 }
