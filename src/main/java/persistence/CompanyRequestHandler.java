@@ -8,9 +8,13 @@ import javax.sql.DataSource;
 import mapper.CompanyMapper;
 import model.Company;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.Transactional;
+
 import org.springframework.jdbc.core.*;
 
 /**
@@ -28,6 +32,8 @@ public class CompanyRequestHandler {
 	 */
 	
 	private JdbcTemplate jdbcTemplate;
+	@Autowired
+	private SessionFactory sessionFactory;
 	
 	@Autowired
 	public CompanyRequestHandler(DataSource dataSource)
@@ -38,22 +44,28 @@ public class CompanyRequestHandler {
 	
 	public Company getCompany(int id)
 	{
-		List<Company> companies =  jdbcTemplate.query("SELECT * FROM `company` WHERE id=?", new Object[] {id}, new int[] { Types.INTEGER}, new CompanyMapper());
+		/*List<Company> companies =  jdbcTemplate.query("SELECT * FROM `company` WHERE id=?", new Object[] {id}, new int[] { Types.INTEGER}, new CompanyMapper());
 		if (companies.isEmpty())
 		{
 			return new Company(-1,null);
 		}
-		return companies.get(0);
+		return companies.get(0);*/
+		Session session = sessionFactory.openSession();
+		return session.find(Company.class, id);
 	}
 	
 	public Company getCompany(String name)
 	{
-		List<Company> companies =  jdbcTemplate.query("SELECT * FROM `company` WHERE name=?", new Object[] { name }, new int[] { Types.VARCHAR}, new CompanyMapper());	
+		/*List<Company> companies =  jdbcTemplate.query("SELECT * FROM `company` WHERE name=?", new Object[] { name }, new int[] { Types.VARCHAR}, new CompanyMapper());	
 		if (companies.isEmpty())
 		{
 			return new Company(-1,null);
-		}
-		return companies.get(0);
+		}*/
+		Session session = sessionFactory.openSession();
+		Query<Company> query = session.createQuery("from Company c where c.name=:name", Company.class);
+	    query.setParameter("name", name);
+	    Company company = query.uniqueResult();
+		return company;
 	}
 	
 	/**

@@ -42,7 +42,7 @@ public class ComputerDAOMapper implements RowMapper<Computer> {
 		}
 		if(result.getString("company.name") != null)
 		{
-			builder.setCompany(new Company(result.getInt("company.id"),result.getString("company.name")));
+			builder.setCompany(new Company(result.getInt("company_id"),result.getString("company.name")));
 		}
 		builder.setId(result.getInt("computer.id"));
 		return builder.build();

@@ -75,6 +75,9 @@ public class Computer {
 	{ 	this(name,introduced,discontinued,company);
 		this.id = id;
 	}
+	
+	public Computer()
+	{}
 
 	public String getName()
 	{

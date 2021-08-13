@@ -7,8 +7,12 @@ import javax.sql.*;
 
 import builder.ComputerBuilder;
 import mapper.ComputerDAOMapper;
+import model.Company;
 import model.Computer;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -30,6 +34,8 @@ public class ComputerRequestHandler {
 	private static final String GET_NB_COMPUTERS = "SELECT COUNT(computer.id) FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ?"; 
 
 	private JdbcTemplate jdbcTemplate;
+	@Autowired
+	private SessionFactory sessionFactory;
 	private ComputerDAOMapper computerDAOMapper;
 	
 	@Autowired
@@ -45,12 +51,14 @@ public class ComputerRequestHandler {
 	 */
 	public Computer getComputer(int id)
 	{
-		List<Computer> result = jdbcTemplate.query(GET_WITH_ID, new Object[] { id }, new int[] { Types.INTEGER}, this.computerDAOMapper);
+		/*List<Computer> result = jdbcTemplate.query(GET_WITH_ID, new Object[] { id }, new int[] { Types.INTEGER}, this.computerDAOMapper);
 		if (result.isEmpty())
 		{
 			return new ComputerBuilder().build();
 		}
-		return result.get(0);
+		return result.get(0);*/
+		Session session = sessionFactory.openSession();
+		return session.find(Computer.class, id);
 	}
 	
 	/**
@@ -59,12 +67,17 @@ public class ComputerRequestHandler {
 	 */
 	public Computer getComputer(String name)
 	{			
-		List<Computer> result = jdbcTemplate.query(GET_WITH_NAME, new Object[] { name }, new int[] { Types.VARCHAR}, this.computerDAOMapper);
+		/*List<Computer> result = jdbcTemplate.query(GET_WITH_NAME, new Object[] { name }, new int[] { Types.VARCHAR}, this.computerDAOMapper);
 		if (result.isEmpty())
 		{
 			return new ComputerBuilder().build();
 		}
-		return result.get(0);
+		return result.get(0);*/
+		Session session = sessionFactory.openSession();
+		Query<Computer> query = session.createQuery("from Computer c where c.name=:name", Computer.class);
+	    query.setParameter("name", name);
+	    Computer computer = query.uniqueResult();
+		return computer;
 	}
 	
 	/**

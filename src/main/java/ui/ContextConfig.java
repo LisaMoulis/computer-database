@@ -1,5 +1,6 @@
 package ui;
 
+import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.ViewResolver;
@@ -9,6 +10,8 @@ import org.springframework.web.servlet.view.JstlView;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+
+import model.*;
 
 @Configuration
 
@@ -50,16 +53,23 @@ public class ContextConfig extends WebMvcConfigurationSupport {
 	public void addInterceptors(InterceptorRegistry registry) {
 	    registry.addInterceptor(localeChangeInterceptor());
 	}*/
-	 @Bean
-	    public ResourceBundleMessageSource messageSource() {
+	@Bean
+	public ResourceBundleMessageSource messageSource() {
 
-		 ResourceBundleMessageSource source = new ResourceBundleMessageSource();
-	        source.setBasenames("/messages");
-	        source.setUseCodeAsDefaultMessage(true);
-	       source.setDefaultEncoding("UTF-8");
+		ResourceBundleMessageSource source = new ResourceBundleMessageSource();
+	    source.setBasenames("/messages");
+	    source.setUseCodeAsDefaultMessage(true);
+	       //source.setDefaultEncoding("UTF-8");
 
-	        return source;
-	    }
+	    return source;
+	}
+	
+	@Bean
+	public SessionFactory sessionFactory() 
+	{	
+	    return new org.hibernate.cfg.Configuration().addAnnotatedClass(Company.class).addAnnotatedClass(Computer.class).buildSessionFactory();
+	}
+	
 	
 }
 //Inversion de dépendance :  la classe est la mère, le nom est la classe fille

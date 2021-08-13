@@ -22,6 +22,8 @@ public class Company {
 		this.name = name;
 	}
 	
+	public Company() {}
+	
 	public int getId()
 	{
 		return this.id;

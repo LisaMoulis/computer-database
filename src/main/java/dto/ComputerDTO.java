@@ -7,7 +7,7 @@ import validation.ValidateDates;
 @ValidateDates(message = "Invalid date!")
 public class ComputerDTO {
 	private int id = -1;
-	@NotBlank(message="The name is empty!")
+	@NotEmpty(message="The name is empty!")
 	private String name = "";
 	private String introduced = "";
 	private String discontinued = "";
