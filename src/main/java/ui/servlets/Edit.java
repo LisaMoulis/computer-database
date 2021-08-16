@@ -37,7 +37,7 @@ public class Edit {
 		logger.debug("Edit page displayed.");
 		ComputerDTO c = computerDTOMapper.mapToDTO(computerService.getComputer(id));
 		page.addObject("computer", c);
-		if (c.getCompany() != null)
+		if (c.getCompany() != null && !c.getCompany().equals(""))
 		{
 			page.addObject("companyId",companyService.getCompany(c.getCompany()).getId());
 		}

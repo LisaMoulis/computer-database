@@ -1,27 +1,17 @@
 package persistence;
 
-import java.sql.Types;
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Expression;
-import javax.sql.*;
+import javax.persistence.RollbackException;
 
-import builder.ComputerBuilder;
-import mapper.ComputerDAOMapper;
-import model.Company;
 import model.Computer;
 
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.*;
 
 /**
@@ -36,19 +26,16 @@ public class ComputerRequestHandler {
 
 	private static final String GET_WITH_NAME = "from Computer c where c.name=:name";//"SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer`, `company.name` LEFT JOIN `company` ON company_id = company.id WHERE computer.name=?";
 	//private static final String GET_WITH_ID = "SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE computer.id=?";
-	private static final String GET_PAGE = "from Computer c where lower(c.name) like ?1 or lower(c.company.name) like ?2 order by ";//"SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ? ORDER BY "; 
+	private static final String GET_PAGE = "SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ? ORDER BY "; 
 	private static final String GET_NB_COMPUTERS = "SELECT COUNT(computer.id) FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ?"; 
 
-	private JdbcTemplate jdbcTemplate;
 	@Autowired
 	private SessionFactory sessionFactory;
-	private ComputerDAOMapper computerDAOMapper;
 	
 	@Autowired
-	public ComputerRequestHandler(DataSource dataSource,ComputerDAOMapper computerDAOMapper)
+	public ComputerRequestHandler(SessionFactory sessionFactory)
 	{
-		this.computerDAOMapper = computerDAOMapper;
-		this.jdbcTemplate = new JdbcTemplate(dataSource);
+		this.sessionFactory = sessionFactory;
 	}
 	
 	/**
@@ -83,7 +70,12 @@ public class ComputerRequestHandler {
 	 */
 	public List<Computer> getAllComputers()
 	{
-		return jdbcTemplate.query("SELECT * FROM `computer` LEFT JOIN `company` ON company_id = company.id", this.computerDAOMapper);
+		Session session = sessionFactory.openSession();
+		Query<Computer> query = session.createQuery("from Computer", Computer.class);
+	    List<Computer> computers = query.getResultList();
+	    session.close();
+		return computers;
+		//return jdbcTemplate.query("SELECT * FROM `computer` LEFT JOIN `company` ON company_id = company.id", this.computerDAOMapper);
 	}
 	
 	public List<Computer> getPage(int size, int offset, String search, String column, String sense)
@@ -97,28 +89,15 @@ public class ComputerRequestHandler {
 		catch (Exception e)
 		{}
 			
-		//str = str + " LIMIT ? OFFSET ?";
-		//List<Computer> page = jdbcTemplate.query(str, new Object[] { "%"+search.toLowerCase()+"%", "%"+search.toLowerCase()+"%", size, offset}, new int[] { Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER}, this.computerDAOMapper);
-		/*CriteriaBuilder cb = session.getCriteriaBuilder();
-		CriteriaQuery<Computer> cr = cb.createQuery(Computer.class);
-		Root<Computer> root = cr.from(Computer.class);
-		cr = cr.select(root);
-		if (sense.equals("DESC"))
-		{
-			cr = cr.orderBy(cb.desc(root.get(column)));
-		}
-		else
-		{
-			cr = cr.orderBy(cb.asc(root.get(column)));
-		}
-		cr.having(new Expression().("LIMIT ? OFFSET ?", new Object[] { "%"+search.toLowerCase()+"%", "%"+search.toLowerCase()+"%", size, offset}, new int[] { Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER}));*/
-		//dbConnection.getLogger().info("Page gathered : " + page);
-		Query<Computer> query = session.createQuery(str,Computer.class);
+		str = str + " LIMIT ? OFFSET ?";
+
+		@SuppressWarnings("unchecked")
+		Query<Computer> query = session.createSQLQuery(str).addEntity(Computer.class);
+		
 		query.setParameter(1, "%"+search.toLowerCase()+"%");
 		query.setParameter(2, "%"+search.toLowerCase()+"%");
-		//query.setParameter(3, size);
-		//query.setParameter(4, offset);
-		query.setFirstResult(offset).setMaxResults(size);
+		query.setParameter(3, size);
+		query.setParameter(4, offset);
 		List<Computer> page = query.getResultList();
 		session.close();
 		return page;
@@ -133,10 +112,16 @@ public class ComputerRequestHandler {
 		}
 		catch (Exception e)
 		{}
-			
+		Session session = sessionFactory.openSession();
 		//dbConnection.getLogger().info("Nb computers : " + result.getInt(1));
-
-		return jdbcTemplate.queryForObject(str, new Object[] {"%"+search.toLowerCase()+"%","%"+search.toLowerCase()+"%"}, new int[] {Types.VARCHAR, Types.VARCHAR}, Integer.class);
+		@SuppressWarnings("unchecked")
+		Query<Integer> query = session.createSQLQuery(str).addEntity(Computer.class);
+		
+		query.setParameter(1, "%"+search.toLowerCase()+"%");
+		query.setParameter(2, "%"+search.toLowerCase()+"%");
+		List<Integer> nb = query.getResultList();
+		session.close();
+		return nb.get(0);
 	}
 	
 	/**
@@ -144,7 +129,16 @@ public class ComputerRequestHandler {
 	 */
 	public void createComputer(Computer computer, int company_id)
 	{
-		jdbcTemplate.update("INSERT INTO `computer`"+ computerDAOMapper.mapToCreate(computer, company_id));
+		Session session = sessionFactory.openSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+		  session.persist(computer);
+		  transaction.commit();
+		} catch (RollbackException t) {
+		  transaction.rollback();
+		  throw t;
+		}
+		session.close();
 	}
 	
 	/**
@@ -152,7 +146,17 @@ public class ComputerRequestHandler {
 	 */
 	public void updateComputer(Computer computer,int company_id)
 	{
-		jdbcTemplate.update("UPDATE `computer` SET "+ computerDAOMapper.mapToUpdate(computer,company_id) + "WHERE id=?",new Object[] {computer.getId()}, new int[] {Types.INTEGER});
+		Session session = sessionFactory.openSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+		  session.update(computer);
+		  transaction.commit();
+		} catch (RollbackException t) {
+		  transaction.rollback();
+		  throw t;
+		}
+		session.close();
+		//jdbcTemplate.update("UPDATE `computer` SET "+ computerDAOMapper.mapToUpdate(computer,company_id) + "WHERE id=?",new Object[] {computer.getId()}, new int[] {Types.INTEGER});
 	}
 	
 	/**
@@ -160,7 +164,16 @@ public class ComputerRequestHandler {
 	 */
 	public void deleteComputer(int id)
 	{
-		jdbcTemplate.update("DELETE FROM `computer` WHERE id=?",new Object[] { id }, new int[] {Types.INTEGER});
+		Session session = sessionFactory.openSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+			session.delete(getComputer(id));
+			transaction.commit();
+		} catch (RollbackException t) {
+			transaction.rollback();
+			throw t;
+		}
+		session.close();
 	}
 	
 	/**
@@ -168,7 +181,18 @@ public class ComputerRequestHandler {
 	 */
 	public void deleteComputer(String name)
 	{
-		jdbcTemplate.update("DELETE FROM `computer` WHERE name=?",new Object[] { name }, new int[] {Types.VARCHAR});
+		Session session = sessionFactory.openSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+		  Query<Computer> query = session.createQuery("delete from Computer where name = :name",Computer.class);
+		  query.setParameter("name", name);
+		  query.executeUpdate();
+		  transaction.commit();
+		} catch (RollbackException t) {
+		  transaction.rollback();
+		  throw t;
+		}
+		session.close();
 	}
 	
 }
