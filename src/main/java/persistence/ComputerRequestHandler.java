@@ -1,5 +1,6 @@
 package persistence;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.persistence.RollbackException;
@@ -115,13 +116,13 @@ public class ComputerRequestHandler {
 		Session session = sessionFactory.openSession();
 		//dbConnection.getLogger().info("Nb computers : " + result.getInt(1));
 		@SuppressWarnings("unchecked")
-		Query<Integer> query = session.createSQLQuery(str).addEntity(Computer.class);
+		Query<BigInteger> query = session.createSQLQuery(str);
 		
 		query.setParameter(1, "%"+search.toLowerCase()+"%");
 		query.setParameter(2, "%"+search.toLowerCase()+"%");
-		List<Integer> nb = query.getResultList();
+		int nb = query.uniqueResult().intValue();
 		session.close();
-		return nb.get(0);
+		return nb;
 	}
 	
 	/**
