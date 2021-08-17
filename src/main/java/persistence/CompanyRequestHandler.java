@@ -87,7 +87,7 @@ public class CompanyRequestHandler {
 		  transaction.rollback();
 		  throw t;
 		}
-		//session.remove(id);
+		session.remove(id);
 		session.close();
 	}
 }

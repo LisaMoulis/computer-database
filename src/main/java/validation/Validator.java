@@ -34,11 +34,11 @@ public class Validator implements ConstraintValidator<ValidateDates,ComputerDTO>
 
 	@Override
 	public boolean isValid(ComputerDTO value, ConstraintValidatorContext context) {
-        if (value.getDiscontinued() == null || value.getDiscontinued().equals(""))
+        if (value.getDiscontinued() == null)
         {
         	return true;
         }
-        else if (value.getIntroduced() == null || value.getIntroduced().equals(""))
+        else if (value.getIntroduced() == null)
         {
         	return false;
         }

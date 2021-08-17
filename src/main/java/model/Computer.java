@@ -4,9 +4,6 @@ import java.time.LocalDate;
 
 import javax.persistence.*;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 /**
  * Class Computer :
  * Represent a computer and its information
@@ -19,13 +16,12 @@ public class Computer {
 	private int id = -1;
 	@Column
 	private String name;
-	@Column(nullable=true)
+	@Column
 	private LocalDate introduced;
-	@Column(nullable=true)
+	@Column
 	private LocalDate discontinued;
-	@ManyToOne(optional = true)
-	@Fetch(FetchMode.JOIN)
-	@JoinColumn(name = "company_id",nullable=true)
+	@ManyToOne
+	@JoinColumn(name = "company_id")
 	private Company company;
 	
 	/**
