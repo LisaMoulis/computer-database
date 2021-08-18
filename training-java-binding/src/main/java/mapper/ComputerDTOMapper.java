@@ -5,11 +5,13 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import dto.ComputerDTO;
 import model.Company;
 import model.Computer;
+import service.CompanyService;
 import builder.*;
 
 /**
@@ -20,7 +22,15 @@ import builder.*;
 
 @Component
 public class ComputerDTOMapper {
-		
+	
+	private CompanyService companyService;
+	
+	@Autowired
+	public ComputerDTOMapper(CompanyService companyService)
+	{
+		this.companyService = companyService;
+	}
+	
 	/**
 	 * @param result	Representation of a computer from the database
 	 * @return A computer object created from one of the database
@@ -41,7 +51,7 @@ public class ComputerDTOMapper {
 		}
 		if (dto.getCompanyId() > 0)
 		{
-			builder.setCompany(new Company(dto.getCompanyId(),dto.getCompany()));
+			builder.setCompany(companyService.getCompany(dto.getCompanyId()));
 		}
 		return builder.build();
 	}

@@ -12,5 +12,15 @@
 	    <artifactId>training-java-model</artifactId>
 	    <version>0.0.1-SNAPSHOT</version>
 	  </dependency>
+	  <dependency>
+	    <groupId>training-java</groupId>
+	    <artifactId>training-java-service</artifactId>
+	    <version>0.0.1-SNAPSHOT</version>
+	  </dependency>
+	  <dependency>
+	    <groupId>training-java</groupId>
+	    <artifactId>training-java-binding</artifactId>
+	    <version>0.0.1-SNAPSHOT</version>
+	  </dependency>
   </dependencies>
 </project>

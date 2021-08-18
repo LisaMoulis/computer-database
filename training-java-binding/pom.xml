@@ -13,22 +13,10 @@
     <version>0.0.1-SNAPSHOT</version>
   </dependency>
   
-  	<dependency>
-	    <groupId>org.springframework</groupId>
-	    <artifactId>spring-context</artifactId>
-	    <version>5.3.0</version>
-	</dependency>
-	<dependency>
-	    <groupId>org.springframework</groupId>
-	    <artifactId>spring-core</artifactId>
-	    <version>5.3.0</version>
-	    <!-- for our own logging -->
-	    <exclusions>
-            <exclusion>
-                <groupId>commons-logging</groupId>
-                <artifactId>commons-logging</artifactId>
-            </exclusion>
-        </exclusions>
-	</dependency>
+  <dependency>
+    <groupId>training-java</groupId>
+    <artifactId>training-java-service</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </dependency>
   </dependencies>
 </project>
