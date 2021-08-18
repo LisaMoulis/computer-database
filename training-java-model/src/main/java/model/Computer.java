@@ -16,7 +16,8 @@ import org.hibernate.annotations.FetchMode;
 @Table(name = "computer")
 public class Computer {
 	@Id
-	private int id = -1;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 	@Column
 	private String name;
 	@Column(nullable=true)

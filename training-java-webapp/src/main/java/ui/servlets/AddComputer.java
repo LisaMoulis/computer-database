@@ -81,9 +81,9 @@ public class AddComputer {
 			CompanyList companies = new CompanyList();
 			companies.setCompanies(companyService.getAllCompanies());
 			request.setAttribute("companies", companies.getCompanies());
-			RequestDispatcher rd= request.getRequestDispatcher("/add");
+			RequestDispatcher rd= request.getRequestDispatcher("/WEB-INF/static/views/addComputer.jsp");
 			rd.include(request, response);
-			return "addComputer";
+			return null;
 		}
 	}
 

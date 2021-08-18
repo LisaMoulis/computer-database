@@ -134,7 +134,7 @@ public class ComputerRequestHandler {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-		  session.persist(computer);
+		  session.save(computer);
 		  transaction.commit();
 		} catch (RollbackException t) {
 		  transaction.rollback();

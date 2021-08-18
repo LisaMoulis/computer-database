@@ -69,9 +69,9 @@ public class Edit {
 			logger.debug("Computer update failed. Error message : "+e.getMessage());
 			out.println("<script>alert(\""+ e.getMessage()+"\")</script>");
 			request.setAttribute("companies", companyService.getAllCompanies());
-			RequestDispatcher rd= request.getRequestDispatcher("/add");
+			RequestDispatcher rd= request.getRequestDispatcher("/WEB-INF/static/views/edit.jsp");
 			rd.include(request, response);
-			return "editComputer";
+			return null;
 		}
 	}
 }

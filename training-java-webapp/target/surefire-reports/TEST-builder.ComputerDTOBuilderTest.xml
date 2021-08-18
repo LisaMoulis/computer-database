@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="3" failures="0" name="builder.ComputerDTOBuilderTest" time="0.001" errors="0" skipped="0">
+<testsuite tests="3" failures="0" name="builder.ComputerDTOBuilderTest" time="0.002" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="java.vm.version" value="16.0.1+9-24"/>
@@ -22,7 +22,7 @@
 "/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="os.name" value="Linux"/>
-    <property name="classworlds.conf" value="/home/excilys/eclipse-workspace/.metadata/.plugins/org.eclipse.m2e.launching/launches/m2conf10070315601896312335.tmp"/>
+    <property name="classworlds.conf" value="/home/excilys/eclipse-workspace/.metadata/.plugins/org.eclipse.m2e.launching/launches/m2conf11705816510670375939.tmp"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
     <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib"/>
     <property name="jdk.debug" value="release"/>
@@ -54,6 +54,6 @@
     <property name="sun.cpu.endian" value="little"/>
   </properties>
   <testcase classname="builder.ComputerDTOBuilderTest" name="testCreateEmpty" time="0.001"/>
-  <testcase classname="builder.ComputerDTOBuilderTest" name="testCreateFull" time="0"/>
+  <testcase classname="builder.ComputerDTOBuilderTest" name="testCreateFull" time="0.001"/>
   <testcase classname="builder.ComputerDTOBuilderTest" name="testCreateMinimum" time="0"/>
 </testsuite>
