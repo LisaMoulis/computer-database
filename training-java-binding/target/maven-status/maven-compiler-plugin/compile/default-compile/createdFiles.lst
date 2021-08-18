@@ -1,0 +1,6 @@
+mapper/PageListMapper.class
+mapper/CompanyMapper.class
+builder/ComputerBuilder.class
+mapper/ComputerDAOMapper.class
+mapper/ComputerDTOMapper.class
+builder/ComputerDTOBuilder.class

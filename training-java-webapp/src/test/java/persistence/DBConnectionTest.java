@@ -13,7 +13,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
-
+/*
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(locations = {"classpath:applicationContext.xml"})
@@ -32,12 +32,12 @@ public class DBConnectionTest {
         connection.close();
 	}
 	
-	/*@Test
+	@Test
 	public void testClose() throws SQLException
-	{
+	{extends WebSecurityConfigurerAdapter
         Connection connection = dbConnection.getConnection();
         assertNotNull(connection);
         dbConnection.close();
         assertTrue(connection.isClosed());
-	}*/
-}
+	}
+}*/

@@ -1,0 +1,15 @@
+command/CommandCreate.class
+command/CommandDetails.class
+command/CommandHandler.class
+command/CommandNextPage.class
+ui/CLIReader.class
+command/CommandDelete.class
+command/CommandUpdate.class
+ui/Main.class
+command/CommandListComputers.class
+command/CommandPreviousPage.class
+command/CommandQuit.class
+command/CommandListCompanies.class
+ui/ConsoleConfig.class
+command/Command.class
+command/CommandDeleteCompany.class

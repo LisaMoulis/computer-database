@@ -1,0 +1,6 @@
+service/ValidatorTest.class
+builder/ComputerDTOBuilderTest.class
+model/CompanyTest.class
+dto/ComputerDTOTest.class
+dto/PageListDTOTest.class
+model/ComputerListTest.class
