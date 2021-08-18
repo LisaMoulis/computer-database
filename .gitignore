@@ -23,3 +23,9 @@
 hs_err_pid*
 /bin/
 /target/
+/training-java-model/target/
+/training-java-service/target/
+/training-java-persistence/target/
+/training-java-binding/target/
+/training-java-webapp/target/
+/training-java-console/target/
