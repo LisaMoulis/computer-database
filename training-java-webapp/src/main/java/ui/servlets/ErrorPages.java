@@ -19,6 +19,14 @@ public class ErrorPages {
 	@Autowired
 	private ResourceBundleMessageSource messages;
 	
+	@RequestMapping("/401")
+	public ModelAndView page401(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		ModelAndView page = new ModelAndView("error");
+		page.addObject("message",messages.getMessage("error401",new Object[] {},Locale.getDefault()));
+		return page;
+	}
+	
 	@RequestMapping("/403")
 	public ModelAndView page403(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{

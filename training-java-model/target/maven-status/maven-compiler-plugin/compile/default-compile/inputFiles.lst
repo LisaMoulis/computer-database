@@ -4,7 +4,9 @@
 /home/excilys/eclipse-workspace/training-java-core/training-java-model/src/main/java/validation/ValidateDates.java
 /home/excilys/eclipse-workspace/training-java-core/training-java-model/src/main/java/dto/PageSettings.java
 /home/excilys/eclipse-workspace/training-java-core/training-java-model/src/main/java/model/exceptions/EmptyNameException.java
+/home/excilys/eclipse-workspace/training-java-core/training-java-model/src/main/java/model/Authority.java
 /home/excilys/eclipse-workspace/training-java-core/training-java-model/src/main/java/dto/PageListDTO.java
+/home/excilys/eclipse-workspace/training-java-core/training-java-model/src/main/java/model/User.java
 /home/excilys/eclipse-workspace/training-java-core/training-java-model/src/main/java/validation/Validator.java
 /home/excilys/eclipse-workspace/training-java-core/training-java-model/src/main/java/model/exceptions/IncorrectDateOrderException.java
 /home/excilys/eclipse-workspace/training-java-core/training-java-model/src/main/java/model/ComputerList.java

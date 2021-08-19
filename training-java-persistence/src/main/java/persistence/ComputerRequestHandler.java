@@ -30,14 +30,12 @@ public class ComputerRequestHandler {
 	private static final String GET_PAGE = "SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ? ORDER BY "; 
 	private static final String GET_NB_COMPUTERS = "SELECT COUNT(computer.id) FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ?"; 
 
-	@Autowired
 	private SessionFactory sessionFactory;
 	
 	@Autowired
 	public ComputerRequestHandler(SessionFactory sessionFactory)
 	{
 		this.sessionFactory = sessionFactory;
-		System.out.println("\nJe ne suis pas ton père !\n");
 	}
 	
 	/**

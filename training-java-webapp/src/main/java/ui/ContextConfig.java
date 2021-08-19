@@ -5,13 +5,13 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
 
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,7 +25,6 @@ import org.springframework.security.web.authentication.www.DigestAuthenticationE
 import org.springframework.security.web.authentication.www.DigestAuthenticationFilter;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
@@ -33,6 +32,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import model.*;
+import service.UserService;
 
 @Configuration
 
@@ -41,6 +41,9 @@ import model.*;
 @EnableWebMvc
 @EnableWebSecurity
 public class ContextConfig extends WebSecurityConfigurerAdapter {
+	
+	@Autowired
+	private UserService userService;
 	
 	@Bean
 	public HikariDataSource dataSource()
@@ -80,34 +83,13 @@ public class ContextConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public PasswordEncoder encoder() {
 		return NoOpPasswordEncoder.getInstance();
-	}
+	}	
 	
-	/*@Bean
-	public UserDetailsService users() {
-	    // The builder will ensure the passwords are encoded before saving in memory
-	    UserBuilder builder = User.builder();
-	    UserDetails user = builder
-	        .username("user")
-	        .password("password")
-	        .roles("USER")
-	        .build();
-	    UserDetails admin = builder
-	        .username("admin")
-	        .password("password")
-	        .roles("USER", "ADMIN")
-	        .build();
-	    JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource());
-	    users.createUser(user);
-	    users.createUser(admin);
-	    return users;
-	}*/
-	
-	
-	
+	/*
 	@Bean
     public UserDetailsService users() throws Exception {
         return super.userDetailsServiceBean();
-    }
+    }*/
 	
 	@Bean
 	public ResourceBundleMessageSource messageSource() {
@@ -123,8 +105,9 @@ public class ContextConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public SessionFactory sessionFactory() 
 	{	
-	    return new org.hibernate.cfg.Configuration().addAnnotatedClass(Company.class).addAnnotatedClass(Computer.class).buildSessionFactory();
+	    return new org.hibernate.cfg.Configuration().addAnnotatedClass(Company.class).addAnnotatedClass(Computer.class).addAnnotatedClass(User.class).buildSessionFactory();
 	}
+	
 	@Bean
 	public DigestAuthenticationEntryPoint entryPoint() {
 	    DigestAuthenticationEntryPoint result = new DigestAuthenticationEntryPoint();
@@ -136,14 +119,18 @@ public class ContextConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public DigestAuthenticationFilter digestAuthenticationFilter() throws Exception {
 	    DigestAuthenticationFilter result = new DigestAuthenticationFilter();
-	    result.setUserDetailsService(users());
+	    if (userService.loadUserByUsername("user") == null)
+	    {
+	    	userService.registerUser(new User("user",encoder().encode("digestsecret")));
+	    }
+	    result.setUserDetailsService(userService);
 	    result.setAuthenticationEntryPoint(entryPoint());
 	    //result.setPasswordAlreadyEncoded(true);
 	    return result;
 	}
-
+/*
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication()
+		auth.jdbcAuthentication().
         .withUser("user")
             .password(encoder().encode("digestsecret"))
             .roles("USER")
@@ -151,7 +138,7 @@ public class ContextConfig extends WebSecurityConfigurerAdapter {
         .withUser("TestAdmin")
             .password(encoder().encode("adminsecret"))
             .roles("ADMIN");
-	}
+	}*/
 	
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
@@ -163,14 +150,17 @@ public class ContextConfig extends WebSecurityConfigurerAdapter {
 	      .antMatchers("/add*").hasRole("USER")
 	      .antMatchers("/login*").permitAll()
 	      .antMatchers("/computers*").permitAll()
+	      .antMatchers("/static/**").permitAll() 
 	      .anyRequest().authenticated()
 	      .and()
-	      //.formLogin()
+	      .formLogin()
 	      //.loginPage("/login")
-	      //.defaultSuccessUrl("/computers", true)
-	      //.and()
+	      .defaultSuccessUrl("/computers")
+	      .and()
 	      .logout()
-	      //.logoutUrl("/logout")
+	      .invalidateHttpSession(true)
+	      .clearAuthentication(true)
+	      .logoutSuccessUrl("/computers")
 	      .deleteCookies("JSESSIONID")
 	      .and().addFilter(digestAuthenticationFilter()).exceptionHandling()
 			.authenticationEntryPoint(entryPoint())

@@ -8,9 +8,9 @@
 <meta charset="UTF-8">
 
 <!-- Bootstrap -->
-<link href="/training-java/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="/training-java/static/css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="/training-java/static/css/main.css" rel="stylesheet" media="screen">
+<link href="/training-java-webapp/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/training-java-webapp/static/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="/training-java-webapp/static/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
