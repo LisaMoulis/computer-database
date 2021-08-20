@@ -22,7 +22,7 @@
 "/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="os.name" value="Linux"/>
-    <property name="classworlds.conf" value="/home/excilys/eclipse-workspace/.metadata/.plugins/org.eclipse.m2e.launching/launches/m2conf5390730106325424363.tmp"/>
+    <property name="classworlds.conf" value="/home/excilys/eclipse-workspace/.metadata/.plugins/org.eclipse.m2e.launching/launches/m2conf3288352751974161274.tmp"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
     <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib"/>
     <property name="jdk.debug" value="release"/>

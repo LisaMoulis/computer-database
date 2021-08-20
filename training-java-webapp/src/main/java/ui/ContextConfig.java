@@ -1,26 +1,15 @@
 package ui;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Properties;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User.UserBuilder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.codec.Hex;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.DigestAuthenticationFilter;
 import org.springframework.web.servlet.ViewResolver;
@@ -146,8 +135,8 @@ public class ContextConfig extends WebSecurityConfigurerAdapter {
 	    http
 	      .csrf().disable()
 	      .authorizeRequests()
-	      .antMatchers("/edit*").hasRole("USER")
-	      .antMatchers("/add*").hasRole("USER")
+	      .antMatchers("/edit*").hasAuthority("USER")
+	      .antMatchers("/add*").hasAuthority("USER")
 	      .antMatchers("/login*").permitAll()
 	      .antMatchers("/computers*").permitAll()
 	      .antMatchers("/static/**").permitAll() 
@@ -160,7 +149,7 @@ public class ContextConfig extends WebSecurityConfigurerAdapter {
 	      .logout()
 	      .invalidateHttpSession(true)
 	      .clearAuthentication(true)
-	      .logoutSuccessUrl("/computers")
+	      .logoutSuccessUrl("/logout_process")
 	      .deleteCookies("JSESSIONID")
 	      .and().addFilter(digestAuthenticationFilter()).exceptionHandling()
 			.authenticationEntryPoint(entryPoint())
