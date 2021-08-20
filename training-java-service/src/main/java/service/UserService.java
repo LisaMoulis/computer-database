@@ -25,17 +25,6 @@ public class UserService implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = this.userDAO.getUser(username);
-		System.out.println("\n\nuser : " + user.getUsername() + user.getPassword());
-		if (user.getAuthorities().size() != 0)
-		{
-			for (Authority a : user.getAuthorities())
-			{
-				System.out.println(a.getAuthority());
-			}
-		}
-		
-		System.out.println("\n\n");
 		return this.userDAO.getUser(username);
 	}
 	
