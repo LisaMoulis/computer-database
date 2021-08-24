@@ -15,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.*;
 
+import dto.ComputerDTO;
+import mapper.ComputerDTOMapper;
+
 /**
  * Class ComputersRequesthandler :
  * Manage the SQL requests for the computers
@@ -25,17 +28,19 @@ import org.springframework.stereotype.*;
 @Scope("singleton")
 public class ComputerRequestHandler {
 
-	private static final String GET_WITH_NAME = "from Computer c where c.name=:name";//"SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer`, `company.name` LEFT JOIN `company` ON company_id = company.id WHERE computer.name=?";
+	private static final String GET_WITH_NAME = "from ComputerDTO c where c.name=:name";//"SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer`, `company.name` LEFT JOIN `company` ON company_id = company.id WHERE computer.name=?";
 	//private static final String GET_WITH_ID = "SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE computer.id=?";
 	private static final String GET_PAGE = "SELECT computer.id, computer.name,`company_id`,`introduced`,`discontinued`, company.name FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ? ORDER BY "; 
 	private static final String GET_NB_COMPUTERS = "SELECT COUNT(computer.id) FROM `computer` LEFT JOIN `company` ON company_id = company.id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ?"; 
 
 	private SessionFactory sessionFactory;
+	private ComputerDTOMapper computerMapper;
 	
 	@Autowired
-	public ComputerRequestHandler(SessionFactory sessionFactory)
+	public ComputerRequestHandler(SessionFactory sessionFactory,ComputerDTOMapper computerMapper)
 	{
 		this.sessionFactory = sessionFactory;
+		this.computerMapper = computerMapper;
 	}
 	
 	/**
@@ -44,11 +49,10 @@ public class ComputerRequestHandler {
 	 */
 	public Computer getComputer(int id)
 	{
-		
 		Session session = sessionFactory.openSession();
-		Computer computer = session.find(Computer.class, id);
+		ComputerDTO computer = session.find(ComputerDTO.class, id);
 		session.close();
-		return computer;
+		return computerMapper.mapToComputer(computer);
 	}
 	
 	/**
@@ -58,11 +62,11 @@ public class ComputerRequestHandler {
 	public Computer getComputer(String name)
 	{			
 		Session session = sessionFactory.openSession();
-		Query<Computer> query = session.createQuery(GET_WITH_NAME, Computer.class);
+		Query<ComputerDTO> query = session.createQuery(GET_WITH_NAME, ComputerDTO.class);
 	    query.setParameter("name", name);
-	    Computer computer = query.uniqueResult();
+	    ComputerDTO computer = query.uniqueResult();
 	    session.close();
-		return computer;
+		return computerMapper.mapToComputer(computer);
 	}
 	
 	/**
@@ -71,10 +75,10 @@ public class ComputerRequestHandler {
 	public List<Computer> getAllComputers()
 	{
 		Session session = sessionFactory.openSession();
-		Query<Computer> query = session.createQuery("from Computer", Computer.class);
-	    List<Computer> computers = query.getResultList();
+		Query<ComputerDTO> query = session.createQuery("from ComputerDTO", ComputerDTO.class);
+	    List<ComputerDTO> computers = query.getResultList();
 	    session.close();
-		return computers;
+		return computerMapper.mapToComputerList(computers);
 		//return jdbcTemplate.query("SELECT * FROM `computer` LEFT JOIN `company` ON company_id = company.id", this.computerDAOMapper);
 	}
 	
@@ -92,15 +96,15 @@ public class ComputerRequestHandler {
 		str = str + " LIMIT ? OFFSET ?";
 
 		@SuppressWarnings("unchecked")
-		Query<Computer> query = session.createSQLQuery(str).addEntity(Computer.class);
+		Query<ComputerDTO> query = session.createSQLQuery(str).addEntity(ComputerDTO.class);
 		
 		query.setParameter(1, "%"+search.toLowerCase()+"%");
 		query.setParameter(2, "%"+search.toLowerCase()+"%");
 		query.setParameter(3, size);
 		query.setParameter(4, offset);
-		List<Computer> page = query.getResultList();
+		List<ComputerDTO> page = query.getResultList();
 		session.close();
-		return page;
+		return computerMapper.mapToComputerList(page);
 	}
 
 	public int getNbComputers(String search)
@@ -132,7 +136,7 @@ public class ComputerRequestHandler {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-		  session.save(computer);
+		  session.save(computerMapper.mapToDTO(computer));
 		  transaction.commit();
 		} catch (RollbackException t) {
 		  transaction.rollback();
@@ -149,7 +153,8 @@ public class ComputerRequestHandler {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-		  session.update(computer);
+			System.out.println(computerMapper.mapToDTO(computer));
+		  session.update(computerMapper.mapToDTO(computer));
 		  transaction.commit();
 		} catch (RollbackException t) {
 		  transaction.rollback();
@@ -184,7 +189,7 @@ public class ComputerRequestHandler {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-		  Query<Computer> query = session.createQuery("delete from Computer where name = :name",Computer.class);
+		  Query<ComputerDTO> query = session.createQuery("delete from ComputerDTO where name = :name",ComputerDTO.class);
 		  query.setParameter("name", name);
 		  query.executeUpdate();
 		  transaction.commit();

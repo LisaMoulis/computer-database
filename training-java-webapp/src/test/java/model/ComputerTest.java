@@ -1,5 +1,5 @@
 package model;
-/*
+
 import java.time.LocalDate;
 
 import junit.framework.TestCase;
@@ -41,7 +41,7 @@ public class ComputerTest extends TestCase{
 	public void testCompany()
 	{
 		computer = new Computer("test");
-		computer.setCompany("test");
-		assertEquals("test",computer.getCompany());
+		computer.setCompany(new Company(3,"test"));
+		assertEquals("test",computer.getCompany().getName());
 	}
-}*/
+}

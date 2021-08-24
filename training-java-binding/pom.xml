@@ -14,9 +14,8 @@
   </dependency>
   
   <dependency>
-    <groupId>training-java</groupId>
-    <artifactId>training-java-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-jdbc</artifactId>
+	</dependency>
   </dependencies>
 </project>

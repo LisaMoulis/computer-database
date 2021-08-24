@@ -1,5 +1,5 @@
 package mapper;
-/*
+
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import model.Company;
 import model.Computer;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -48,14 +49,14 @@ public class ComputerDAOMapperTest {
 		assertEquals("test",c.getName());
 		assertEquals(LocalDate.of(2021, 1, 1),c.getIntroduced());
 		assertEquals(LocalDate.of(2021, 2, 2),c.getDiscontinued());
-		assertEquals("testcompany",c.getCompany());
+		assertEquals("testcompany",c.getCompany().getName());
 		
 	}
 	
 	@Test
 	public void testToUpdate() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
 	{
-		Computer computer = new Computer(1,"test",LocalDate.of(2021,1,1),LocalDate.of(2021,2,2),"testcompany");
+		Computer computer = new Computer(1,"test",LocalDate.of(2021,1,1),LocalDate.of(2021,2,2),new Company(3,"testcompany"));
 		String request = computerDAOMapper.mapToUpdate(computer,3);
 		assertEquals("`id`='1', `name`='test', `introduced`='2021-01-01 00:00:00.0', `discontinued`='2021-02-02 00:00:00.0', `company_id`='3'",request);
 
@@ -64,9 +65,9 @@ public class ComputerDAOMapperTest {
 	@Test
 	public void testToCreate() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
 	{
-		Computer computer = new Computer(1,"test",LocalDate.of(2021,1,1),LocalDate.of(2021,2,2),"testcompany");
+		Computer computer = new Computer(1,"test",LocalDate.of(2021,1,1),LocalDate.of(2021,2,2),new Company(3,"testcompany"));
 		String request = computerDAOMapper.mapToCreate(computer,3);
 		assertEquals("(`name`, `introduced`, `discontinued`, `company_id`) VALUES ('test', '2021-01-01 00:00:00.0', '2021-02-02 00:00:00.0', 3)",request);
 
 	}
-}*/
+}

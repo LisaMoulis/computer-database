@@ -1,27 +1,34 @@
-package model;
+package dto;
 
 import java.util.ArrayList;
 
 import javax.persistence.*;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import dto.AuthorityDTO;
-
-public class User implements UserDetails {
+@Entity
+@Table(name = "users")
+public class UserDTO implements UserDetails {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@Id
 	private String username;
+	@Column
 	private String password;
+	@Column
 	private String authority;
-	private boolean enabled = true;
+	@Column
+	private boolean enabled;
+	@Transient
 	private boolean accountExpired = false;
+	@Transient
 	private boolean locked = false;
+	@Transient
 	private boolean credentialExpired = false;
 	
-	public User(String name, String encode) {
+	public UserDTO(String name, String encode) {
 		this.username = name;
 		this.password = encode;
 		this.authority = "USER";
@@ -30,19 +37,19 @@ public class User implements UserDetails {
 		//this.authorities.add(new Authority("USER"));
 	}
 
-	public User()
+	public UserDTO()
 	{}
 	
-	public User(String username, String password, String authority) {
+	public UserDTO(String username, String password, String authority) {
 		this.username = username;
 		this.password = password;
 		this.authority = authority;
 	}
 
 	@Override
-	public ArrayList<Authority> getAuthorities() {
-		ArrayList<Authority> authorities = new ArrayList<Authority>();
-		authorities.add(new Authority(this.authority));
+	public ArrayList<AuthorityDTO> getAuthorities() {
+		ArrayList<AuthorityDTO> authorities = new ArrayList<AuthorityDTO>();
+		authorities.add(new AuthorityDTO(this.authority));
 		return authorities;
 	}
 

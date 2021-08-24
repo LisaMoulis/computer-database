@@ -6,8 +6,8 @@ public class ComputerDTOBuilder {
 
 	private int id = -1;
 	private String name = "";
-	private String introduced = "";
-	private String discontinued = "";
+	private String introduced;
+	private String discontinued;
 	private String company = "";
 	private int companyId = -1;
 	

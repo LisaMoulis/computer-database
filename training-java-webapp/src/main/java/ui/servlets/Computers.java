@@ -78,7 +78,6 @@ public class Computers {
 		PageSettings settings = (PageSettings) request.getSession().getAttribute("pageSettings");
 		this.setPageDTO(page,settings);
 		view.addObject("page",page);
-		
 		return view;
 	}
 	

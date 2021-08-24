@@ -1,11 +1,14 @@
 package persistence;
 
+
 import java.util.List;
 
 import javax.persistence.RollbackException;
 
+import mapper.CompanyDTOMapper;
+
 import model.Company;
-import model.Computer;
+
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -14,6 +17,9 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.Transactional;
+
+import dto.CompanyDTO;
+import dto.ComputerDTO;
 
 
 /**
@@ -31,29 +37,31 @@ public class CompanyRequestHandler {
 	 */
 	
 	private SessionFactory sessionFactory;
+	private CompanyDTOMapper companyMapper;
 	
 	@Autowired
-	public CompanyRequestHandler(SessionFactory sessionFactory)
+	public CompanyRequestHandler(SessionFactory sessionFactory, CompanyDTOMapper companyMapper)
 	{
 		this.sessionFactory = sessionFactory;
+		this.companyMapper = companyMapper;
 	}
 	
 	public Company getCompany(int id)
 	{
 		Session session = sessionFactory.openSession();
-		Company company = session.find(Company.class, id);
+		CompanyDTO company = session.find(CompanyDTO.class, id);
 		session.close();
-		return company;
+		return companyMapper.mapToCompany(company);
 	}
 	
 	public Company getCompany(String name)
 	{
 		Session session = sessionFactory.openSession();
-		Query<Company> query = session.createQuery("from Company c where c.name=:name", Company.class);
+		Query<CompanyDTO> query = session.createQuery("from CompanyDTO c where c.name=:name", CompanyDTO.class);
 	    query.setParameter("name", name);
-	    Company company = query.uniqueResult();
+	    CompanyDTO company = query.uniqueResult();
 	    session.close();
-		return company;
+		return companyMapper.mapToCompany(company);
 	}
 	
 	/**
@@ -62,10 +70,10 @@ public class CompanyRequestHandler {
 	public List<Company> getAllCompanies()
 	{
 		Session session = sessionFactory.openSession();
-		Query<Company> query = session.createQuery("from Company c", Company.class);
-		List<Company> companies = query.getResultList();
+		Query<CompanyDTO> query = session.createQuery("from CompanyDTO c", CompanyDTO.class);
+		List<CompanyDTO> companies = query.getResultList();
 		session.close();
-		return companies;
+		return companyMapper.mapToCompanyList(companies);
 	}
 	
 	@Transactional
@@ -75,10 +83,10 @@ public class CompanyRequestHandler {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-		  Query<Computer> queryComputer = session.createQuery("delete from Computer where company_id = :id",Computer.class);
+		  Query<ComputerDTO> queryComputer = session.createQuery("delete from ComputerDTO where company_id = :id",ComputerDTO.class);
 		  queryComputer.setParameter("id", id);
 		  queryComputer.executeUpdate();
-		  Query<Company> queryCompany  = session.createQuery("delete from Company where id = :id",Company.class);
+		  Query<CompanyDTO> queryCompany  = session.createQuery("delete from CompanyDTO where id = :id",CompanyDTO.class);
 		  queryCompany.setParameter("id", id);
 		  queryCompany.executeUpdate();
 

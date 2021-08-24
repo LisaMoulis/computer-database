@@ -1,9 +1,0 @@
-ui/ContextConfig.class
-ui/servlets/Login.class
-ui/servlets/Edit.class
-ui/servlets/Computers.class
-ui/servlets/ErrorPages.class
-ui/servlets/Delete.class
-ui/servlets/Home.class
-ui/CharsetFilter.class
-ui/servlets/AddComputer.class

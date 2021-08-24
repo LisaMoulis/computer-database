@@ -20,6 +20,7 @@ import org.springframework.web.servlet.view.JstlView;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+import dto.*;
 import model.*;
 import service.UserService;
 
@@ -74,12 +75,6 @@ public class ContextConfig extends WebSecurityConfigurerAdapter {
 		return NoOpPasswordEncoder.getInstance();
 	}	
 	
-	/*
-	@Bean
-    public UserDetailsService users() throws Exception {
-        return super.userDetailsServiceBean();
-    }*/
-	
 	@Bean
 	public ResourceBundleMessageSource messageSource() {
 
@@ -94,7 +89,7 @@ public class ContextConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public SessionFactory sessionFactory() 
 	{	
-	    return new org.hibernate.cfg.Configuration().addAnnotatedClass(Company.class).addAnnotatedClass(Computer.class).addAnnotatedClass(User.class).buildSessionFactory();
+	    return new org.hibernate.cfg.Configuration().addAnnotatedClass(CompanyDTO.class).addAnnotatedClass(ComputerDTO.class).addAnnotatedClass(UserDTO.class).buildSessionFactory();
 	}
 	
 	@Bean
@@ -117,17 +112,6 @@ public class ContextConfig extends WebSecurityConfigurerAdapter {
 	    //result.setPasswordAlreadyEncoded(true);
 	    return result;
 	}
-/*
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.jdbcAuthentication().
-        .withUser("user")
-            .password(encoder().encode("digestsecret"))
-            .roles("USER")
-    .and()
-        .withUser("TestAdmin")
-            .password(encoder().encode("adminsecret"))
-            .roles("ADMIN");
-	}*/
 	
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
@@ -140,6 +124,7 @@ public class ContextConfig extends WebSecurityConfigurerAdapter {
 	      .antMatchers("/login*").permitAll()
 	      .antMatchers("/computers*").permitAll()
 	      .antMatchers("/static/**").permitAll() 
+	      .antMatchers("/service/**").permitAll()
 	      .anyRequest().authenticated()
 	      .and()
 	      .formLogin()
@@ -156,7 +141,6 @@ public class ContextConfig extends WebSecurityConfigurerAdapter {
 	      //.logoutSuccessHandler(logoutSuccessHandler());
 	      ;
 	}
-	
 	
 }
 //Inversion de dépendance :  la classe est la mère, le nom est la classe fille

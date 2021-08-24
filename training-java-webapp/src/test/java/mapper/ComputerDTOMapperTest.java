@@ -1,11 +1,12 @@
 package mapper;
-/*
+
 import dto.ComputerDTO;
 import model.Company;
 import model.Computer;
 import service.CompanyService;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 import java.time.LocalDate;
 
@@ -30,7 +31,7 @@ public class ComputerDTOMapperTest {
 	@Before
 	public void setMapper()
 	{
-		CompanyService service =  Mockito.mock(CompanyService.class);
+		CompanyService service =  mock(CompanyService.class);
 		Mockito.when(service.getCompany(3)).thenReturn(new Company(3,"testcompany"));
 		Mockito.when(service.getCompany("testcompany")).thenReturn(new Company(3,"testcompany"));
 		
@@ -47,13 +48,13 @@ public class ComputerDTOMapperTest {
 		assertEquals("test",c.getName());
 		assertEquals(LocalDate.of(2021, 1, 1),c.getIntroduced());
 		assertEquals(LocalDate.of(2021, 2, 2),c.getDiscontinued());
-		assertEquals("testcompany",c.getCompany());
+		assertEquals("testcompany",c.getCompany().getName());
 	}
 	
 	@Test
 	public void testToDTO() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
 	{
-		Computer c = new Computer(1,"test",LocalDate.of(2021,1,1),LocalDate.of(2021,2,2),"testcompany");
+		Computer c = new Computer(1,"test",LocalDate.of(2021,1,1),LocalDate.of(2021,2,2),new Company(3,"testcompany"));
 		ComputerDTO dto = computerDTOMapper.mapToDTO(c);
 		
 		assertEquals("test",dto.getName());
@@ -61,4 +62,4 @@ public class ComputerDTOMapperTest {
 		assertEquals("2021-02-02",dto.getDiscontinued());
 		assertEquals("testcompany",dto.getCompany());
 	}
-}*/
+}

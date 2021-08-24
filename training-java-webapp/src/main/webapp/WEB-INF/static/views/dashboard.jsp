@@ -93,7 +93,7 @@
 	                        </td>
 	                        <td><c:if test="${not empty entry.introduced}">${entry.introduced}</c:if></td>
 	                        <td><c:if test="${not empty entry.discontinued}">${entry.discontinued}</c:if></td>
-	                        <td><c:if test="${not empty entry.company}">${entry.company}</c:if></td>
+	                        <td><c:if test="${not empty entry.company}">${entry.company.name}</c:if></td>
 	
 	                    </tr>
 					</c:forEach>

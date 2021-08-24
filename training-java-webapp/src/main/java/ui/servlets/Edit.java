@@ -36,10 +36,11 @@ public class Edit {
 		ModelAndView page = new ModelAndView("editComputer");
 		logger.debug("Edit page displayed.");
 		ComputerDTO c = computerDTOMapper.mapToDTO(computerService.getComputer(id));
+		System.out.println("\n\n\n" + computerService.getComputer(id) + "\n" + c + "\n\n\n");
 		page.addObject("computer", c);
-		if (c.getCompany() != null && !c.getCompany().equals(""))
+		if (c.getCompany() != null)
 		{
-			page.addObject("companyId",companyService.getCompany(c.getCompany()).getId());
+			page.addObject("companyId",c.getCompany().getId());
 		}
 		else
 		{
@@ -52,10 +53,12 @@ public class Edit {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public String doPost(HttpServletRequest request, HttpServletResponse response, @Valid ComputerDTO dto) throws IOException, ServletException 
+	public String doPost(HttpServletRequest request, HttpServletResponse response, @Valid ComputerDTO dto,@RequestParam(name="companyId", required =false) int companyId) throws IOException, ServletException 
 	{
 		logger.debug("Computer info retrieved. Trying to create the computer.");
 		Computer computer = computerDTOMapper.mapToComputer(dto);
+		computer.setCompany(companyService.getCompany(companyId));
+		
 		try
 		{	
 			computerService.updateComputer(computer);
@@ -69,7 +72,16 @@ public class Edit {
 			logger.debug("Computer update failed. Error message : "+e.getMessage());
 			out.println("<script>alert(\""+ e.getMessage()+"\")</script>");
 			request.setAttribute("companies", companyService.getAllCompanies());
-			RequestDispatcher rd= request.getRequestDispatcher("/WEB-INF/static/views/edit.jsp");
+			request.setAttribute("computer", computer);
+			if (computer.getCompany() != null)
+			{
+				request.setAttribute("companyId",computer.getCompany().getId());
+			}
+			else
+			{
+				request.setAttribute("companyId",0);
+			}
+			RequestDispatcher rd= request.getRequestDispatcher("/WEB-INF/static/views/editComputer.jsp");
 			rd.include(request, response);
 			return null;
 		}

@@ -5,13 +5,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import dto.ComputerDTO;
 import model.Company;
 import model.Computer;
-import service.CompanyService;
 import builder.*;
 
 /**
@@ -22,15 +20,7 @@ import builder.*;
 
 @Component
 public class ComputerDTOMapper {
-	
-	private CompanyService companyService;
-	
-	@Autowired
-	public ComputerDTOMapper(CompanyService companyService)
-	{
-		this.companyService = companyService;
-	}
-	
+		
 	/**
 	 * @param result	Representation of a computer from the database
 	 * @return A computer object created from one of the database
@@ -40,18 +30,20 @@ public class ComputerDTOMapper {
 	{
 		ComputerBuilder builder = new ComputerBuilder().setName(dto.getName()).setId(dto.getId());
 		//Verify if some columns are empty before getting them
-		if (dto.getIntroduced() != null && !dto.getIntroduced().equals(""))
+		if (dto.getIntroduced() != null && !dto.getIntroduced().equals("") && !dto.getIntroduced().equals("0000-00-00"))
 		{
-			builder.setIntroduced(LocalDate.parse(dto.getIntroduced(), DateTimeFormatter.ISO_LOCAL_DATE));
+			dto.setIntroduced(dto.getIntroduced().replace(" 00:00:00",""));
+			builder.setIntroduced(LocalDate.parse(dto.getIntroduced(), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 		}
 		
-		if (dto.getDiscontinued() != null && !dto.getDiscontinued().equals(""))
+		if (dto.getDiscontinued() != null && !dto.getDiscontinued().equals("") && !dto.getDiscontinued().equals("0000-00-00"))
 		{
-			builder.setDiscontinued(LocalDate.parse(dto.getDiscontinued(), DateTimeFormatter.ISO_LOCAL_DATE));
+			dto.setDiscontinued(dto.getDiscontinued().replace(" 00:00:00",""));
+			builder.setDiscontinued(LocalDate.parse(dto.getDiscontinued(), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 		}
-		if (dto.getCompanyId() > 0)
+		if (dto.getCompany() != null)
 		{
-			builder.setCompany(companyService.getCompany(dto.getCompanyId()));
+			builder.setCompany(new CompanyDTOMapper().mapToCompany(dto.getCompany()));
 		}
 		return builder.build();
 	}
@@ -82,5 +74,10 @@ public class ComputerDTOMapper {
 	{
 		List<ComputerDTO> dto = (List<ComputerDTO>) computers.stream().map(e -> mapToDTO(e)).toList();
 		return dto;
+	}
+
+	public List<Computer> mapToComputerList(List<ComputerDTO> dto) {
+		List<Computer> computers = (List<Computer>) dto.stream().map(e -> mapToComputer(e)).toList();
+		return computers;
 	}
 }

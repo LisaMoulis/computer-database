@@ -2,31 +2,17 @@ package model;
 
 import java.time.LocalDate;
 
-import javax.persistence.*;
-
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 /**
  * Class Computer :
  * Represent a computer and its information
  * @author Lisa
  */
-@Entity
-@Table(name = "computer")
 public class Computer {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	@Column
+
+	private int id = -1;
 	private String name;
-	@Column(nullable=true)
 	private LocalDate introduced;
-	@Column(nullable=true)
 	private LocalDate discontinued;
-	@ManyToOne(optional = true)
-	@Fetch(FetchMode.JOIN)
-	@JoinColumn(name = "company_id",nullable=true)
 	private Company company;
 	
 	/**
@@ -163,7 +149,7 @@ public class Computer {
 	
 	@Override
 	public String toString() {
-		return "Computer [name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued + ", company=" + company
+		return "Computer [id=" + id + "name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued + ", company=" + company
 				+ "]";
 	}
 }

@@ -1,20 +1,27 @@
-package model;
+package dto;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
 
-public class Authority implements GrantedAuthority {
+@Entity
+@Table(name = "authorities")
+public class AuthorityDTO implements GrantedAuthority {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@Id
 	private String authority;
 	
-	public Authority(String string) {
+	public AuthorityDTO(String string) {
 		this.authority = string;
 	}
 
-	public Authority()
+	public AuthorityDTO()
 	{}
 
 	@Override
