@@ -26,7 +26,7 @@ import service.UserService;
 
 @Configuration
 
-@ComponentScan(basePackages = { "command","service","persistence","mapper","ui.servlets","training-java-persistence.src/main/java.persistence",
+@ComponentScan(basePackages = { "command","service","persistence","mapper","ui.servlets", "api","training-java-persistence.src/main/java.persistence",
 		"training-java-persistence.persistence" ,"training-java.training-java-persistence.persistence","training-java.training-java-persistence.src/main/java.persistence" })
 @EnableWebMvc
 @EnableWebSecurity

@@ -19,7 +19,6 @@ import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import dto.CompanyDTO;
-import dto.ComputerDTO;
 
 
 /**
@@ -83,10 +82,10 @@ public class CompanyRequestHandler {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-		  Query<ComputerDTO> queryComputer = session.createQuery("delete from ComputerDTO where company_id = :id",ComputerDTO.class);
+		  Query<?> queryComputer = session.createQuery("delete from ComputerDTO where company_id = :id");
 		  queryComputer.setParameter("id", id);
 		  queryComputer.executeUpdate();
-		  Query<CompanyDTO> queryCompany  = session.createQuery("delete from CompanyDTO where id = :id",CompanyDTO.class);
+		  Query<?> queryCompany  = session.createQuery("delete from CompanyDTO where id = :id");
 		  queryCompany.setParameter("id", id);
 		  queryCompany.executeUpdate();
 

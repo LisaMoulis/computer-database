@@ -172,7 +172,7 @@ public class ComputerRequestHandler {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			session.delete(getComputer(id));
+			session.delete(computerMapper.mapToDTO( getComputer(id)));
 			transaction.commit();
 		} catch (RollbackException t) {
 			transaction.rollback();
@@ -189,7 +189,7 @@ public class ComputerRequestHandler {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-		  Query<ComputerDTO> query = session.createQuery("delete from ComputerDTO where name = :name",ComputerDTO.class);
+		  Query<?> query = session.createQuery("delete from ComputerDTO where name = :name");
 		  query.setParameter("name", name);
 		  query.executeUpdate();
 		  transaction.commit();

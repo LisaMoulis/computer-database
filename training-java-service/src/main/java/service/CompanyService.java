@@ -46,7 +46,7 @@ public class CompanyService {
 	
 	public void removeCompany(int id)
 	{
-		computerRequestHandler.deleteComputer(id);
+		companyRequestHandler.deleteCompany(id);
 	}
 	
 	public void removeCompany(String name)
