@@ -2,15 +2,18 @@ package command;
 
 import java.util.ArrayList;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+
 import model.ComputerList;
-import persistence.CompanyRequestHandler;
-import persistence.ComputerRequestHandler;
 import service.CompanyService;
 import service.ComputerService;
 import service.PageService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import mapper.ComputerDTOMapper;
 
 /**
  * Class CommandHandler :
@@ -24,8 +27,9 @@ public class CommandHandler {
 	private ArrayList<Command> commands;
 	//private static CommandHandler instance;
 	private ComputerList computerList = new ComputerList();
+	private Client client = ClientBuilder.newClient();
 	@Autowired
-	private CommandHandler(ComputerService computerService,CompanyService companyService,PageService pageService,ComputerRequestHandler computerRequestHandler,CompanyRequestHandler companyRequestHandler)
+	private CommandHandler(ComputerService computerService,CompanyService companyService,PageService pageService,ComputerDTOMapper computerMapper)
 	{
 		//Create the list of commands with the basic ones
 		this.commands = new ArrayList<Command>();
@@ -41,11 +45,11 @@ public class CommandHandler {
 		this.commands.add(new CommandPreviousPage());
 		
 		this.commands.forEach(c -> {
-			c.setCompanyRequestHandler(companyRequestHandler);
 			c.setCompanyService(companyService);
-			c.setComputerRequestHandler(computerRequestHandler);
+			c.setComputerDTOMapper(computerMapper);
 			c.setComputerService(computerService);
 			c.setPageService(pageService);
+			c.setClient(client);
 		});
 	}
 	

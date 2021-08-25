@@ -63,14 +63,15 @@ public class ComputerWebService {
 	
 
 	@RequestMapping(method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public void addComputer(@Valid ComputerDTO computer)
+	public void addComputer(@RequestBody @Valid ComputerDTO computer)
 	{
 		computerService.createComputer(computerMapper.mapToComputer(computer));
 	}
 	
-	@RequestMapping(value= "/service/computers/update",method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public void updateComputer(@Valid ComputerDTO computer)
+	@RequestMapping(value= "/update",method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public void updateComputer(@RequestBody @Valid ComputerDTO computer)
 	{
+		System.out.println(computer);
 		computerService.updateComputer(computerMapper.mapToComputer(computer));
 	}
 	

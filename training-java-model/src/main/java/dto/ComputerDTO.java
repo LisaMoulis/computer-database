@@ -80,14 +80,14 @@ public class ComputerDTO {
 	}
 
 	public void setIntroduced(String introduced) {
-		if (!introduced.equals(""))
+		if (introduced != null && !introduced.equals(""))
 		{
 			this.introduced = introduced;
 		}
 	}
 
 	public void setDiscontinued(String discontinued) {
-		if (!discontinued.equals(""))
+		if (discontinued != null && !discontinued.equals(""))
 		{
 			this.discontinued = discontinued;
 		}

@@ -1,11 +1,12 @@
 package command;
 
+import javax.ws.rs.client.Client;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import persistence.CompanyRequestHandler;
-import persistence.ComputerRequestHandler;
+import mapper.ComputerDTOMapper;
 import service.CompanyService;
 import service.ComputerService;
 import service.PageService;
@@ -23,8 +24,9 @@ public abstract class Command {
 	protected ComputerService computerService;
 	protected CompanyService companyService;
 	protected PageService pageService;
-	protected ComputerRequestHandler computerRequestHandler;
-	protected CompanyRequestHandler companyRequestHandler;
+	protected ComputerDTOMapper computerMapper = new ComputerDTOMapper();
+	protected Client client;
+	protected static final String APP_URI = "http://localhost:8080/training-java-webapp/service";
 	
 	public void setComputerService(ComputerService computerService)
 	{
@@ -41,14 +43,15 @@ public abstract class Command {
 		this.pageService = pageService;
 	}
 	
-	public void setComputerRequestHandler(ComputerRequestHandler computerRequestHandler)
+	public void setComputerDTOMapper(ComputerDTOMapper computerMapper)
 	{
-		this.computerRequestHandler = computerRequestHandler;
+		this.computerMapper = computerMapper;
 	}
 	
-	public void setCompanyRequestHandler(CompanyRequestHandler companyRequestHandler)
+	
+	public void setClient(Client client)
 	{
-		this.companyRequestHandler = companyRequestHandler;
+		this.client = client;
 	}
 	
 	/**
@@ -60,4 +63,6 @@ public abstract class Command {
 	
 	@Override
 	public abstract boolean equals(Object object);
+
+	
 }

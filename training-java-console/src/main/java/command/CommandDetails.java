@@ -1,5 +1,9 @@
 package command;
 
+import javax.ws.rs.core.MediaType;
+
+import dto.ComputerDTO;
+
 /**
  * Class CommandDetails :
  * Display the details of a computer
@@ -21,11 +25,13 @@ public class CommandDetails extends Command {
 			String str = "Details of the computer :\n";
 			try {
 				int id = Integer.valueOf(args[1]);
-				str += computerRequestHandler.getComputer(id);
+				str += this.client.target(APP_URI).path("computers").queryParam("id", id)
+						.request(MediaType.APPLICATION_JSON).get(ComputerDTO.class);//computerRequestHandler.getComputer(id);
 			}
 			catch (NumberFormatException e)
 			{
-				str += computerService.getComputer(args[1]);
+				str += this.client.target(APP_URI).path("computers").queryParam("name", args[1])
+						.request(MediaType.APPLICATION_JSON).get(ComputerDTO.class);//computerService.getComputer(args[1]);
 			}
 			System.out.println(str);
 			logger.debug("Details of the computer displayed.");

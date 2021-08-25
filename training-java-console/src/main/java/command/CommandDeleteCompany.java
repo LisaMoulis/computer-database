@@ -1,5 +1,9 @@
 package command;
 
+import javax.ws.rs.core.MediaType;
+
+import dto.CompanyDTO;
+
 /**
  * Class CommandDelete :
  * Delete a computer
@@ -16,16 +20,19 @@ public class CommandDeleteCompany extends Command {
 	
 	@Override
 	public void exec(CommandHandler handler, String...args) {
-		System.out.println("coucou");
 		if (args.length == 2)
 		{
 			try {
 				int id = Integer.valueOf(args[1]);
-				companyService.removeCompany(id);
+				this.client.target(APP_URI).path("companies").queryParam("id", id)
+					.request(MediaType.APPLICATION_JSON).delete(CompanyDTO.class);
+				//companyService.removeCompany(id);
 			}
 			catch (NumberFormatException e)
 			{
-				companyService.removeCompany(args[1]);
+				this.client.target(APP_URI).path("companies").queryParam("name", args[1])
+					.request(MediaType.APPLICATION_JSON).delete(CompanyDTO.class);
+				//companyService.removeCompany(args[1]);
 			}
 			this.logger.debug("Company deleted.");
 		}

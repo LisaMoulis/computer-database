@@ -1,5 +1,9 @@
 package command;
 
+import java.util.List;
+
+import javax.ws.rs.core.MediaType;
+
 import model.ComputerList;
 
 /**
@@ -22,7 +26,11 @@ public class CommandPreviousPage extends Command{
 			ComputerList page = handler.getPage();
 			page.setPage(page.getPage()-1);
 			this.logger.debug("List of computers displayed.");
-			System.out.println("List of the computers :\n" + pageService.getPage(page,"","computer.id","asc"));
+			String str = "List of the computers :\n";
+			str += client.target(APP_URI).path("computers").queryParam("page", page.getPage()).queryParam("size", 10)
+					.request(MediaType.APPLICATION_JSON).get(List.class);
+			System.out.println(str);
+			//System.out.println("List of the computers :\n" + pageService.getPage(page,"","computer.id","asc"));
 		}
 		else
 		{

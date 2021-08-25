@@ -3,6 +3,9 @@ package command;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.client.Entity;
+
 import builder.ComputerBuilder;
 import model.*;
 import validation.Validator;
@@ -37,7 +40,15 @@ public class CommandCreate extends Command {
 				newone.setDiscontinued(LocalDate.parse(args[i+1],DateTimeFormatter.ISO_LOCAL_DATE));
 				break;
 			case("company"):
-				newone.setCompany(companyService.getCompany(args[i+1]));
+				try {
+					int cid = Integer.valueOf(args[i+1]);
+					newone.setCompany(companyService.getCompany(cid));
+				}
+				catch (NumberFormatException e)
+				{
+					newone.setCompany(companyService.getCompany(args[i+1]));
+				}
+				
 				break;
 			}
 		}
@@ -46,14 +57,8 @@ public class CommandCreate extends Command {
 		//Create the computer in the database and locally
 		Validator.validate(newc);
 		
-		int company_id = -1;
-
-		Company company = newc.getCompany();
-		if (company != null)
-		{
-			company_id = company.getId();
-		}
-		computerRequestHandler.createComputer(newc,company_id);
+		this.client.target(APP_URI).path("computers").request(MediaType.APPLICATION_JSON).post(Entity.entity(computerMapper.mapToDTO(newc), MediaType.APPLICATION_JSON));
+		//computerRequestHandler.createComputer(newc,company_id);
 		this.logger.info("Computer created.");
 		this.logger.info(newc.toString());
 		System.out.println("Done.\n");

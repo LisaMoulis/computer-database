@@ -1,5 +1,9 @@
 package command;
 
+import java.util.List;
+
+import javax.ws.rs.core.MediaType;
+
 /**
  * Class CommandListCompanies :
  * Display a list of the companies
@@ -18,7 +22,11 @@ public class CommandListCompanies extends Command {
 		if (args.length == 1)
 		{
 			this.logger.debug("Displaying the list of the companies.");
-			System.out.println("List of the companies :\n" + companyService.toString());
+			String str = "List of the companies :\n";
+			str += client.target(APP_URI).path("companies")
+					.request(MediaType.APPLICATION_JSON).get(List.class);
+			System.out.println(str);
+			//System.out.println("List of the companies :\n" + companyService.toString());
 		}
 		else
 		{

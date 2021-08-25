@@ -7,7 +7,8 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-import model.*;
+import dto.CompanyDTO;
+import dto.ComputerDTO;
 
 @Configuration
 
@@ -38,7 +39,7 @@ public class ConsoleConfig {
 	@Bean
 	public SessionFactory sessionFactory() 
 	{	
-	    return new org.hibernate.cfg.Configuration().addAnnotatedClass(Company.class).addAnnotatedClass(Computer.class).buildSessionFactory();
+	    return new org.hibernate.cfg.Configuration().addAnnotatedClass(CompanyDTO.class).addAnnotatedClass(ComputerDTO.class).buildSessionFactory();
 	}
 	
 	

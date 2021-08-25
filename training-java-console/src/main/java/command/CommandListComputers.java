@@ -1,5 +1,8 @@
 package command;
 
+import java.util.List;
+import javax.ws.rs.core.MediaType;
+
 import model.ComputerList;
 
 /**
@@ -22,13 +25,22 @@ public class CommandListComputers extends Command{
 		{
 			page.setPage(1);
 			this.logger.debug("Displaying the list of computers.");
-			System.out.println("List of the computers :\n" + pageService.getPage(page,"","computer.id","asc"));
+			String str = "List of the computers :\n";
+			this.logger.debug(client.target(APP_URI).path("computers").queryParam("page", 1).queryParam("size", 10).getUri().toString());
+			str += client.target(APP_URI).path("computers").queryParam("page", 1).queryParam("size", 10)
+					.request(MediaType.APPLICATION_JSON).get(List.class);
+			System.out.println(str);
+			//System.out.println("List of the computers :\n" + pageService.getPage(page,"","computer.id","asc"));
 		}
 		else if (args.length == 2)
 		{
 			this.logger.debug("Displaying the list of computers.");
 			page.setPage(Integer.valueOf(args[2]));
-			System.out.println("List of the computers :\n" + pageService.getPage(page,"","computer.id","asc"));
+			String str = "List of the computers :\n";
+			str += client.target(APP_URI).path("computers").queryParam("page", args[2]).queryParam("size", 10)
+					.request(MediaType.APPLICATION_JSON).get(List.class);
+			System.out.println(str);
+			//System.out.println("List of the computers :\n" + pageService.getPage(page,"","computer.id","asc"));
 		}
 		else
 		{
