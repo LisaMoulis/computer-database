@@ -3,7 +3,6 @@ package ui;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
 import command.*;
@@ -23,10 +22,8 @@ public class Main {
 	public static void main(String[] str)
 	{
 		logger.debug("Program started.");
-		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:/applicationContext.xml");
-		commands = context.getBean(CommandHandler.class);
+		commands = new CommandHandler();//context.getBean(CommandHandler.class);
 		getFromCommandLine();
-		context.close();
 	}
 	
 	
@@ -42,3 +39,5 @@ public class Main {
 	}
 	
 }
+
+//Inversion de dépendance :  la classe est la mère, le nom est la classe fille

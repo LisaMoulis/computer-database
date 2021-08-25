@@ -46,6 +46,13 @@ public class ComputerWebService {
 		return computerMapper.mapToDTO(computerService.getComputer(id));
 	}
 	
+	@RequestMapping(params = {"name"}, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ComputerDTO getComputer(@RequestParam("name") String name)
+	{
+		return computerMapper.mapToDTO(computerService.getComputer(name));
+	}
+	
+
 	@RequestMapping(params = {"page","size"}, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public List<ComputerDTO> getAllComputers(@RequestParam("page") int page, @RequestParam("size") int size)
 	{
@@ -54,13 +61,7 @@ public class ComputerWebService {
 		list.setSize(size);
 		return computerMapper.mapToDTOList(pageService.getPage(list,"","computer.id","asc"));
 	}
-	
-	@RequestMapping(params = {"name"}, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ComputerDTO getComputer(@RequestParam("name") String name)
-	{
-		return computerMapper.mapToDTO(computerService.getComputer(name));
-	}
-	
+		
 
 	@RequestMapping(method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public void addComputer(@RequestBody @Valid ComputerDTO computer)

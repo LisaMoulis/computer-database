@@ -6,6 +6,8 @@ import java.time.format.DateTimeFormatter;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
+import dto.CompanyDTO;
+import dto.ComputerDTO;
 import model.*;
 
 /**
@@ -26,11 +28,13 @@ public class CommandUpdate extends Command{
 		Computer toupdate = null;
 		try {
 			int id = Integer.valueOf(args[1]);
-			toupdate = computerService.getComputer(id);
+			toupdate = computerMapper.mapToComputer(this.client.target(APP_URI).path("computers").queryParam("id", id)
+					.request(MediaType.APPLICATION_JSON).get(ComputerDTO.class));
 		}
 		catch (NumberFormatException e)
 		{
-			toupdate = computerService.getComputer(args[1]);
+			toupdate = computerMapper.mapToComputer(this.client.target(APP_URI).path("computers").queryParam("name", args[1])
+					.request(MediaType.APPLICATION_JSON).get(ComputerDTO.class));
 		}
 		if (toupdate != null)
 		{
@@ -50,11 +54,13 @@ public class CommandUpdate extends Command{
 				case("company"):
 					try {
 						int cid = Integer.valueOf(args[i+1]);
-						toupdate.setCompany(companyService.getCompany(cid));
+						toupdate.setCompany(this.companyMapper.mapToCompany(this.client.target(APP_URI).path("companies").queryParam("id", cid)
+								.request(MediaType.APPLICATION_JSON).get(CompanyDTO.class)));
 					}
 					catch (NumberFormatException e)
 					{
-						toupdate.setCompany(companyService.getCompany(args[i+1]));
+						toupdate.setCompany(this.companyMapper.mapToCompany(this.client.target(APP_URI).path("companies").queryParam("name", args[i+1])
+								.request(MediaType.APPLICATION_JSON).get(CompanyDTO.class)));
 					}
 					
 					break;

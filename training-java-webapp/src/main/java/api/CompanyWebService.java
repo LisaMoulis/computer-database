@@ -33,6 +33,18 @@ public class CompanyWebService {
 		this.companyMapper = companyMapper;
 	}
 	
+	@RequestMapping(params = {"id"}, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public CompanyDTO getCompany(@RequestParam("id") int id)
+	{
+		return companyMapper.mapToDTO(companyService.getCompany(id));
+	}
+	
+	@RequestMapping(params = {"name"}, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public CompanyDTO getCompany(@RequestParam("name") String name)
+	{
+		return companyMapper.mapToDTO(companyService.getCompany(name));
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public List<CompanyDTO> getAllCompanies()
 	{

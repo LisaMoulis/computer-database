@@ -7,6 +7,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.client.Entity;
 
 import builder.ComputerBuilder;
+import dto.CompanyDTO;
 import model.*;
 import validation.Validator;
 
@@ -42,11 +43,13 @@ public class CommandCreate extends Command {
 			case("company"):
 				try {
 					int cid = Integer.valueOf(args[i+1]);
-					newone.setCompany(companyService.getCompany(cid));
+					newone.setCompany(this.companyMapper.mapToCompany(this.client.target(APP_URI).path("companies").queryParam("id", cid)
+							.request(MediaType.APPLICATION_JSON).get(CompanyDTO.class)));
 				}
 				catch (NumberFormatException e)
 				{
-					newone.setCompany(companyService.getCompany(args[i+1]));
+					newone.setCompany(this.companyMapper.mapToCompany(this.client.target(APP_URI).path("companies").queryParam("name", args[i+1])
+							.request(MediaType.APPLICATION_JSON).get(CompanyDTO.class)));
 				}
 				
 				break;
